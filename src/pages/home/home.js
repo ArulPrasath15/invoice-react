@@ -27,26 +27,30 @@ const { Title } = Typography;
 class Home extends React.Component {
     state = {
         collapsed: false,
+        pages:1
     };
     onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
     };
+    handleMenuClick = event => {
+        this.setState((prevState) => {
+            return {
+                pages: parseInt(event.key)
+            };
+        });
+    }
+    pageSelect = () => {
+        switch(this.state.pages) {
+            case 1: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found 1</h1>
+            case 2: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found 2</h1>
+            case 3: return <Invoice/>
+            default: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found </h1>
+        }
+    }
 
     render() {
-
-
         const { collapsed } = this.state;
-
-        function handleButtonClick(e) {
-            console.log('click left button', e);
-
-        }
-        function handleMenuClick(e) {
-            console.log('click', e);
-
-        }
-
         return (
 
             <Layout style={{ minHeight: '100vh' }} >
@@ -85,13 +89,8 @@ class Home extends React.Component {
                     </Header>
                 <Layout>
                   <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}  width={200} className="site-layout-background">
-                    <Menu theme="dark"
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        style={{ height: '100%', borderRight: 0 }}
-                    >
-                        <Menu theme='dark' key="sub1" style={{fontSize:'16px'}}  >
+                        <Menu theme='dark' key="sub1"  style={{fontSize:'16px',height: '100%', borderRight: 0 }} defaultSelectedKeys={['1']}
+                              defaultOpenKeys={['sub1']} mode="inline" onClick={this.handleMenuClick}  >
                             <Menu.Item key="1" icon={<ProjectOutlined style={{fontSize:'18px'}} /> } >Dashboard</Menu.Item>
                             <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}>Client</Menu.Item>
                             <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}>Invoice</Menu.Item>
@@ -99,16 +98,13 @@ class Home extends React.Component {
                                 <Link to='/'>Logout</Link>
                             </Menu.Item>
                         </Menu>
-
-                    </Menu>
                   </Sider>
                 <Layout className="site-layout">
-                    <Invoice/>
+                    {this.pageSelect()}
                     {/*<Template1 />*/}
                     {/*<Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>*/}
                 </Layout>
-
-               </Layout>
+              </Layout>
            </Layout>
         );
     }
