@@ -1,6 +1,7 @@
 import React from 'react';
 import './home.css'
 import 'antd/dist/antd.css';
+import {Link } from 'react-router-dom'
 import {Layout, Menu, Button, Typography, Col, Row, Dropdown, Image} from 'antd';
 import {
     UserOutlined,
@@ -112,7 +113,9 @@ class Home extends React.Component {
                             <Menu.Item key="1" icon={<ProjectOutlined />} >Dashboard</Menu.Item>
                             <Menu.Item key="2" icon={<UsergroupAddOutlined />}>Client</Menu.Item>
                             <Menu.Item key="3" icon={<MailOutlined />}>Invoice</Menu.Item>
-                            <Menu.Item key="4" icon={<LogoutOutlined />}>Logout</Menu.Item>
+                            <Menu.Item key="4" icon={<LogoutOutlined />}>
+                               <Link to='/'>Logout</Link> 
+                            </Menu.Item>
                         </Menu>
 
                     </Menu>
