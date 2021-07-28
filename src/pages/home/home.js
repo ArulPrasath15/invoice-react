@@ -17,6 +17,7 @@ import Search from "antd/es/input/Search";
 import profilelogo from '../../assets/profile.png';
 import logo from '../../assets/logo.png';
 import Invoice from "../../components/invoice";
+import Template1 from "../../components/templates/template-1";
 const { Header, Footer, Sider } = Layout;
 const { Title } = Typography;
 
@@ -118,6 +119,7 @@ class Home extends React.Component {
                   </Sider>
                 <Layout className="site-layout">
                     <Invoice/>
+                    {/*<Template1 />*/}
                     {/*<Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>*/}
                 </Layout>
 
