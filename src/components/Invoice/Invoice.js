@@ -1,10 +1,9 @@
 import React from 'react';
-import '../pages/home/home.css'
-import 'antd/dist/antd.css';
-import {Layout, Menu, Button, Typography, Col, Row, Table} from 'antd';
+import '../../assets/css/home.css'
+import {Layout, Button, Typography, Col, Row, Table} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import Search from "antd/es/input/Search";
-const { Header, Content, Footer, Sider } = Layout;
+const {  Content } = Layout;
 const { Title } = Typography;
 
 

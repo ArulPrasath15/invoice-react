@@ -1,4 +1,4 @@
-import '../css/template.css';
+import '../../assets/css/template.css'
 import {useContext, useState, useEffect, useRef, createContext, Component} from 'react';
 import {Table, Input, Button, Popconfirm, Form, DatePicker, Select} from 'antd';
 import {Option} from "antd/es/mentions";

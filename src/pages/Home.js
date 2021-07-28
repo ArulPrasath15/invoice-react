@@ -1,11 +1,9 @@
 import React from 'react';
-import './home.css'
-import 'antd/dist/antd.css';
-import {Layout, Menu, Button, Typography, Col, Row, Dropdown, Image, Select} from 'antd';
+import '../assets/css/home.css'
+import {Layout, Menu, Button, Typography, Col, Row, Image, Select} from 'antd';
 import {
     UserOutlined,
     LogoutOutlined,
-    DownOutlined,
     BellOutlined,
     SettingOutlined,
     MailOutlined,
@@ -14,13 +12,12 @@ import {
 
 } from '@ant-design/icons';
 import Search from "antd/es/input/Search";
-import profilelogo from '../../assets/profile.png';
-import logo from '../../assets/logo.png';
-import Invoice from "../../components/invoice";
-import Template1 from "../../components/templates/template-1";
+import logo from '../assets/images/logo.png';
+import Invoice from "../components/Invoice/Invoice";
+// import Template1 from "../components/templates/template-1";
 import {Link} from "react-router-dom";
 import {Option} from "antd/es/mentions";
-const { Header, Footer, Sider } = Layout;
+const { Header, Sider } = Layout;
 const { Title } = Typography;
 
 
