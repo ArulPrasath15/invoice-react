@@ -94,11 +94,8 @@ class Home extends React.Component {
                             <Col className="gutter-row" span={1}>
                                 <Button type="dashed"  shape="circle" icon={<SettingOutlined />} size={"large"} />
                             </Col>
-                            <Col className="gutter-row" span={1} style={{paddingTop:"12px"}}>
-                            <Image
-                                width={50}
-                                src={profilelogo}
-                            />
+                            <Col className="gutter-row" span={1} >
+                                <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
                             </Col>
                         </Row>
                     </Header>

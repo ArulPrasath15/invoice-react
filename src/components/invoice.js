@@ -104,7 +104,7 @@ class Invoice extends React.Component {
                     <Row justify="space-around" align="middle" >
                         <Col span={8}>< Title level={3} style={{ marginLeft: 14,marginTop:5}}>Invoice</Title></Col>
                         <Col span={3} offset={12} >
-                            <Button type="danger" icon={<PlusOutlined />} > Add Invoice</Button>
+                            <Button type="primary" style={{borderRadius:'6px'}} icon={<PlusOutlined />} > Add Invoice</Button>
 
                         </Col>
                     </Row>
