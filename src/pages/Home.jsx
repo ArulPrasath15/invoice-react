@@ -5,7 +5,6 @@ import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined, MailOutline
 import Search from "antd/es/input/Search";
 import logo from '../assets/images/logo.png';
 import Invoice from "../components/Invoice/Invoice";
-// import Template1 from "../components/templates/template-1";
 import {Link} from "react-router-dom";
 import {Option} from "antd/es/mentions";
 import Template1 from "../components/templates/template-1";
@@ -18,12 +17,9 @@ function Home(){
     const [collapsed, setCollapsed] = useState(false);
     const [page, setPage] = useState(1);
     const onCollapse = () => {
-        console.log(collapsed);
         setCollapsed(!collapsed);
     };
     const handleMenuClick = (event) => {
-              console.log(parseInt(event.key))
-              console.log(page)
               setPage(parseInt(event.key))
     }
     const pageSelect = () => {
