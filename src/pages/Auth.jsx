@@ -13,14 +13,14 @@ function Auth() {
             <Col span={16} offset={4}>
                 <Card bordered={false} className="auth-card">
                     <Row>
-                        <Col span={0} md={12}>
+                        <Col span={0} lg={12}>
                             <Space>
                                 <img src={logoImg} alt="img" className="auth-logo" />
                                 <h1>Pentafox</h1>
                             </Space>
                             <img src={VectorImg} alt="img" className="auth-vector-img" />
                         </Col>
-                        <Col sm={24} md={12}>
+                        <Col sm={24} lg={12}>
                             <Row justify="space-around">
                                 <Col span={6}>
                                     <Button danger={showLogin} type="text"  onClick={()=>setLogin(true)}>Login</Button>
