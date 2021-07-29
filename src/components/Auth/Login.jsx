@@ -1,40 +1,14 @@
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import { Row, Col ,Typography, Space, Button, Input } from 'antd';
+import React from 'react'
+import { Row, Col ,Typography, Space, Button, Form, Input } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
 
 function Login() {
-    const [email , setEmail] = useState({
-      value:'',
-      err:false,
-      msg:'',
-      clicked:false
-    });
-    const [password,setPassword] = useState({
-      value:'',
-      err:false,
-      msg:'',
-      clicked:false
-    });
 
-    const handleEmail = (e)=>{
-      setEmail({value:e.target.value})
+    const onSubmit = (values)=>{
+      console.log(values);
     }
 
-    const handlePassword = (e)=>{
-      setPassword({value:e.target.value})
-    }
-
-
-    const handleSubmit = ()=>{
-      
-      let data = {
-        email:email.value,
-        password:password.value
-      }
-      console.log(data);
-    }
     return (
       <>
         <Typography className="mt-5">
@@ -46,31 +20,41 @@ function Login() {
           </Space>
         </Typography>
         {/* LOGIN FORM */}
-        <form>
-          <Input 
-            value={email.value} 
-            onChange={ handleEmail } 
-            placeholder="Email" 
-            allowClear 
-            className="mt-5 w-100"
-          />
-          { email.err && <Text type='danger'>{email.msg}</Text> }
-          <Input.Password 
-            value={password.value} 
-            onChange={ handlePassword } 
-            placeholder="Password" 
-            className="mt-3 w-100" 
-          />
-          { password.err && <Text type='danger'>{password.msg}</Text> }
-          <div className="text-center">
-              <Button onClick={handleSubmit} className="mt-4 rounded-btn " shape="round" type="primary">
+        <Form
+          name='login'
+          onFinish={onSubmit}
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: 'Please enter your Email id ' },
+              { type:'email' , message:"Enter a valid Email id" }
+            ]}
+          >
+            <Input className="mt-5 w-100" allowClear placeholder="Email"  />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: 'Please enter your Password !'},
+              { min:8 , message:'Password must have atleast 8 characters'}
+            ]}
+          >
+            <Input.Password className=" w-100" placeholder="Password"  />
+          </Form.Item>
+          
+          <Form.Item className="text-center">
+              <Button className="rounded-btn " shape="round" type="primary" htmlType='submit'>
                   Login
               </Button>
-          </div>
-        </form>
+          </Form.Item>
+        </Form>
+  
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
+  
         <Row justify="space-around" className="mt-5 border-top">
           <Col span={6}>
             <Button shape="round" icon={<GoogleOutlined />}>
@@ -83,6 +67,7 @@ function Login() {
             </Button>
           </Col>
         </Row>
+  
       </>
     );
 }
