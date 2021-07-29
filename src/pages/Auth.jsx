@@ -23,10 +23,10 @@ function Auth() {
                         <Col sm={24} md={12}>
                             <Row justify="space-around">
                                 <Col span={6}>
-                                    <Button danger={showLogin}  onClick={()=>setLogin(true)}>Login</Button>
+                                    <Button danger={showLogin} type="text"  onClick={()=>setLogin(true)}>Login</Button>
                                 </Col>
                                 <Col span={6}>
-                                    <Button  danger={!showLogin} onClick={()=>setLogin(false)}>Signup</Button>
+                                    <Button  danger={!showLogin} type="text" onClick={()=>setLogin(false)}>Signup</Button>
                                 </Col>
                             </Row>
                             { showLogin && <Login />}
