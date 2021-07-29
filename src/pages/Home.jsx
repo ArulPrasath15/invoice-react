@@ -17,6 +17,7 @@ import Invoice from "../components/Invoice/Invoice";
 // import Template1 from "../components/templates/template-1";
 import {Link} from "react-router-dom";
 import {Option} from "antd/es/mentions";
+import Template1 from "../components/templates/template-1";
 const { Header, Sider } = Layout;
 const { Title } = Typography;
 
