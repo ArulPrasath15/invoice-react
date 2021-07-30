@@ -98,29 +98,27 @@ class Invoice extends React.Component {
             console.log('params', pagination, filters, sorter, extra);
         }
         return (
-            <Content style={{ margin: '0 16px' }}>
-                <div className="site-layout-background" style={{ marginTop: 24,borderRadius: 10}}>
+            <div className="mx-5 mt-5">
+               <Row justify='space-between' className='bg-white px-5 py-2'>
+                    <Col span={8}>
+                        <Title level={3}>Invoice</Title>
+                    </Col>
+                    <Col span={3} offset={12}>
+                        <Button type="primary" style={{borderRadius:'6px'}} icon={<PlusOutlined />} > Add Invoice</Button>
+                    </Col>
+                </Row>
+                <div  className='mt-5'>
                     <Row justify="space-around" align="middle" >
-                        <Col span={8}>< Title level={3} style={{ marginLeft: 14,marginTop:5}}>Invoice</Title></Col>
-                        <Col span={3} offset={12} >
-                            <Button type="primary" style={{borderRadius:'6px'}} icon={<PlusOutlined />} > Add Invoice</Button>
-
-                        </Col>
-                    </Row>
-                </div>
-                <div  style={{ marginTop: 24}}>
-                    <Row justify="space-around" align="middle" >
-                        <Col span={7} offset={15} >
+                        <Col span={7} offset={17} >
                             <Search size="large" placeholder="Search Invoice" enterButton />
-
                         </Col>
                     </Row>
                 </div>
 
-                <div className="site-layout-background" style={{ marginTop: 24}}>
+                <div className="bg-w mt-5" >
                     <Table columns={columns} dataSource={data} onChange={onChange} />
                 </div>
-            </Content>
+            </div>
         );
     }
 }

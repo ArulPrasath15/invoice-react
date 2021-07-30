@@ -5,6 +5,7 @@ import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined, MailOutline
 import Search from "antd/es/input/Search";
 import logo from '../assets/images/logo.png';
 import Invoice from "../components/Invoice/Invoice";
+import Client from '../components/Client/Client'
 import {Link} from "react-router-dom";
 import {Option} from "antd/es/mentions";
 import Template1 from "../components/templates/template-1";
@@ -25,7 +26,7 @@ function Home(){
     const pageSelect = () => {
         switch(page) {
             case 1: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found 1</h1>
-            case 2: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found 2</h1>
+            case 2: return <Client />
             case 3: return <Invoice/>
             default: return <h1 align={"center"} style={{paddingTop:'40vh'}}>No Page Found </h1>
         }
@@ -76,7 +77,7 @@ function Home(){
               </Sider>
             <Layout className="site-layout">
                 {pageSelect()}
-                {/*<Template1 />*/}
+                {/* <Template1 /> */}
                 {/*<Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>*/}
             </Layout>
           </Layout>
