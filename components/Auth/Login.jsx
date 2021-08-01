@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import Link from 'next/link'
 import { Row, Col ,Typography, Space, Button, Input } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
@@ -18,7 +18,7 @@ function Login() {
         <Input placeholder="Email" allowClear className="mt-5 w-100" />
         <Input.Password placeholder="Password" className="mt-3 w-100" />
         <div className="text-center">
-            <Link to="/home">
+            <Link href="/home">
                 <Button className="mt-4 rounded-btn " shape="round" type="primary">
                     Login
                 </Button>
