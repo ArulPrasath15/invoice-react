@@ -1,0 +1,24 @@
+.authBgImg{
+    background-image: url('../images/authBG.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+}
+
+.authLogo{
+    height: 40px;
+    width: 40px;
+}
+
+
+.authCard{
+    max-width: 1000px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.authVectorImg{
+    height: 400px;
+    width: inherit;
+}
