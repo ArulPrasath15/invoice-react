@@ -1,12 +1,20 @@
 import 'antd/dist/antd.css';
+import axios from 'axios';
 import { Row, Col ,Typography, Space, Button, Form, Input } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
+import {useState} from "react";
 const { Title, Text } = Typography;
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const onSubmit = (values)=>{
-      console.log(values);
+        const payload={
+            email,password
+        }
+        console.log(payload);
+        axios.post('/authentication/login',payload).then(res=>console.log(res));
     }
 
     return (
@@ -20,28 +28,13 @@ function Login() {
           </Space>
         </Typography>
         {/* LOGIN FORM */}
-        <Form
-          name='login'
-          onFinish={onSubmit}
-        >
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Please enter your Email id ' },
-              { type:'email' , message:"Enter a valid Email id" }
-            ]}
-          >
-            <Input className="mt-5 w-100" allowClear placeholder="Email"  />
+        <Form name='login' onFinish={onSubmit}>
+          <Form.Item name="email" rules={[{ required: true, message: 'Please enter your Email id ' }, { type:'email' , message:"Enter a valid Email id" }]}>
+            <Input className="mt-5 w-100" allowClear placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
           </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[
-              { required: true, message: 'Please enter your Password !'},
-              { min:8 , message:'Password must have atleast 8 characters'}
-            ]}
-          >
-            <Input.Password className=" w-100" placeholder="Password"  />
+          <Form.Item name="password" rules={[{ required: true, message: 'Please enter your Password !'}, { min:6 , message:'Password must have atleast 8 characters'}]}>
+            <Input.Password className=" w-100" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} />
           </Form.Item>
           
           <Form.Item className="text-center">

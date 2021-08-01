@@ -14,7 +14,6 @@ function getOrCreateStore(initialState) {
     if (isServer) {
         return initializeStore(initialState)
     }
-
     // Create store if unavailable on the client and set it on the window object
     if (!window[__NEXT_REDUX_STORE__]) {
         window[__NEXT_REDUX_STORE__] = initializeStore(initialState)
@@ -22,7 +21,10 @@ function getOrCreateStore(initialState) {
     return window[__NEXT_REDUX_STORE__]
 }
 
-export default App => {
+export default App
+
+// eslint-disable-next-line import/no-anonymous-default-export
+function App(App) {
     return class AppWithRedux extends React.Component {
         static async getInitialProps(appContext) {
             // Get or Create the store with `undefined` as initialState
@@ -49,7 +51,7 @@ export default App => {
         }
 
         render() {
-            return <App {...this.props} reduxStore={this.reduxStore} />
+            return <App {...this.props} reduxStore={this.reduxStore}/>
         }
     }
 }
