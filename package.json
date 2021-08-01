@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "pre-run": "install-changed",
     "dev": "npx next dev",
     "build": "next build",
     "start": "next start",
@@ -13,6 +14,7 @@
     "@reduxjs/toolkit": "^1.6.1",
     "antd": "^4.16.9",
     "axios": "^0.21.1",
+    "install-changed": "^1.1.0",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
