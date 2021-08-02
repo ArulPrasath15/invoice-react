@@ -1,8 +1,7 @@
 import "antd/dist/antd.css"
 import Auth from "./Auth";
 
-// import 'styles/globals.css'
-export default function Home() {
+export default function index() {
   // window.axios = axios;
   return (
       <Auth/>

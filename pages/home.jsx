@@ -17,7 +17,7 @@ const { Header, Sider } = Layout;
 const { Title } = Typography;
 
 
-function HomePage(){
+function Home(){
 
     const [collapsed, setCollapsed] = useState(false);
     const [page, setPage] = useState(1);
@@ -77,7 +77,7 @@ function HomePage(){
                         <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}>Client</Menu.Item>
                         <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}>Invoice</Menu.Item>
                         <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}} />}>
-                            <Link href="Auth">
+                            <Link href='/Auth'>
                             <a>Logout</a>
                            </Link>
                         </Menu.Item>
@@ -95,4 +95,4 @@ function HomePage(){
 
 }
 
-export default HomePage;
+export default Home;
