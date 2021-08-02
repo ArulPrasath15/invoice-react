@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import { Row, Col ,Typography, Space, Button,Form, Input, Select } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import axios from "axios";
@@ -10,7 +9,7 @@ function Register() {
 
     const onSubmit = (payload)=>{
       console.log(payload);
-      axios.post('/authentication/register',payload).then(res=>console.log(res));
+      axios.post('/auth/register',payload).then(res=>console.log(res));
     }
 
     return (

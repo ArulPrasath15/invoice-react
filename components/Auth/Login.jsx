@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import axios from 'axios';
 import { Row, Col ,Typography, Space, Button, Form, Input } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
@@ -14,7 +13,7 @@ function Login() {
             email,password
         }
         console.log(payload);
-        axios.post('/authentication/login',payload).then(res=>console.log(res));
+        axios.post('/auth/login',payload).then(res=>console.log(res));
     }
 
     return (
