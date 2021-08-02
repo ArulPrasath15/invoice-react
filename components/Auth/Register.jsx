@@ -1,14 +1,16 @@
 import 'antd/dist/antd.css';
 import { Row, Col ,Typography, Space, Button,Form, Input, Select } from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
+import axios from "axios";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 function Register() {
     const [form] = Form.useForm();
 
-    const onSubmit = (values)=>{
-      console.log(values);
+    const onSubmit = (payload)=>{
+      console.log(payload);
+      axios.post('/authentication/register',payload).then(res=>console.log(res));
     }
 
     return (
@@ -52,18 +54,18 @@ function Register() {
                 rules={[{ required: true , message:"Choose your gender" }]}
               >
                 <Select placeholder='Choose'>
-                  <Option value="Male">Male</Option>
-                  <Option value="Female">Female</Option>
-                  <Option value="Other">Other</Option>
+                  <Option value="M">Male</Option>
+                  <Option value="F">Female</Option>
+                  <Option value="O">Other</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col xs={11}>
               <Form.Item
-                name="businessType"
+                name="btype"
                 rules={[{ required: true , message:"Choose your business type"  }]}
               >
-                <Select placeholder='Choose' className='w-100'>
+                <Select placeholder='Business Type' className='w-100'>
                     <Option value="Retailer">Retailer</Option>
                     <Option value="Freelancer">Freelancer</Option>
                 </Select>
@@ -71,7 +73,7 @@ function Register() {
             </Col>
           </Row>
           <Form.Item
-            name="business"
+            name="bname"
             rules={[
               { required: true, message: 'Please enter your Business Name ' },
             ]}
@@ -88,6 +90,15 @@ function Register() {
           >
             <Input allowClear placeholder="Email"  />
           </Form.Item>
+
+            <Form.Item
+                name="mobile"
+                rules={[
+                    { required: true, message: 'Please enter your Mobile Number ' }
+                ]}
+            >
+                <Input allowClear placeholder="Mobile"  />
+            </Form.Item>
 
           <Row justify="space-between">
             <Col xs={24} lg={11}>

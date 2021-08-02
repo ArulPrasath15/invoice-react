@@ -15,15 +15,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 });
 Router.events.on('routeChangeStart', () => {
   NProgress.start()
-})
-
+});
 Router.events.on('routeChangeComplete', () => {
   NProgress.done();
-})
-
+});
 Router.events.on('routeChangeError', () => {
   NProgress.done();
-})
+});
 
 
 class App extends NextApp {

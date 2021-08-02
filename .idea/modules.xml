@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/app-ant-ui.iml" filepath="$PROJECT_DIR$/.idea/app-ant-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/invoice-react.iml" filepath="$PROJECT_DIR$/.idea/invoice-react.iml" />
     </modules>
   </component>
 </project>
