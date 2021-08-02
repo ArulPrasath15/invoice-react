@@ -1,7 +1,7 @@
 import  {useState} from 'react';
 import React from "react"
 React.useLayoutEffect = React.useEffect
-import 'antd/dist/antd.css';
+
 import Link from 'next/link'
 import Image from 'next/image'
 import {Layout, Menu, Button, Typography, Col, Row, Select} from 'antd';

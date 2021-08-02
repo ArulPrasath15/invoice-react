@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Router } from 'next/dist/client/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import 'antd/dist/antd.css';
 import '../assets/css/globals.css'
 
 axios.defaults.baseURL = 'http://localhost:8800';

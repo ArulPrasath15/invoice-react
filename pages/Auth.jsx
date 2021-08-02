@@ -1,6 +1,5 @@
 import {useState} from 'react'
 import Link from 'next/link'
-import 'antd/dist/antd.css';
 import styles from '../assets/css/Auth.module.css';
 import {Row, Col, Card, Space, Button} from 'antd';
 import logoImg from '../assets/images/logo.png'
