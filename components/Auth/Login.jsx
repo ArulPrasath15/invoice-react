@@ -13,7 +13,7 @@ function Login() {
             email,password
         }
         console.log(payload);
-        const hide=message.loading('Action in progress..', 10);
+        const hide=message.loading('Please wait...',0);
         axios.post('/auth/login',payload)
             .then(res=>{
                 if(res.status===200)
@@ -21,15 +21,20 @@ function Login() {
                     console.log(res)
                     console.log(res.data.token);
                     hide();
-                    message.success('This is a success message',10);
+                    message.success('Login Successful',2);
                 }
                 else{
                     throw Error(res.data.msg);
                 }
             })
             .catch(err=>{
-                // message.error(err)
-                console.error(err);
+                hide();
+                if (!err.response) {
+                    console.log("Custom Network Error")
+                    message.error('Network Error',2);
+                } else {
+                    message.error(err.message,2)
+                }
             });
     }
 
