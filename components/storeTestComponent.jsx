@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 const storeTestComponent = ({counted}) => {
     return(
         <div>
-            <h1>Store from Another Compoenent</h1>
+            <h1>Store from Another Component</h1>
             <h2>Counter Reactive: {counted}</h2>
             <hr/>
         </div>

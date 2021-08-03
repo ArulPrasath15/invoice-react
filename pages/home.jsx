@@ -10,8 +10,8 @@ import { Input, Space } from 'antd';
 const { Search } = Input;
 import logo from '../assets/images/logo.png';
 const { Option } = Select;
-import Invoice from "../components/Invoice/Invoice";
-import Client from '../components/Client/Client'
+import Invoice from "./Invoice";
+import Client from './Client'
 // import Template1 from "../components/templates/template-1";
 const { Header, Sider } = Layout;
 const { Title } = Typography;

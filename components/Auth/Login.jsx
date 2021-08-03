@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Row, Col ,Typography, Space, Button, Form, Input } from 'antd';
+import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import {useState} from "react";
 const { Title, Text } = Typography;
@@ -13,7 +13,24 @@ function Login() {
             email,password
         }
         console.log(payload);
-        axios.post('/auth/login',payload).then(res=>console.log(res));
+        const hide=message.loading('Action in progress..', 10);
+        axios.post('/auth/login',payload)
+            .then(res=>{
+                if(res.status===200)
+                {
+                    console.log(res)
+                    console.log(res.data.token);
+                    hide();
+                    message.success('This is a success message',10);
+                }
+                else{
+                    throw Error(res.data.msg);
+                }
+            })
+            .catch(err=>{
+                // message.error(err)
+                console.error(err);
+            });
     }
 
     return (
