@@ -28,7 +28,6 @@ function _App({ Component, pageProps, reduxStore }) {
 
 _App.getInitialProps = async ({Component,ctx}) => {
   let pageProps = {};
-  console.log("From Store",ctx.store.authStore.auth);
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
