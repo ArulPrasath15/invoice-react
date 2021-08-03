@@ -1,5 +1,5 @@
 import React from 'react'
-import  styles from '../../assets/css/Client.module.css'
+import  styles from '../assets/css/Client.module.css'
 import {Layout, Button, Typography, Col, Row, Table , Card, Space} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;

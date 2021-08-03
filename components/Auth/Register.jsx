@@ -19,39 +19,22 @@ function Register() {
             <Title level={3}> Create Account</Title>
           </Space>
         </Typography>
-        <Form
-           form={form}
-          name='login'
-          onFinish={onSubmit}
-        >
+        <Form form={form} name='login' onFinish={onSubmit}>
           <Row justify="space-between">
             <Col xs={24} lg={11}>
-              <Form.Item
-                name="fname"
-                rules={[
-                  { required: true, message: 'Please enter your First Name ' },
-                ]}
-              >
+              <Form.Item name="fname" rules={[{ required: true, message: 'Please enter your First Name ' },]}>
                 <Input allowClear placeholder="First Name"  />
               </Form.Item>
             </Col>
             <Col xs={24} lg={11}>
-              <Form.Item
-                name="lname"
-                rules={[
-                  { required: true, message: 'Please enter your Last Name ' },
-                ]}
-              >
+              <Form.Item name="lname" rules={[{ required: true, message: 'Please enter your Last Name ' },]}>
                 <Input allowClear placeholder="Last Name"  />
               </Form.Item>
             </Col>
           </Row>
           <Row justify="space-between">
             <Col xs={11}>
-              <Form.Item
-                name="gender"
-                rules={[{ required: true , message:"Choose your gender" }]}
-              >
+              <Form.Item name="gender" rules={[{ required: true , message:"Choose your gender" }]}>
                 <Select placeholder='Choose'>
                   <Option value="M">Male</Option>
                   <Option value="F">Female</Option>
@@ -60,10 +43,7 @@ function Register() {
               </Form.Item>
             </Col>
             <Col xs={11}>
-              <Form.Item
-                name="btype"
-                rules={[{ required: true , message:"Choose your business type"  }]}
-              >
+              <Form.Item name="btype" rules={[{ required: true , message:"Choose your business type"  }]}>
                 <Select placeholder='Business Type' className='w-100'>
                     <Option value="Retailer">Retailer</Option>
                     <Option value="Freelancer">Freelancer</Option>
@@ -71,31 +51,15 @@ function Register() {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item
-            name="bname"
-            rules={[
-              { required: true, message: 'Please enter your Business Name ' },
-            ]}
-          >
+          <Form.Item name="bname" rules={[{ required: true, message: 'Please enter your Business Name ' },]}>
             <Input allowClear placeholder="Business Name"  />
           </Form.Item>
 
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Please enter your Email id ' },
-              { type:'email' , message:"Enter a valid Email id" }
-            ]}
-          >
+          <Form.Item name="email" rules={[{ required: true, message: 'Please enter your Email id ' }, { type:'email' , message:"Enter a valid Email id" }]}>
             <Input allowClear placeholder="Email"  />
           </Form.Item>
 
-            <Form.Item
-                name="mobile"
-                rules={[
-                    { required: true, message: 'Please enter your Mobile Number ' }
-                ]}
-            >
+            <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' }]}>
                 <Input allowClear placeholder="Mobile"  />
             </Form.Item>
 
