@@ -3,8 +3,11 @@ import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import {useState} from "react";
 const { Title, Text } = Typography;
+import {connect} from 'react-redux'
+import {login} from '../../store/authStore'
+import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 
-function Login() {
+function Login({auth,token,login}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,8 +15,8 @@ function Login() {
         const payload={
             email,password
         }
-        console.log(payload);
-        const hide=message.loading('Action in progress..', 10);
+        console.log(auth,token);
+        const hide=message.loading('Please wait...',0);
         axios.post('/auth/login',payload)
             .then(res=>{
                 if(res.status===200)
@@ -21,15 +24,21 @@ function Login() {
                     console.log(res)
                     console.log(res.data.token);
                     hide();
-                    message.success('This is a success message',10);
+                    login({auth:true,token:res.data.token});
+                    message.success('Login Successful',2);
                 }
                 else{
                     throw Error(res.data.msg);
                 }
             })
             .catch(err=>{
-                // message.error(err)
-                console.error(err);
+                hide();
+                if (!err.response) {
+                    console.log("Custom Network Error")
+                    message.error('Network Error',2);
+                } else {
+                    message.error(err.message,2)
+                }
             });
     }
 
@@ -63,22 +72,29 @@ function Login() {
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
-  
-        <Row justify="space-around" className="mt-5 border-top">
-          <Col span={6}>
-            <Button shape="round" icon={<GoogleOutlined />}>
-              Google
-            </Button>
-          </Col>
-          <Col span={6}>
-            <Button shape="round" icon={<FacebookOutlined />}>
-              Facebook
-            </Button>
-          </Col>
-        </Row>
+
+          <Row justify="space-between" className="mt-5 border-top">
+              <Col span={8} offset={1}>
+                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                      <span>Google</span>
+                  </GoogleLoginButton>
+              </Col>
+              <Col span={8}>
+                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                      <span>Facebook</span>
+                  </FacebookLoginButton>
+              </Col>
+          </Row>
   
       </>
     );
 }
 
-export default Login
+const mapStateToProps = (state) => ({
+    auth: state.authStore.auth,
+    token: state.authStore.token
+})
+
+const mapDispatchToProps = { login }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
