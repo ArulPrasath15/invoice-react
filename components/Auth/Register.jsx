@@ -1,4 +1,4 @@
-import { Row, Col ,Typography, Space, Button,Form, Input, Select } from 'antd';
+import {Row, Col, Typography, Space, Button, Form, Input, Select, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import axios from "axios";
 const { Title, Text } = Typography;
@@ -9,7 +9,29 @@ function Register() {
 
     const onSubmit = (payload)=>{
       console.log(payload);
-      axios.post('/auth/register',payload).then(res=>console.log(res));
+        const hide=message.loading('Please wait...',0);
+        axios.post('/auth/register',payload)
+            .then(res=>{
+                if(res.status===200)
+                {
+                    console.log(res)
+                    console.log(res.data.token);
+                    hide();
+                    message.success('Register Successful',2);
+                }
+                else{
+                    throw Error(res.data.msg);
+                }
+            })
+            .catch(err=>{
+                hide();
+                if (!err.response) {
+                    console.log("Custom Network Error")
+                    message.error('Network Error',2);
+                } else {
+                    message.error(err.message,2)
+                }
+            });
     }
 
     return (

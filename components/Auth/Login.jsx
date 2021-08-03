@@ -3,8 +3,10 @@ import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import {useState} from "react";
 const { Title, Text } = Typography;
+import {connect} from 'react-redux'
+import {login} from '../../store/authStore'
 
-function Login() {
+function Login({auth,token,login}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,7 +14,7 @@ function Login() {
         const payload={
             email,password
         }
-        console.log(payload);
+        console.log(auth,token);
         const hide=message.loading('Please wait...',0);
         axios.post('/auth/login',payload)
             .then(res=>{
@@ -21,6 +23,7 @@ function Login() {
                     console.log(res)
                     console.log(res.data.token);
                     hide();
+                    login({auth:true,token:res.data.token});
                     message.success('Login Successful',2);
                 }
                 else{
@@ -86,4 +89,11 @@ function Login() {
     );
 }
 
-export default Login
+const mapStateToProps = (state) => ({
+    auth: state.authStore.auth,
+    token: state.authStore.token
+})
+
+const mapDispatchToProps = { login }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
