@@ -8,6 +8,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import 'antd/dist/antd.css';
 import '../assets/css/globals.css'
+import NavLayout from '../components/Layout/NavLayout'
 
 axios.defaults.baseURL = 'http://localhost:8800';
 axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
@@ -24,10 +25,12 @@ class App extends NextApp {
     return {pageProps,};
   }
   render() {
+    const hideList=['/','/Auth']
     const { Component, pageProps, reduxStore } = this.props;
     return (
         <Provider store={reduxStore}>
-          <Component {...pageProps} />
+            { !hideList.includes(this.props.router.asPath) && <NavLayout><Component {...pageProps} /></NavLayout> }
+            { hideList.includes(this.props.router.asPath) && <Component {...pageProps} /> }
         </Provider>
     );
   }
