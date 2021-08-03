@@ -58,10 +58,10 @@ function NavLayout({children}){
               <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}  width={200} className="site-layout-background">
                     <Menu theme='dark' key="sub1"  style={{fontSize:'16px',height: '100%', borderRight: 0 }} defaultSelectedKeys={['1']}
                           defaultOpenKeys={['sub1']} mode="inline"   >
-                        <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/Dashboard'><a>Dashboard</a></Link></Menu.Item>
-                        <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/Invoice'><a>Invoice</a></Link></Menu.Item>
-                        <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}><Link href='/Client'><a>Client</a></Link></Menu.Item>
-                        <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}} />}><Link href='/Auth'><a>Logout</a></Link></Menu.Item>
+                        <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
+                        <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
+                        <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
+                        <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}} />}><Link href='/auth'><a>Logout</a></Link></Menu.Item>
                     </Menu>
               </Sider>
             <Layout className="site-layout">
