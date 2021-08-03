@@ -1,6 +1,7 @@
 import {Row, Col, Typography, Space, Button, Form, Input, Select, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import axios from "axios";
+import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -166,17 +167,17 @@ function Register() {
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
-        <Row justify="space-around" className="mt-5 border-top">
-          <Col span={6}>
-            <Button shape="round" icon={<GoogleOutlined />}>
-              Google
-            </Button>
-          </Col>
-          <Col span={6}>
-            <Button shape="round" icon={<FacebookOutlined />}>
-              Facebook
-            </Button>
-          </Col>
+        <Row justify="space-between" className="mt-5 border-top">
+            <Col span={8} offset={1}>
+                <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                    <span>Google</span>
+                </GoogleLoginButton>
+            </Col>
+            <Col span={8}>
+                <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                    <span>Facebook</span>
+                </FacebookLoginButton>
+            </Col>
         </Row>
       </>
     )
