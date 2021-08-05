@@ -2,6 +2,7 @@ import axios from 'axios';
 import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import {useState} from "react";
+import { signIn } from "next-auth/client"
 const { Title, Text } = Typography;
 import {connect} from 'react-redux'
 import {login} from '../../store/authStore'
@@ -15,31 +16,9 @@ function Login({auth,token,login}) {
         const payload={
             email,password
         }
-        console.log(auth,token);
-        const hide=message.loading('Please wait...',0);
-        axios.post('/auth/login',payload)
-            .then(res=>{
-                if(res.status===200)
-                {
-                    console.log(res)
-                    console.log(res.data.token);
-                    hide();
-                    login({auth:true,token:res.data.token});
-                    message.success('Login Successful',2);
-                }
-                else{
-                    throw Error(res.data.msg);
-                }
-            })
-            .catch(err=>{
-                hide();
-                if (!err.response) {
-                    console.log("Custom Network Error")
-                    message.error('Network Error',2);
-                } else {
-                    message.error(err.message,2)
-                }
-            });
+        const res=signIn("email-pass", payload);
+        console.log(res);
+
     }
 
     return (

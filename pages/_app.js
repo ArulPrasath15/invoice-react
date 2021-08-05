@@ -8,15 +8,33 @@ import 'nprogress/nprogress.css';
 import 'antd/dist/antd.css';
 import '../assets/css/globals.css'
 import NavLayout from "../components/Layout/NavLayout";
+import {getSession} from "next-auth/client";
 
 
-axios.defaults.baseURL = 'http://localhost:8800';
-axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 
 NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 });Router.events.on('routeChangeStart', () => {NProgress.start()});Router.events.on('routeChangeComplete', () => {NProgress.done();});Router.events.on('routeChangeError', () => {NProgress.done();});
 
+
+
 function _App({ Component, pageProps, reduxStore }) {
+    const [authToken, setAuthToken] = useState('');
+
+    axios.defaults.baseURL = 'http://localhost:8800';
+    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+    axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+
+    useEffect(() => {
+        getSession().then((session) => {
+            if (session) {
+                setAuthToken(session.user.jwt);
+                // console.log("Index Session",session)
+            } else {
+                console.log(false);
+            }
+        });
+    }, []);
     const router = useRouter()
     const [auth, setAuth] = useState(false);
     const hideList=['/','/auth']
@@ -24,7 +42,7 @@ function _App({ Component, pageProps, reduxStore }) {
 
     return (
       <>
-          <Provider store={reduxStore}>
+          <Provider store={reduxStore} session={pageProps.session}>
               { !hideList.includes(router.pathname) && <NavLayout><Component {...pageProps} /></NavLayout> }
               { hideList.includes(router.pathname) && <Component {...pageProps} /> }
           </Provider>
