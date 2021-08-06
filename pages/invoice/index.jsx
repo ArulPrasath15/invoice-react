@@ -99,12 +99,12 @@ class Invoice extends React.Component {
         }
         return (
             <div className="mx-5 mt-5">
-               <Row justify='space-between' className='bg-white px-5 py-2'>
+               <Row justify='space-between' className='bg-white px-5 py-2 br-5'>
                     <Col span={8}>
                         <Title level={3}>Invoice</Title>
                     </Col>
                     <Col span={3} offset={12}>
-                        <Button type="primary" style={{borderRadius:'6px'}} icon={<PlusOutlined />} > Add Invoice</Button>
+                        <Button type="primary"  icon={<PlusOutlined />} > Add Invoice</Button>
                     </Col>
                 </Row>
                 <div  className='mt-5'>
@@ -116,7 +116,7 @@ class Invoice extends React.Component {
                 </div>
 
                 <div className="bg-w mt-5" >
-                    <Table columns={columns} dataSource={data} onChange={onChange} />
+                    <Table columns={columns} className='br-5'  dataSource={data} onChange={onChange} />
                 </div>
             </div>
         );

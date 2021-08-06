@@ -7,6 +7,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import 'antd/dist/antd.css';
 import '../assets/css/globals.css'
+import '../assets/css/color.css'
 import NavLayout from "../components/Layout/NavLayout";
 import {getSession} from "next-auth/client";
 import Router from 'next/router'

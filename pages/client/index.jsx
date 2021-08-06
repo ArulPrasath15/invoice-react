@@ -7,7 +7,7 @@ const { Title, Text } = Typography;
 function Client() {
     return (
         <div className='mt-5 mx-5'>
-           <Row justify='space-between'  className='bg-white px-5 py-2'>
+           <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
                 <Col span={8}>
                     <Title level={3}  >Client</Title>
                 </Col>
@@ -15,32 +15,11 @@ function Client() {
                 <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
                 </Col>
            </Row>
-           <Row className="mt-5" justify='space-around'>
+           <Row className="mt-5 " justify='space-between'>
                 <Col span={8}>
-                    <Card>
+                    <Card className='shadow-hv shadow br-5'>
                         <Row>
-                            <Col span={6}>
-                                <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
-                            </Col>
-                            <Col span={18}>
-                                <Title level={4}>Adam Wilson</Title>
-                                <Space direction='vertical'>
-                                    <div>
-                                        <Text type='secondary' copyable>adamwilson@gmail.com</Text>
-                                    </div>
-                                    <div>
-                                        <Text type='secondary' copyable>99978765456</Text>
-                                    </div>
-                                </Space>
-                            </Col>
-                        </Row>
-                    </Card>
-                </Col>
-
-                <Col span={8}>
-                    <Card>
-                        <Row>
-                            <Col span={6}>
+                            <Col span={6} >
                                 <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
                             </Col>
                             <Col span={18}>

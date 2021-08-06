@@ -4,8 +4,9 @@ React.useLayoutEffect = React.useEffect
 
 import Link from 'next/link'
 import Image from 'next/image'
-import {Layout, Menu, Button, Typography, Col, Row, Select} from 'antd';
-import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined, MailOutlined, ProjectOutlined, UsergroupAddOutlined,} from '@ant-design/icons';
+import {Layout, Menu, Button, Typography, Col, Row, Select , Dropdown , Divider} from 'antd';
+import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined
+    , MailOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
 import { Input, Space } from 'antd';
 const { Search } = Input;
 import logo from '../../assets/images/logo.png';
@@ -14,6 +15,19 @@ const { Option } = Select;
 // import Template1 from "../components/templates/template-1";
 const { Header, Sider } = Layout;
 const { Title } = Typography;
+
+
+const userMenu = (
+    <Menu className='mx-5 mt-5'>
+      <Menu.Item key="0"  className='px-5 mt-2' icon={<UserOutlined />}>
+        <a href="https://www.antgroup.com">Edit Profile</a>
+      </Menu.Item>
+      <Menu.Item key="3"  className='px-5 mt-2' icon={<LogoutOutlined/>}>
+        <a href="https://www.aliyun.com">Logout</a>
+      </Menu.Item>
+      <Menu.Divider />
+    </Menu>
+  );
 
 
 function NavLayout({children}){
@@ -51,7 +65,11 @@ function NavLayout({children}){
                             <Button type="dashed"  shape="circle" icon={<SettingOutlined />} size={"large"} />
                         </Col>
                         <Col className="gutter-row" span={1} >
-                            <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
+                            <Dropdown  overlay={userMenu} trigger={['click']} placement='bottomRight'>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
+                                </a>
+                            </Dropdown>
                         </Col>
                     </Row>
                 </Header>
@@ -62,7 +80,11 @@ function NavLayout({children}){
                         <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
                         <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
                         <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
-                        <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}}/>}  onClick={() => signout()}>Logout</Menu.Item>
+                        <Menu.Item key="4" icon={<ClockCircleOutlined style={{fontSize:'18px'}} />}><Link href='/timesheet'><a>Timesheets</a></Link></Menu.Item>
+                        {/* <Divider dashed /> */}
+                        <div style={{borderTop:'1px solid rgb(82 82 82)'}}></div>
+                        <Menu.Item key="5"  icon={<SettingOutlined style={{fontSize:'18px'}} />}><Link href='/settings'><a>Settings</a></Link></Menu.Item>
+                        <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize:'18px'}}/>}  onClick={() => signout()}>Logout</Menu.Item>
                     </Menu>
               </Sider>
             <Layout className="site-layout">
