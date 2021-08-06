@@ -1,8 +1,8 @@
 import Auth from "./auth";
 
-export default function index() {
-  // window.axios = axios;
-  return (
-      <Auth/>
-  )
+
+export default function Page() {
+  return <>
+     <Auth/>
+  </>
 }
