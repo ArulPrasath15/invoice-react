@@ -42,7 +42,7 @@ function Register() {
             <Title level={3}> Create Account</Title>
           </Space>
         </Typography>
-        <Form form={form} name='login' onFinish={onSubmit}>
+        <Form form={form} name='login' onFinish={onSubmit} className='mt-3'>
           <Row justify="space-between">
             <Col xs={24} lg={11}>
               <Form.Item name="fname" rules={[{ required: true, message: 'Please enter your First Name ' },]}>
@@ -140,17 +140,17 @@ function Register() {
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
-        <Row justify="space-between" className="mt-5 border-top">
+        <Row justify="space-around" className="mt-5 border-top">
             <Col span={8} offset={1}>
                 <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
                     <span>Google</span>
                 </GoogleLoginButton>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
                 <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
                     <span>Facebook</span>
                 </FacebookLoginButton>
-            </Col>
+            </Col> */}
         </Row>
       </>
     )

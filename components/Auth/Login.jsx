@@ -63,17 +63,17 @@ function Login({auth,token,login}) {
           <Text type="secondary"> OR </Text>
         </Typography>
 
-          <Row justify="space-between" className="mt-5 border-top">
+          <Row justify="space-around" className="mt-5 border-top">
               <Col span={8} offset={1}>
                   <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>
                       <span>Google</span>
                   </GoogleLoginButton>
               </Col>
-              <Col span={8}>
+              {/* <Col span={8}>
                   <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onFacebook()}>
                       <span>Facebook</span>
                   </FacebookLoginButton>
-              </Col>
+              </Col> */}
           </Row>
   
       </>

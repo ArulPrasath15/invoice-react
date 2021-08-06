@@ -57,7 +57,7 @@ const providers = [
 // add the domain to domain manager facebook dashborad
 // eg : https://548b9431d4d9.ngrok.io
 
-// change the .env next url
+// change the .env next url to new https url
 const callbacks = {
     async signIn(user, account, profile) {
         return true;
@@ -90,7 +90,7 @@ const options = {
         encryption: true
     }
 }
-console.log(process.env.NEXTAUTH_URL);
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (req, res) => NextAuth(req, res, options)
 
