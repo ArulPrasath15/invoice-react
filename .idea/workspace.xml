@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Commiting to check GPG">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Commiting to check GPG" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,6 +69,7 @@
       <updated>1628228900321</updated>
       <workItem from="1628228905839" duration="1990000" />
       <workItem from="1628230985450" duration="201000" />
+      <workItem from="1628231435426" duration="157000" />
     </task>
     <task id="LOCAL-00001" summary="Changes to IDEA configuration">
       <created>1628229749568</created>
@@ -93,7 +92,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628230541839</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Commiting to check GPG">
+      <created>1628231510474</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1628231510474</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
