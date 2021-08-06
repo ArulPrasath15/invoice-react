@@ -4,14 +4,11 @@ import axios from "axios";
 
 export default NextAuth({
     pages: {
-        signIn: '/',
+        signIn: '/auth',
     },
     callbacks: {
         async signIn(user, account, profile) {
-            return user
-        },
-        async redirect(url, baseUrl) {
-            return baseUrl
+            return true;
         },
         async session(session, user) {
             session.user=user;
@@ -24,7 +21,7 @@ export default NextAuth({
                 token.jwt = user.token.toString();
             }
             return Promise.resolve(token);
-        }
+        },
     },
     providers: [
         Providers.Credentials({
@@ -36,17 +33,41 @@ export default NextAuth({
             },
             async authorize(credentials, req) {
 
-                const res = await axios.post('/auth/login', credentials);
-                // If no error and we have user data, return it
-                console.log("Login response",res.data);
-                if (res) {
-                    return res.data;
+                // const res = await axios.post('/auth/login', credentials);
+                // // If no error and we have user data, return it
+                // console.log("Login response",res.data);
+                // if (res) {
+                //     return res.data;
+                // }
+                // // Return null if user data could not be retrieved
+                // return null
+
+                return {
+                    id: "12312312312",
+                    name: "Barry",
+                    email: "barry@gmail.com",
+                    image: "url",
+                    token:"dwdwefewgergsergregerhrthth"
                 }
-                // Return null if user data could not be retrieved
-                return null
             }
-        })
-        // ...add more providers here
+        }),
+        Providers.Google({
+            id: "google",
+            clientId: "58284380920-nsvt55760duphe8j5hsg4ngadb68jar1.apps.googleusercontent.com",
+            clientSecret: "X-BhSI5Qfq1HAOEBKgVw9iTV",
+            async profile(profile, tokens) {
+                return {
+                    id: profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                    token:"sgjengijneijgegrehdrtyt"
+                }
+            },
+
+        }),
+        //Facebook..
+
     ],
     session: {
         jwt: true,

@@ -16,8 +16,13 @@ function Login({auth,token,login}) {
         const payload={
             email,password
         }
-        const res=signIn("email-pass", payload);
-        console.log(res);
+        const res=signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+        console.log("Result"+res);
+
+    }
+    const onGoogle = (values)=>{
+        const res=signIn("google",{ callbackUrl: 'http://localhost:3000/dashboard' });
+        console.log("Result"+res);
 
     }
 
@@ -54,7 +59,7 @@ function Login({auth,token,login}) {
 
           <Row justify="space-between" className="mt-5 border-top">
               <Col span={8} offset={1}>
-                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>
                       <span>Google</span>
                   </GoogleLoginButton>
               </Col>

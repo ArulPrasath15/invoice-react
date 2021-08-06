@@ -9,6 +9,7 @@ import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined, MailOutline
 import { Input, Space } from 'antd';
 const { Search } = Input;
 import logo from '../../assets/images/logo.png';
+import {signout} from "next-auth/client";
 const { Option } = Select;
 // import Template1 from "../components/templates/template-1";
 const { Header, Sider } = Layout;
@@ -61,7 +62,7 @@ function NavLayout({children}){
                         <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
                         <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
                         <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
-                        <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}} />}><Link href='/auth'><a>Logout</a></Link></Menu.Item>
+                        <Menu.Item key="4" icon={<LogoutOutlined style={{fontSize:'18px'}}/>}  onClick={() => signout()}>Logout</Menu.Item>
                     </Menu>
               </Sider>
             <Layout className="site-layout">
