@@ -27,13 +27,10 @@ function Login({auth,token,login}) {
 
     }
 
-    useEffect(() => {
-      if(session){
-        router.push('/client');
-      }else{
-        console.log("Logged out");
-      }
-    }, [session,router])
+    const onFacebook = ()=>{
+      const res=signIn("facebook",{ callbackUrl: 'https://548b9431d4d9.ngrok.io/dashboard' });
+      console.log("Result"+res);
+    }
 
     return (
       <>
@@ -73,7 +70,7 @@ function Login({auth,token,login}) {
                   </GoogleLoginButton>
               </Col>
               <Col span={8}>
-                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => signIn('facebook')}>
+                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onFacebook()}>
                       <span>Facebook</span>
                   </FacebookLoginButton>
               </Col>

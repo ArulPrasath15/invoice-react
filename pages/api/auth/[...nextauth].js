@@ -46,22 +46,29 @@ const providers = [
     })    
 ]
 
-// use below command to bind local http to remote https (facebook testing):
-// ngrok http -bind-tls=true --host-header="localhost:80" 4200
+// TESTING FB OAUTH 
 // use ngrok https domain as facebook only accepts req from https domains
+// use below command to bind local http to remote https (facebook testing):
+// ngrok http -bind-tls=true --host-header="localhost:80" 3000
 
+// update Valid OAuth Redirect URIs at dev.facebook dashboard
+// eg : https://548b9431d4d9.ngrok.io/api/auth/callback/facebook
+
+// add the domain to domain manager facebook dashborad
+// eg : https://548b9431d4d9.ngrok.io
+
+// change the .env next url
 const callbacks = {
     async signIn(user, account, profile) {
         return true;
     },
     async session(session, user) {
         session.user=user;
-        // session.token=user.token;
         return session
     },
     async jwt(token, user, account, profile, isNewUser) {
         const isUserSignedIn = !!user;
-        if(isUserSignedIn) {
+        if(isUserSignedIn && user.token) {
             token.jwt = user.token.toString();
         }
         return Promise.resolve(token);
@@ -83,7 +90,7 @@ const options = {
         encryption: true
     }
 }
-
+console.log(process.env.NEXTAUTH_URL);
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (req, res) => NextAuth(req, res, options)
 
