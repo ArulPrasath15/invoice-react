@@ -155,7 +155,7 @@
 }
 
 
-h3.ant-typography, .ant-typography h3{
+h4.ant-typography, .ant-typography h4 , h3.ant-typography, .ant-typography h3{
   margin-bottom: 0;
 }
 

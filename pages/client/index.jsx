@@ -9,7 +9,7 @@ function Client() {
         <div className='mt-5 mx-5'>
            <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
                 <Col span={8}>
-                    <Title level={3}  >Client</Title>
+                    <Title level={4}  >Client</Title>
                 </Col>
                 <Col span={3} offset={12}>
                 <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>

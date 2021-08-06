@@ -101,7 +101,7 @@ class Invoice extends React.Component {
             <div className="mx-5 mt-5">
                <Row justify='space-between' className='bg-white px-5 py-2 br-5'>
                     <Col span={8}>
-                        <Title level={3}>Invoice</Title>
+                        <Title level={4}>Invoice</Title>
                     </Col>
                     <Col span={3} offset={12}>
                         <Button type="primary"  icon={<PlusOutlined />} > Add Invoice</Button>

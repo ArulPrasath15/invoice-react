@@ -1,18 +1,18 @@
 import  {useState} from 'react';
 import React from "react"
-React.useLayoutEffect = React.useEffect
-
+import {signout, useSession} from "next-auth/client";
 import Link from 'next/link'
 import Image from 'next/image'
-import {Layout, Menu, Button, Typography, Col, Row, Select , Dropdown , Divider} from 'antd';
+// React.useLayoutEffect = React.useEffect
+
+import {Layout, Menu, Button, Typography, Col, Row, Select , Dropdown , Divider, Input, Space} from 'antd';
 import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined
     , MailOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
-import { Input, Space } from 'antd';
-const { Search } = Input;
+
 import logo from '../../assets/images/logo.png';
-import {signout} from "next-auth/client";
-const { Option } = Select;
 // import Template1 from "../components/templates/template-1";
+const { Search } = Input;
+const { Option } = Select;
 const { Header, Sider } = Layout;
 const { Title } = Typography;
 
@@ -28,9 +28,10 @@ const userMenu = (
       <Menu.Divider />
     </Menu>
   );
-
-
-function NavLayout({children}){
+  
+  
+  function NavLayout({children}){
+    const [session , loading] = useSession()    
 
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = () => {
@@ -67,7 +68,9 @@ function NavLayout({children}){
                         <Col className="gutter-row" span={1} >
                             <Dropdown  overlay={userMenu} trigger={['click']} placement='bottomRight'>
                                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                    <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
+                                    
+                                    {!session && <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />}
+                                    {session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.name[0]}</Button>}
                                 </a>
                             </Dropdown>
                         </Col>
