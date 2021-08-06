@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Removed unwanted files">
-      <change afterPath="$PROJECT_DIR$/pages/settings/index.jsx" afterDir="false" />
+    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Update package.json">
+      <changelist_data name="Abinash S" email="s.abinash@outlook.com" />
+      <change afterPath="$PROJECT_DIR$/components/Utils/notify.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/timesheet/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/timesheet/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +29,11 @@
       </list>
     </option>
     <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -82,6 +90,7 @@
       <workItem from="1628228905839" duration="1990000" />
       <workItem from="1628230985450" duration="201000" />
       <workItem from="1628231435426" duration="157000" />
+      <workItem from="1628270183068" duration="748000" />
     </task>
     <task id="LOCAL-00001" summary="Changes to IDEA configuration">
       <created>1628229749568</created>

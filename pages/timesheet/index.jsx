@@ -1,4 +1,5 @@
 import React from 'react'
+import notify from '../../components/Utils/notify';
 
 import {Layout, Button, Typography, Col, Row, Table , Card, Space} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
@@ -12,7 +13,7 @@ function Timesheet() {
                     <Title level={4}  >Timesheet</Title>
                 </Col>
                 <Col span={4} offset={11}>
-                <Button type="primary"   icon={<PlusOutlined />} >Add Timesheet</Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={()=>notify({type:'success',msg:'Not yet Available'})}>Add Timesheet</Button>
                 </Col>
            </Row>
         </div>
