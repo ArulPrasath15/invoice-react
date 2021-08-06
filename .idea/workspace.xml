@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Commiting to check GPG" />
+    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/components/storeTestComponent.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/storeTest.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/counterStore.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/store/store.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,7 +33,9 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1wLDIBYnp9pHQmBRW1re23UQjoz" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
