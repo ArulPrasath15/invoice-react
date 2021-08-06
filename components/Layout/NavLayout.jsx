@@ -10,7 +10,7 @@ import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined
     , MailOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
 
 import logo from '../../assets/images/logo.png';
-// import Template1 from "../components/templates/template-1";
+// import Template1 from "../components/Templates/template-1";
 const { Search } = Input;
 const { Option } = Select;
 const { Header, Sider } = Layout;
