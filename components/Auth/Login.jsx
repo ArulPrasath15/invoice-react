@@ -1,45 +1,35 @@
-import axios from 'axios';
+import { useEffect,useState } from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
-import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
-import {useState} from "react";
+import { signIn,useSession } from "next-auth/client"
 const { Title, Text } = Typography;
 import {connect} from 'react-redux'
 import {login} from '../../store/authStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
+import { useRouter } from 'next/router'
 
 function Login({auth,token,login}) {
+    const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [ session, loading ] = useSession()
 
     const onSubmit = (values)=>{
         const payload={
             email,password
         }
-        console.log(auth,token);
-        const hide=message.loading('Please wait...',0);
-        axios.post('/auth/login',payload)
-            .then(res=>{
-                if(res.status===200)
-                {
-                    console.log(res)
-                    console.log(res.data.token);
-                    hide();
-                    login({auth:true,token:res.data.token});
-                    message.success('Login Successful',2);
-                }
-                else{
-                    throw Error(res.data.msg);
-                }
-            })
-            .catch(err=>{
-                hide();
-                if (!err.response) {
-                    console.log("Custom Network Error")
-                    message.error('Network Error',2);
-                } else {
-                    message.error(err.message,2)
-                }
-            });
+        const res=signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+        console.log("Result"+res);
+
+    }
+    const onGoogle = (values)=>{
+        const res=signIn("google",{ callbackUrl: 'http://localhost:3000/dashboard' });
+        console.log("Result"+res);
+
+    }
+
+    const onFacebook = ()=>{
+      const res=signIn("facebook",{ callbackUrl: 'https://548b9431d4d9.ngrok.io/dashboard' });
+      console.log("Result"+res);
     }
 
     return (
@@ -73,17 +63,17 @@ function Login({auth,token,login}) {
           <Text type="secondary"> OR </Text>
         </Typography>
 
-          <Row justify="space-between" className="mt-5 border-top">
+          <Row justify="space-around" className="mt-5 border-top">
               <Col span={8} offset={1}>
-                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>
                       <span>Google</span>
                   </GoogleLoginButton>
               </Col>
-              <Col span={8}>
-                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+              {/* <Col span={8}>
+                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onFacebook()}>
                       <span>Facebook</span>
                   </FacebookLoginButton>
-              </Col>
+              </Col> */}
           </Row>
   
       </>
