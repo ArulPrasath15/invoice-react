@@ -4,16 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/components/storeTestComponent.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/storeTest.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/counterStore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/store/store.js" afterDir="false" />
+    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Removed unwanted files">
+      <change afterPath="$PROJECT_DIR$/pages/settings/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JSX File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -35,6 +39,7 @@
   <component name="ProjectId" id="1wLDIBYnp9pHQmBRW1re23UQjoz" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -106,7 +111,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628231510474</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Removed unwanted files">
+      <created>1628267173332</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1628267173332</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,6 +139,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changes to IDEA configuration" />
     <MESSAGE value="Commiting to check GPG" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commiting to check GPG" />
+    <MESSAGE value="Removed unwanted files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unwanted files" />
   </component>
 </project>
