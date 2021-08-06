@@ -1,16 +1,17 @@
-import axios from 'axios';
+import { useEffect,useState } from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
-import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
-import {useState} from "react";
-import { signIn } from "next-auth/client"
+import { signIn,useSession } from "next-auth/client"
 const { Title, Text } = Typography;
 import {connect} from 'react-redux'
 import {login} from '../../store/authStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
+import { useRouter } from 'next/router'
 
 function Login({auth,token,login}) {
+    const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [ session, loading ] = useSession()
 
     const onSubmit = (values)=>{
         const payload={
@@ -25,6 +26,14 @@ function Login({auth,token,login}) {
         console.log("Result"+res);
 
     }
+
+    useEffect(() => {
+      if(session){
+        router.push('/client');
+      }else{
+        console.log("Logged out");
+      }
+    }, [session,router])
 
     return (
       <>
@@ -64,7 +73,7 @@ function Login({auth,token,login}) {
                   </GoogleLoginButton>
               </Col>
               <Col span={8}>
-                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
+                  <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => signIn('facebook')}>
                       <span>Facebook</span>
                   </FacebookLoginButton>
               </Col>
