@@ -1,7 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 // import storage from 'redux-persist/lib/storage'
-import count from './counterStore'
 import authStore from './authStore'
 import {persistReducer} from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
@@ -14,7 +13,7 @@ const storage = typeof window !== "undefined" ? createWebStorage("local") : crea
 
 
 const reducers = combineReducers({
-    count,authStore
+    authStore
 })
 
 const persistConfig = {
