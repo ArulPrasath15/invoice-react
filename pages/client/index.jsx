@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
+import Link from 'next/link'
 import ClientCard from "../../components/Client/ClientCard";
-// import  styles from '../assets/css/Client.module.css'
 import {Layout, Button, Typography, Col, Row, Table , Card, Space} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
@@ -19,7 +19,11 @@ function Client() {
                     <Title level={4}  >Client</Title>
                 </Col>
                 <Col span={3} offset={12}>
-                <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
+                    <Link href='/client/new'>
+                        <a>
+                            <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
+                        </a>
+                    </Link>
                 </Col>
            </Row>
            <Row className="mt-5 mb-5" justify='space-between'>

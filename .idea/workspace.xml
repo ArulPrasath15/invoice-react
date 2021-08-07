@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Update package.json">
-      <changelist_data name="Abinash S" email="s.abinash@outlook.com" />
-      <change afterPath="$PROJECT_DIR$/components/Client/ClientCard.jsx" afterDir="false" />
+    <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/components/Client/ClientForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/client/new.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Client/Client.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/Client.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/Client.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/client/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/client/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +26,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="Yashwanth K &lt;yashwanthkkn@gmail.com&gt;" />
         <option value="Abinash S &lt;s.abinash@outlook.com&gt;" />
       </list>
     </option>
@@ -128,7 +129,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628267173332</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Updated Client page">
+      <created>1628311445357</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1628311445357</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +158,7 @@
     <MESSAGE value="Changes to IDEA configuration" />
     <MESSAGE value="Commiting to check GPG" />
     <MESSAGE value="Removed unwanted files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unwanted files" />
+    <MESSAGE value="Updated Client page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Client page" />
   </component>
 </project>
