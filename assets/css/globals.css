@@ -170,3 +170,7 @@ h4.ant-typography, .ant-typography h4 , h3.ant-typography, .ant-typography h3{
 .br-5{
   border-radius: 5px;
 }
+
+.ant-form-item-label > label{
+  color: rgba(0, 0, 0, 0.45);
+}

@@ -12,13 +12,15 @@ const ClientCard = ({client}) => {
     const {name , email , phone} = client
     return (
         <Card className='shadow-hv shadow br-5'>
-            <Row>
-                <Col span={6} >
-                    <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />
+            <Row align='middle'>
+                <Col span={12}>
+                    <Button type="danger"  shape="circle" size={"large"} >
+                        {name[0]}
+                    </Button>
+                    <Title className='mt-2' type='secondary' level={5}>{name}</Title>
                 </Col>
-                <Col span={18}>
-                    <Title level={4}>{name}</Title>
-                    <Space direction='vertical'>
+                <Col span={12}>
+                    <Space direction='vertical' className='mt-4'>
                         <Text type='secondary'><MailOutlined /> {email} </Text>
                         <Text type='secondary'><PhoneOutlined /> {phone}</Text>
                     </Space>
