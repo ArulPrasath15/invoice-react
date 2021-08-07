@@ -1,9 +1,14 @@
 import React from 'react';
 import ClientForm from "../../components/Client/ClientForm";
-import {Button, Col, Row, Typography} from "antd";
-import {PlusOutlined} from "@ant-design/icons";
+import {Button, Col, Row, Typography , Popconfirm} from "antd";
 import Head from "next/head";
+import {useRouter} from "next/router";
+
 function NewClient(props) {
+    const router = useRouter();
+    const closeForm = ()=>{
+        router.push('/client')
+    }
     return (
         <>
             <Head>
@@ -16,7 +21,14 @@ function NewClient(props) {
                         <Title level={4}  >Add New Client</Title>
                     </Col>
                     <Col span={3} offset={12}>
-                        <Button type="danger" > Cancel</Button>
+                        <Popconfirm
+                            title="Your changes will not be saved ?"
+                            onConfirm={closeForm}
+                            okText="Close Any"
+                            cancelText="No"
+                        >
+                            <Button type='danger'>Cancel</Button>
+                        </Popconfirm>
                     </Col>
                 </Row>
                 <div className="form">

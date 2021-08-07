@@ -36,7 +36,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div>
-                <Text type='secondary'>Contact Person</Text>
+                <Title type='secondary' level={5}>Contact Person</Title>
                 <Divider />
             </div>
             <Row justify={"space-between"}>
@@ -76,7 +76,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div className="mt-3">
-                <Text type='secondary'>Settings</Text>
+                <Title type='secondary' level={5}>Settings </Title>
                 <Divider />
             </div>
             <Form.Item name="profile" label="Profile" rules={[{ required: true }]}>
@@ -89,7 +89,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div className="mt-3">
-                <Text type='secondary'>Billing Address</Text>
+                <Title type='secondary' level={5}>Billing Address</Title>
                 <Divider />
             </div>
 
@@ -142,7 +142,7 @@ function ClientForm(props) {
                 </Col>
             </Row>
             <div className="mt-3">
-                <Text type='secondary'>Additional Info</Text>
+                <Title type='secondary' level={5}>Additional Info</Title>
                 <Divider />
             </div>
             <Row justify='space-between'>

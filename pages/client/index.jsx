@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import ClientCard from "../../components/Client/ClientCard";
-import {Layout, Button, Typography, Col, Row, Table , Card, Space} from 'antd';
+import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
 
@@ -32,15 +32,32 @@ function Client() {
                         </Link>
                     </Col>
                </Row>
-               <Row className="mt-5 mb-5" justify='space-between'>
-                    {clients.map(client=>{
-                        return (
-                            <Col span={11} key={client.id} className="mt-5">
-                                <ClientCard client={client}  />
-                            </Col>
-                        )
-                    })}
-               </Row>
+            </div>
+            <div className='mx-5 mt-5 mb-5'>
+                {clients.length == 0 &&
+                <Row justify='center' align="middle"  style={{minHeight: '60vh'}}>
+                    <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                           imageStyle={{height: 80,}}
+                           description={<><Title level={4}>Send Invoices to Clients Seamlessly</Title><Text type="secondary">Add clients to your business.</Text></>}>
+                        <Link href='/client/new'>
+                            <a>
+                                <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
+                            </a>
+                        </Link>
+                    </Empty>
+                </Row>
+                }
+                {clients.length > 0 &&
+                <Row  justify='space-between'>
+                     {clients.map(client=>{
+                         return (
+                             <Col span={11} key={client.id} className="mt-5">
+                                 <ClientCard client={client}  />
+                             </Col>
+                         )
+                     })}
+                </Row>
+                }
             </div>
         </>
     )
