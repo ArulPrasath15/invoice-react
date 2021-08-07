@@ -1868,11 +1868,6 @@ inherits@2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
-install-changed@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/install-changed/-/install-changed-1.1.0.tgz#661187dd36f034053b92068a3a71c22aec7410a1"
-  integrity sha512-APUWMdQnwGcyv9bmuvgxCcrR6qtD996+hofEEAPGSjsvGIZuBpBF0yrYAKOl9tmhm2AzxJC4EXUbxZ/SId4NIA==
-
 internal-slot@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/internal-slot/-/internal-slot-1.0.3.tgz#7347e307deeea2faac2ac6205d4bc7d34967f59c"
