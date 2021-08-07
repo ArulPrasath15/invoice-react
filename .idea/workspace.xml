@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="96a4269f-0757-48d6-b5c9-a3ad58444642" name="Changes" comment="Update package.json">
       <changelist_data name="Abinash S" email="s.abinash@outlook.com" />
-      <change afterPath="$PROJECT_DIR$/components/Utils/notify.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Client/ClientCard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/timesheet/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/timesheet/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Client/Client.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/client/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/client/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
