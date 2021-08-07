@@ -3,7 +3,7 @@
 * @author: Abi
 * @description: ----------------
 */
-import React, {useState} from 'react';
+import React from 'react';
 import {Row, Col, Card, Form, Button, Select, Input} from "antd";
 import Link from 'next/link';
 import {PlusOutlined} from "@ant-design/icons";
@@ -13,7 +13,7 @@ const { Option } = Select;
 const TimesheetForm = () => {
 
     const [form] = Form.useForm();
-    const [requiredMark, setRequiredMarkType] = useState('');
+
 
     return (
         <>
@@ -23,7 +23,6 @@ const TimesheetForm = () => {
                         <Form
                             form={form}
                             layout="vertical"
-                            requiredMark={requiredMark}
                         >
                             <Form.Item label="Client" required>
                                 <Select placeholder="Select a Client" allowClear>
@@ -53,7 +52,7 @@ const TimesheetForm = () => {
                             </Row>
 
                             <Form.Item>
-                                <Button type="primary">Create</Button>
+                                <Button type="primary" icon={<PlusOutlined />}>Create</Button>
                             </Form.Item>
                         </Form>
 

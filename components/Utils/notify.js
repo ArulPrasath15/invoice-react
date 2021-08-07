@@ -4,7 +4,7 @@ const notify = ({type='info',msg='', des=''}) => {
     notification[type]({
         message: msg,
         description: des,
-        placement: 'topRight',
+        placement: 'bottomRight',
         duration: 2.5,
     });
     return true;

@@ -2,13 +2,15 @@ import React, {useState} from 'react'
 import notify from '../../components/Utils/notify';
 import { Empty } from 'antd';
 
-import {Layout, Button, Typography, Col, Row, Table , Card, Space} from 'antd';
-import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
+import {Button, Typography, Col, Row} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
 import Head from "next/head";
-import New from "./new";
+import {useRouter} from "next/router";
+import TimesheetList from "../../components/Timesheet/TimesheetList";
 const { Title, Text } = Typography;
 
 function Timesheet() {
+    const router = useRouter();
     const [isEmpty, setIsEmpty] = useState(false);
     return (
         <>
@@ -22,7 +24,7 @@ function Timesheet() {
                     <Title level={4}>Timesheet</Title>
                 </Col>
                 <Col span={4} offset={11}>
-                <Button type="primary" icon={<PlusOutlined />} onClick={()=>notify({type:'success',msg:'Not yet Available'})}>Add Timesheet</Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={()=>router.push('/timesheet/new')}>Add Timesheet</Button>
                 </Col>
            </Row>
         </div>
@@ -32,14 +34,14 @@ function Timesheet() {
                 <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                        imageStyle={{height: 80,}}
                        description={<><Title level={4}>Track your work time</Title><Text type="secondary">Create
-                           timesheets for different clients and turn them into invoices.</Text></>}>
-                    <Button type="primary" icon={<PlusOutlined/>}>Add Timesheet</Button>
+                           timesheet for different clients and turn them into invoices.</Text></>}>
+                    <Button type="primary" icon={<PlusOutlined/>} onClick={()=>router.push('/timesheet/new')}>Add Timesheet</Button>
                 </Empty>
             </Row>
              </div>
         }
         {
-            !isEmpty && <New/>
+            !isEmpty && <TimesheetList/>
         }
         </>
     )

@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 import {Layout, Menu, Button, Typography, Col, Row, Select , Dropdown , Divider, Input, Space} from 'antd';
 import {UserOutlined, LogoutOutlined, BellOutlined, SettingOutlined
-    , MailOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
+    , CopyOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
 
 import logo from '../../assets/images/logo.png';
 // import Template1 from "../components/Templates/template-1";
@@ -81,11 +81,11 @@ const userMenu = (
                     <Menu theme='dark' key="sub1"  style={{fontSize:'16px',height: '100%', borderRight: 0 }} defaultSelectedKeys={['1']}
                           defaultOpenKeys={['sub1']} mode="inline"   >
                         <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
-                        <Menu.Item key="2" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
-                        <Menu.Item key="3" icon={<MailOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
+                        <Menu.Item key="2" icon={<CopyOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
+                        <Menu.Item key="3" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
                         <Menu.Item key="4" icon={<ClockCircleOutlined style={{fontSize:'18px'}} />}><Link href='/timesheet'><a>Timesheets</a></Link></Menu.Item>
                         {/* <Divider dashed /> */}
-                        <div style={{borderTop:'1px solid rgb(82 82 82)'}}></div>
+                        <div style={{borderTop: '1px solid rgb(82 82 82)'}}/>
                         <Menu.Item key="5"  icon={<SettingOutlined style={{fontSize:'18px'}} />}><Link href='/settings'><a>Settings</a></Link></Menu.Item>
                         <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize:'18px'}}/>}  onClick={() => signout()}>Logout</Menu.Item>
                     </Menu>
