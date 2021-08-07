@@ -33,7 +33,7 @@ function NewClient(props) {
                 </Row>
                 <div className="form">
                     <Row >
-                        <Col span={20} offset={2} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
+                        <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
                             <ClientForm />
                         </Col>
                     </Row>

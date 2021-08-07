@@ -26,7 +26,10 @@ function ClientForm(props) {
             name="basic"
             onFinish={onSubmit}
         >
-
+            <div className="mt-3">
+                <Title type='secondary' level={5}>CLIENT DETAILS</Title>
+                <Divider />
+            </div>
             <Form.Item
                 label="Client Name"
                 name="clientName"
@@ -36,7 +39,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div>
-                <Title type='secondary' level={5}>Contact Person</Title>
+                <Title type='secondary' level={5}>CONTACT PERSON</Title>
                 <Divider />
             </div>
             <Row justify={"space-between"}>
@@ -76,7 +79,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div className="mt-3">
-                <Title type='secondary' level={5}>Settings </Title>
+                <Title type='secondary' level={5}>SETTINGS </Title>
                 <Divider />
             </div>
             <Form.Item name="profile" label="Profile" rules={[{ required: true }]}>
@@ -89,7 +92,7 @@ function ClientForm(props) {
             </Form.Item>
 
             <div className="mt-3">
-                <Title type='secondary' level={5}>Billing Address</Title>
+                <Title type='secondary' level={5}>BILLING ADDRESS</Title>
                 <Divider />
             </div>
 
@@ -142,7 +145,7 @@ function ClientForm(props) {
                 </Col>
             </Row>
             <div className="mt-3">
-                <Title type='secondary' level={5}>Additional Info</Title>
+                <Title type='secondary' level={5}>ADDITIONAL INFO</Title>
                 <Divider />
             </div>
             <Row justify='space-between'>
@@ -166,7 +169,7 @@ function ClientForm(props) {
             <div className='text-center mt-5'>
                 <Form.Item >
                     <Button type="primary" htmlType="submit" >
-                        Submit
+                        Create Client
                     </Button>
                 </Form.Item>
             </div>

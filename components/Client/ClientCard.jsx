@@ -20,7 +20,7 @@ const ClientCard = ({client}) => {
                     <Title className='mt-2' type='secondary' level={5}>{name}</Title>
                 </Col>
                 <Col span={12}>
-                    <Space direction='vertical' className='mt-4'>
+                    <Space direction='vertical' className='mt-2'>
                         <Text type='secondary'><MailOutlined /> {email} </Text>
                         <Text type='secondary'><PhoneOutlined /> {phone}</Text>
                     </Space>
