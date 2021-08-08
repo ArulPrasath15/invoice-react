@@ -6,7 +6,7 @@
 import React from 'react';
 import {Tabs} from "antd";
 import General from "../../components/Settings/General";
-import {Accounting} from "../../components/Settings/Accounting";
+import Accounting from "../../components/Settings/Accounting";
 import Head from "next/head";
 const { TabPane } = Tabs;
 
@@ -40,8 +40,8 @@ const Settings = ({data}) => {
                     <TabPane tab="General" key="1">
                         <General countryData={data}/>
                     </TabPane>
-                    <TabPane tab="Accounting"  key="2">
-                        <Accounting/>
+                    <TabPane tab="Accounting" key="2">
+                        <Accounting countryData={data}/>
                     </TabPane>
                 </Tabs>
             </div>
