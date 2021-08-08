@@ -35,3 +35,12 @@ yarn-error.log*
 
 #WebStorm File
 .idea
+
+#Yarn files
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
