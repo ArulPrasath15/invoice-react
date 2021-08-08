@@ -9,8 +9,6 @@ const { Option } = Select;
 import notify from  '../../components/Utils/notify'
 
 
-
-
 function Accounting({countryData}) {
 
     const tempdata={
@@ -32,12 +30,6 @@ function Accounting({countryData}) {
         setEditing(!editing)
         console.log(editing)
     }
-    const AccTypeOptions = [{ label: 'Freelancer', value: 'Freelancer' }, { label: 'Business', value: 'Business' }];
-
-    const onChangeAccType = e => {
-        console.log(' checked', e.target.value);
-        setAcctype(e.target.value);
-    };
     const onSubmit = (values)=>{
         setFormdata(values)
         notify({type:'success',msg:'Updated successfully',des:'General settings updated successfully'})
