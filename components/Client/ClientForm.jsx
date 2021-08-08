@@ -4,12 +4,17 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 function ClientForm(props) {
-
+    const {data} = props
     const countryCode = (
         <Form.Item name="prefix" noStyle>
-            <Select style={{ width: 70 }}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
+            <Select style={{ width: 100 }}>
+                {data.length > 0 &&
+                    data.map(country => {
+                        return (
+                            <Option value={country.callingCode} key={country.code}> {country.code} {country.callingCode}</Option>
+                        )
+                    })
+                }
             </Select>
         </Form.Item>
     );
@@ -138,8 +143,15 @@ function ClientForm(props) {
                         <Select
                             placeholder="Country"
                             allowClear
+
                         >
-                            <Option value="India">India</Option>
+                            {data.length > 0 &&
+                            data.map(country => {
+                                return (
+                                    <Option value={country.name} key={country.code}>{country.name}</Option>
+                                )
+                            })
+                            }
                         </Select>
                     </Form.Item>
                 </Col>

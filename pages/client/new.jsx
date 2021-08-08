@@ -4,7 +4,25 @@ import {Button, Col, Row, Typography , Popconfirm} from "antd";
 import Head from "next/head";
 import {useRouter} from "next/router";
 
+export async function getServerSideProps() {
+    const res = await fetch('https://restcountries.eu/rest/v2/all');
+    let countries = await res.json();
+    let data=[];
+    await countries.forEach(country=>{
+        if(country.alpha3Code!=null && country.callingCodes[0] !=null && country.name != null)
+            data.push({
+                code: country.alpha3Code,
+                callingCode: country.callingCodes[0],
+                name:country.name
+            });
+    });
+    return {
+        props: {data}, // will be passed to the page component as props
+    }
+}
+
 function NewClient(props) {
+    const {data} = props
     const router = useRouter();
     const closeForm = ()=>{
         router.push('/client')
@@ -34,7 +52,7 @@ function NewClient(props) {
                 <div className="form">
                     <Row >
                         <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
-                            <ClientForm />
+                            <ClientForm data={data} />
                         </Col>
                     </Row>
                 </div>
