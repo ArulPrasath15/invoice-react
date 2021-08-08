@@ -1,10 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import axios from "axios";
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import * as Prisma from "@prisma/client"
-
-const prisma = new Prisma.PrismaClient()
 
 const providers = [
     Providers.Credentials({
@@ -76,8 +72,7 @@ const options = {
     jwt: {
         secret: "secret",
         encryption: true
-    },
-    adapter: PrismaAdapter(prisma)
+    }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
