@@ -1,6 +1,10 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import axios from "axios";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import * as Prisma from "@prisma/client"
+
+const prisma = new Prisma.PrismaClient()
 
 const providers = [
     Providers.Credentials({
@@ -39,25 +43,9 @@ const providers = [
             }
         },
 
-    }),
-    Providers.Facebook({
-        clientId: process.env.FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-    })    
+    })
 ]
 
-// TESTING FB OAUTH 
-// use ngrok https domain as facebook only accepts req from https domains
-// use below command to bind local http to remote https (facebook testing):
-// ngrok http -bind-tls=true --host-header="localhost:80" 3000
-
-// update Valid OAuth Redirect URIs at dev.facebook dashboard
-// eg : https://548b9431d4d9.ngrok.io/api/auth/callback/facebook
-
-// add the domain to domain manager facebook dashborad
-// eg : https://548b9431d4d9.ngrok.io
-
-// change the .env next url to new https url
 const callbacks = {
     async signIn(user, account, profile) {
         return true;
@@ -88,7 +76,8 @@ const options = {
     jwt: {
         secret: "secret",
         encryption: true
-    }
+    },
+    adapter: PrismaAdapter(prisma)
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

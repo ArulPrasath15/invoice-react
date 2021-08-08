@@ -6,7 +6,7 @@ import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'a
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const res = await fetch('https://jsonplaceholder.typicode.com/users');
     const data = await res.json();
     return {

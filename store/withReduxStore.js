@@ -26,7 +26,7 @@ export default App
 // eslint-disable-next-line import/no-anonymous-default-export
 function App(App) {
     return class AppWithRedux extends React.Component {
-        static async getInitialProps(appContext) {
+        static async getServerSideProps(appContext) {
             // Get or Create the store with `undefined` as initialState
             // This allows you to set a custom default initialState
             const reduxStore = getOrCreateStore()

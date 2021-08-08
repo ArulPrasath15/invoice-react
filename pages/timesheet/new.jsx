@@ -10,7 +10,7 @@ import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
 const { Title, Text } = Typography;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const res = await fetch('https://restcountries.eu/rest/v2/all');
     let countries = await res.json();
     let data=[];

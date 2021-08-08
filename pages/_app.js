@@ -50,10 +50,10 @@ function _App({ Component, pageProps, reduxStore }) {
   );
 }
 
-_App.getInitialProps = async ({Component,ctx}) => {
+_App.getServerSideProps = async ({Component,ctx}) => {
   let pageProps = {};
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
+  if (Component.getServerSideProps) {
+    pageProps = await Component.getServerSideProps(ctx);
   }
   return {pageProps,};
 }
