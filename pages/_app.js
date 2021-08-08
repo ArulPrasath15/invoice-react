@@ -43,7 +43,7 @@ function _App({ Component, pageProps, reduxStore }) {
     return (
       <>
           <Provider store={reduxStore} session={pageProps.session}>
-              { !hideList.includes(router.pathname) && <NavLayout><Component {...pageProps} /></NavLayout> }
+              { !hideList.includes(router.pathname) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
               { hideList.includes(router.pathname) && <Component {...pageProps} /> }
           </Provider>
       </>
