@@ -6,11 +6,28 @@
 import React from 'react';
 import TimesheetForm from "../../components/Timesheet/TimesheetForm";
 import Head from "next/head";
-import {Button, Col, Popconfirm, Row} from "antd";
+import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
-import Title from "antd/es/typography/Title";
+const { Title, Text } = Typography;
 
-const NewTimeSheet = () => {
+export async function getServerSideProps() {
+    const res = await fetch('https://restcountries.eu/rest/v2/all');
+    let countries = await res.json();
+    let data=[];
+    await countries.forEach(country=>{
+        if(country.alpha3Code!=null && country.currencies[0].code!=null && country.currencies[0].symbol)
+            data.push({
+                code: country.alpha3Code,
+                currency: country.currencies[0].code,
+                symbol: country.currencies[0].symbol
+            });
+    });
+    return {
+        props: {data}, // will be passed to the page component as props
+    }
+}
+
+const NewTimeSheet = ({data}) => {
     const router = useRouter();
     const closeForm = ()=>{
         router.push('/timesheet')
@@ -40,7 +57,7 @@ const NewTimeSheet = () => {
                 <div className="form">
                     <Row >
                         <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
-                            <TimesheetForm />
+                            <TimesheetForm data={data}/>
                         </Col>
                     </Row>
                 </div>

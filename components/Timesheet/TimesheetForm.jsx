@@ -10,10 +10,9 @@ import {PlusOutlined} from "@ant-design/icons";
 
 const { Option } = Select;
 
-const TimesheetForm = () => {
+const TimesheetForm = ({data}) => {
 
     const [form] = Form.useForm();
-
 
     return (
         <>
@@ -37,15 +36,15 @@ const TimesheetForm = () => {
                             <Row gutter={8}>
                                 <Col span={12}>
                                     <Form.Item label="Currency" required>
-                                        <Select showSearch placeholder="Select a person" optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                            <Option value="jack">Jack</Option>
-                                            <Option value="lucy">Lucy</Option>
-                                            <Option value="tom">Tom</Option>
+                                        <Select showSearch placeholder="Select Currency" optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                            {data.map(country => (
+                                                <Option value={country.code} key={country.code}>{country.currency +' - '+country.symbol}</Option>
+                                            ))}
                                         </Select>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Budget" requiredMark={'optional'}>
+                                    <Form.Item label="Budget">
                                         <Input placeholder="Title" />
                                     </Form.Item>
                                 </Col>

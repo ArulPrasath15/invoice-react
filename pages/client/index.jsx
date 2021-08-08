@@ -6,13 +6,17 @@ import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'a
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
 
-function Client() {
-    const [clients,setClients] = useState([]);
-    useEffect( async ()=>{
-        const res = await fetch('https://jsonplaceholder.typicode.com/users');
-        const data = await res.json();
-        setClients(data)
-    },[])
+export async function getServerSideProps() {
+    const res = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await res.json();
+    return {
+        props: {data}, // will be passed to the page component as props
+    }
+}
+
+function Client({data}) {
+    const [clients,setClients] = useState(data);
+
     return (
         <>
             <Head>
