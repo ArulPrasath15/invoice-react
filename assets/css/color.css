@@ -7,6 +7,10 @@
   color:#1890ff ;
 }
 
+.text-secondary{
+  color: rgba(0, 0, 0, 0.45);
+}
+
 .bg-white{
   background-color: white;
 }
