@@ -123,7 +123,7 @@ const InvoiceTable1= () => {
             setTotal(newData, index);
         }
         setTableData(newData);
-    }, []);
+    }, [tableData]);
 
     const onInputChange = (key, index) => (e) => {
         const newData = [...tableData];

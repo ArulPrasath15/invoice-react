@@ -146,7 +146,7 @@ function Accounting({countryData}) {
                 </Row>
                 <Row><Title level={5}>TAXES </Title></Row>
                 <hr className={Styles.hr}/>
-                <Row justify="start" className='pt-2' justify={"space-between"}>
+                <Row justify="space-between" className='pt-2'>
                 <Col span={11}>
                         <Form.Item label="Tax ID" name="taxid" rules={[{ required: true, message: 'Please enter Tax ID ' }]}>
                             <Input />

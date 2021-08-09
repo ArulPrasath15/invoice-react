@@ -11,7 +11,7 @@ function Template(props) {
                 <title>New Invoice | Penta Invoice</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            <Template1></Template1>
+            <Template1/>
         </>
 
     );
