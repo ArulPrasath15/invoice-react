@@ -92,15 +92,25 @@ const userMenu = (
                 </Header>
             <Layout>
               <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}  width={200} className="site-layout-background">
-                    <Menu theme='dark' key="sub1"  style={{fontSize:'16px',height: '100%', borderRight: 0 }} defaultSelectedKeys={['1']}
-                          defaultOpenKeys={['sub1']} mode="inline"  selectedKeys={menuSelected} onSelect={(e)=>{setMenuSelected([`${e.key}`])}}  >
-                        <Menu.Item key="1" style={{marginTop:'0px'}}  icon={<ProjectOutlined style={{fontSize:'18px'}} /> } ><Link href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
-                        <Menu.Item key="2" icon={<CopyOutlined style={{fontSize:'18px'}} />}><Link href='/invoice'><a>Invoice</a></Link></Menu.Item>
-                        <Menu.Item key="3" icon={<UsergroupAddOutlined style={{fontSize:'18px'}} />}><Link href='/client'><a>Client</a></Link></Menu.Item>
-                        <Menu.Item key="4" icon={<ClockCircleOutlined style={{fontSize:'18px'}} />}><Link href='/timesheet'><a>Timesheets</a></Link></Menu.Item>
-                        <Menu.Item key="5" style={{borderTop:"1px solid rgb(82 82 82)"}}  icon={<SettingOutlined style={{fontSize:'18px'}} />}><Link href='/settings'><a>Settings</a></Link></Menu.Item>
-                        <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize:'18px'}}/>}  onClick={() => signout()}>Logout</Menu.Item>
-                    </Menu>
+                  {!loading && <Menu theme='dark' key="sub1" style={{fontSize: '16px', height: '100%', borderRight: 0}}
+                         defaultSelectedKeys={['1']}
+                         defaultOpenKeys={['sub1']} mode="inline" selectedKeys={menuSelected} onSelect={(e) => {
+                      setMenuSelected([`${e.key}`])
+                  }}>
+                      <Menu.Item key="1" style={{marginTop: '0px'}}
+                                 icon={<ProjectOutlined style={{fontSize: '18px'}}/>}><Link
+                          href='/dashboard'><a>Dashboard</a></Link></Menu.Item>
+                      <Menu.Item key="2" icon={<CopyOutlined style={{fontSize: '18px'}}/>}><Link
+                          href='/invoice'><a>Invoice</a></Link></Menu.Item>
+                      <Menu.Item key="3" icon={<UsergroupAddOutlined style={{fontSize: '18px'}}/>}><Link href='/client'><a>Client</a></Link></Menu.Item>
+                      <Menu.Item key="4" icon={<ClockCircleOutlined style={{fontSize: '18px'}}/>}><Link
+                          href='/timesheet'><a>Timesheets</a></Link></Menu.Item>
+                      <Menu.Item key="5" style={{borderTop: "1px solid rgb(82 82 82)"}}
+                                 icon={<SettingOutlined style={{fontSize: '18px'}}/>}><Link
+                          href='/settings'><a>Settings</a></Link></Menu.Item>
+                      <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize: '18px'}}/>}
+                                 onClick={() => signout()}>Logout</Menu.Item>
+                  </Menu>}
               </Sider>
             <Layout className="site-layout">
                 {children}
