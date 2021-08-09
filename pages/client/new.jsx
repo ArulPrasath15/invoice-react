@@ -1,3 +1,8 @@
+/*
+* @created: 07/08/2021 - 1:22 PM
+* @author: Yash
+* @description: List the available clients for a particular busniess
+*/
 import React from 'react';
 import ClientForm from "../../components/Client/ClientForm";
 import {Button, Col, Row, Typography , Popconfirm} from "antd";
@@ -50,8 +55,8 @@ function NewClient(props) {
                     </Col>
                 </Row>
                 <div className="form">
-                    <Row >
-                        <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
+                    <Row className='bg-white mt-5 mb-5 py-5 px-5 br-5' >
+                        <Col xs={{span: 24}} lg={{span: 12, offset:6}}  >
                             <ClientForm data={data} />
                         </Col>
                     </Row>

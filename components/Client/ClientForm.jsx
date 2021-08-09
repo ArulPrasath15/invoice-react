@@ -1,3 +1,8 @@
+/*
+* @created: 07/08/2021 - 1:55 PM
+* @author: Yash
+* @description: Form component to create a new client
+*/
 import React from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, Select, message , Divider} from 'antd';
 const { Title, Text } = Typography;
@@ -6,7 +11,7 @@ const { Option } = Select;
 function ClientForm(props) {
     const {data} = props
     const countryCode = (
-        <Form.Item name="prefix" noStyle>
+        <Form.Item name="phoneCode" noStyle>
             <Select style={{ width: 100 }}>
                 {data.length > 0 &&
                     data.map(country => {
@@ -20,6 +25,7 @@ function ClientForm(props) {
     );
 
     const onSubmit = (values)=>{
+        // post from here
         console.log(values)
     }
     return (
@@ -178,9 +184,9 @@ function ClientForm(props) {
                     </Form.Item>
                 </Col>
             </Row>
-            <div className='text-center mt-5'>
+            <div className='mt-5'>
                 <Form.Item >
-                    <Button type="primary" htmlType="submit" >
+                    <Button type="primary" htmlType="submit" shape='round'>
                         Create Client
                     </Button>
                 </Form.Item>
