@@ -61,11 +61,13 @@ export default function Template1() {
                         </Dropdown>
                         }
                         {client!="" &&
-                        <><h2>Invoice For </h2>
-                        <p>Micheal Roy<br/>
-                            1114 Freedom Lane<br/>
-                            Lodi D.F., California, 95240
-                        </p></>}
+                        <>
+                            <h2>Invoice For </h2>
+                            <p>Micheal Roy<br/>
+                                1114 Freedom Lane<br/>
+                                Lodi D.F., California, 95240
+                            </p>
+                        </>}
                     </div>
 
 
@@ -123,7 +125,7 @@ const InvoiceTable1= () => {
             setTotal(newData, index);
         }
         setTableData(newData);
-    }, [tableData]);
+    }, []);
 
     const onInputChange = (key, index) => (e) => {
         const newData = [...tableData];
@@ -148,13 +150,14 @@ const InvoiceTable1= () => {
 
     const columns = [
         {
-            title: "Sr No",
-            dataIndex: "sr"
+            title: "Sr No.",
+            dataIndex: "sr",
+            width: "8%"
         },
         {
             title: "Particulars",
             dataIndex: "desc",
-            width: "30%",
+            width: "50%",
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -166,6 +169,7 @@ const InvoiceTable1= () => {
         {
             dataIndex: "qty",
             title: "Quantity",
+            width: "12%",
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -177,6 +181,7 @@ const InvoiceTable1= () => {
         {
             dataIndex: "price",
             title: "Unit Price",
+            width: "12%",
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -188,6 +193,7 @@ const InvoiceTable1= () => {
         {
             dataIndex: "amt",
             title: "Amount",
+            width: "15%",
             render: (text, record, index) => <h4>  {text}</h4>
         }
     ];
@@ -201,7 +207,7 @@ const InvoiceTable1= () => {
         };
         setTableData([...tableData, newData1]);
     };
-    const { Option1 } = Select;
+    const { Option } = Select;
     return (
         <div >
             <div className="action-btn">
@@ -217,12 +223,13 @@ const InvoiceTable1= () => {
                 dataSource={tableData}
                 pagination={false}
                 size="small"
+                tableLayout="unset"
                 summary={pageData => (
-                    <Table.Summary fixed  bordered={false}>
+                    <Table.Summary fixed >
                         <Table.Summary.Row >
                             <Table.Summary.Cell colSpan={2} />
                             <Table.Summary.Cell colSpan={2} >
-                                Sub Total
+                                <b>Sub Total</b>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell>
 
@@ -231,9 +238,9 @@ const InvoiceTable1= () => {
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
 
-                            <Table.Summary.Cell  >VAT </Table.Summary.Cell>
+                            <Table.Summary.Cell  ><b>VAT</b> </Table.Summary.Cell>
                             <Table.Summary.Cell>
-                                <Select style={{ width: 100}} bordered={false}>
+                                <Select defaultValue="18%" style={{ width: 100}} bordered={false}>
                                     <Option value="1%">1%</Option>
                                     <Option value="2%">2%</Option>
                                     <Option value="8%">8%</Option>
@@ -250,7 +257,7 @@ const InvoiceTable1= () => {
                         </Table.Summary.Row>
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
-                            <Table.Summary.Cell colSpan={2}>Total </Table.Summary.Cell>
+                            <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
                             <Table.Summary.Cell>
 
                             </Table.Summary.Cell>
