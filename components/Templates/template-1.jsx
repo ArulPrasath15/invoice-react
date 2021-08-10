@@ -1,6 +1,12 @@
+/*
+* @created: 08/08/2021 - 04:25 PM
+* @author: Ajay R
+* @description: Template Design for creating new invoice
+*/
+
 import  styles from  '../../assets/css/template.module.css'
-import {useEffect, useState,cloneElement} from 'react';
-import {Button, DatePicker, Input, Table, Tooltip,Select,Option,Popover,Menu,Dropdown} from 'antd';
+import {useEffect, useState} from 'react';
+import {Button, DatePicker, Input, Table, Tooltip,Select,Menu,Dropdown} from 'antd';
 import {PlusOutlined} from "@ant-design/icons";
 
 
@@ -53,33 +59,36 @@ export default function Template1() {
                     </div>
 
                     <div className={styles.for}>
-                        {client==""&&
+                        {client===""&&
                         <Dropdown overlay={menu}  placement="bottomLeft" arrow>
                             <Button>
                                 <PlusOutlined />Add Client
                             </Button>
                         </Dropdown>
                         }
-                        {client!="" &&
-                        <><h2>Invoice For </h2>
-                        <p>Micheal Roy<br/>
-                            1114 Freedom Lane<br/>
-                            Lodi D.F., California, 95240
-                        </p></>}
+                        {client!=="" &&
+                        <>
+                            <h2>Invoice For </h2>
+                            <p>Micheal Roy<br/>
+                                1114 Freedom Lane<br/>
+                                Lodi D.F., California, 95240
+                            </p>
+                        </>}
                     </div>
 
 
                     <div className={styles.from}>
                         <h2>From</h2>
-                        <p style={{paddingBottom: "20px", borderBottom: "1px solid #e5e5e5"}}>Thiyo <br/>
+                        <p style={{paddingBottom: "20px", borderBottom: "1px solid #e5e5e5"}}>
+                            Thiyo <br/>
                             3386 Allison Avenue<br/>
                             Virginia Beach, Virginia, 23462
                         </p>
-                        <p style={{paddingTop: "20px"}}>
-                            <label>Invoice ID: 23543</label><br/>
+                        <div style={{paddingTop: "20px"}}>
+                            <span>Invoice ID: 23543</span><br/>
                             Invoice Date: <DatePicker bordered={false} /><br/>
                             Due Date: <DatePicker bordered={false}/>
-                        </p>
+                        </div>
                     </div>
 
                     <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
@@ -104,8 +113,6 @@ export default function Template1() {
 
                 </div>
             </div>
-
-            <div className="responsive-message"></div>
         </div>
     );
 }
@@ -123,7 +130,7 @@ const InvoiceTable1= () => {
             setTotal(newData, index);
         }
         setTableData(newData);
-    }, [tableData]);
+    }, []);
 
     const onInputChange = (key, index) => (e) => {
         const newData = [...tableData];
@@ -148,13 +155,16 @@ const InvoiceTable1= () => {
 
     const columns = [
         {
-            title: "Sr No",
-            dataIndex: "sr"
+            title: "Sr No.",
+            dataIndex: "sr",
+            width: "8%"
         },
         {
             title: "Particulars",
             dataIndex: "desc",
-            width: "30%",
+            width: "50%",
+
+            // eslint-disable-next-line react/display-name
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -166,6 +176,8 @@ const InvoiceTable1= () => {
         {
             dataIndex: "qty",
             title: "Quantity",
+            width: "12%",
+            // eslint-disable-next-line react/display-name
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -177,6 +189,8 @@ const InvoiceTable1= () => {
         {
             dataIndex: "price",
             title: "Unit Price",
+            width: "12%",
+            // eslint-disable-next-line react/display-name
             render: (text, record, index) => (
                 <Input
                     value={text}
@@ -188,7 +202,9 @@ const InvoiceTable1= () => {
         {
             dataIndex: "amt",
             title: "Amount",
-            render: (text, record, index) => <h4>  {text}</h4>
+            width: "15%",
+            // eslint-disable-next-line react/display-name
+            render: (text) => <h4>  {text}</h4>
         }
     ];
     const handleAdd = () => {
@@ -201,7 +217,7 @@ const InvoiceTable1= () => {
         };
         setTableData([...tableData, newData1]);
     };
-    const { Option1 } = Select;
+    const { Option } = Select;
     return (
         <div >
             <div className="action-btn">
@@ -217,12 +233,13 @@ const InvoiceTable1= () => {
                 dataSource={tableData}
                 pagination={false}
                 size="small"
-                summary={pageData => (
-                    <Table.Summary fixed  bordered={false}>
+                tableLayout="unset"
+                summary={()=> (
+                    <Table.Summary fixed >
                         <Table.Summary.Row >
                             <Table.Summary.Cell colSpan={2} />
                             <Table.Summary.Cell colSpan={2} >
-                                Sub Total
+                                <b>Sub Total</b>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell>
 
@@ -231,9 +248,9 @@ const InvoiceTable1= () => {
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
 
-                            <Table.Summary.Cell  >VAT </Table.Summary.Cell>
+                            <Table.Summary.Cell  ><b>VAT</b> </Table.Summary.Cell>
                             <Table.Summary.Cell>
-                                <Select style={{ width: 100}} bordered={false}>
+                                <Select defaultValue="18%" style={{ width: 100}} bordered={false}>
                                     <Option value="1%">1%</Option>
                                     <Option value="2%">2%</Option>
                                     <Option value="8%">8%</Option>
@@ -250,7 +267,7 @@ const InvoiceTable1= () => {
                         </Table.Summary.Row>
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
-                            <Table.Summary.Cell colSpan={2}>Total </Table.Summary.Cell>
+                            <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
                             <Table.Summary.Cell>
 
                             </Table.Summary.Cell>

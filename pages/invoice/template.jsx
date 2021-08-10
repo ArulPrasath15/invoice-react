@@ -3,8 +3,6 @@ import Head from "next/head";
 import Template1 from "../../components/Templates/template-1";
 
 function Template(props) {
-
-
     return (
         <>
             <Head>

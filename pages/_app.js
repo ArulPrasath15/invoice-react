@@ -27,11 +27,10 @@ function _App({ Component, pageProps, reduxStore }) {
 
 
     useEffect(() => {
-        getSession().then((session) => {
+        getSession().then((session,loading) => {
             if (session) {
                 setAuthToken(session.user.jwt);
                 console.log("Index Session",session)
-                Router.push('/dashboard')
             } else {
                 Router.push('/')
             }

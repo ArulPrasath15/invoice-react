@@ -1,4 +1,4 @@
-import {Row, Col, Button, Divider, Radio, Input, Form, Select, Space} from 'antd';
+import {Row, Col, Button, Divider, Radio, Input, Form, Select, Space, Image} from 'antd';
 import { EditOutlined,SaveOutlined,CloseOutlined,ShopOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
@@ -55,7 +55,7 @@ function General({countryData}) {
                 </Row>
                 <Divider className="mt-3 mb-2"/>
                 <div style={{paddingRight:"20vw",paddingLeft:"20vw"}}>
-                    <Title level={5} type={'secondary'} >ACCOUNT </Title>
+                    <Title className={'mt-5'}  level={5} type={'secondary'} >ACCOUNT </Title>
                     <Space direction={'vertical'}>
                         <Space>
                             <Text className={'text-secondary'}>Account Type : </Text>
