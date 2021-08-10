@@ -31,6 +31,7 @@ function _App({ Component, pageProps, reduxStore }) {
             if (session) {
                 setAuthToken(session.user.jwt);
                 console.log("Index Session",session)
+                Router.push('/dashboard')
             } else {
                 Router.push('/')
             }

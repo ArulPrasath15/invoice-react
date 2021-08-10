@@ -56,11 +56,11 @@ const userMenu = (
         <Layout style={{ minHeight: '100vh' }} >
                 <Header className="header" style={{backgroundColor:'white',boxShadow:'inset rgb(0 0 0 / 0%) 0px -5px 8px 0px',paddingLeft:'2vh'}}   >
                     <Row gutter={16}>
-                        <Col className="gutter-row" span={1} style={{paddingTop:'10px'}}>
-                            <Image width={40} height={40} alt="img" src={logo}/>
+                        <Col className="gutter-row " span={1} style={{paddingTop:'10px'}} >
+                            <Image width={40} height={40} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>
                         </Col>
-                        <Col className="gutter-row" span={5} style={{paddingTop:'10px'}}>
-                            <Title style={{color:'#ff0202'}} level={3}>Pentafox Invoice</Title>
+                        <Col className="gutter-row " span={5} style={{paddingTop:'10px'}}>
+                            <Title style={{color:'#ff0202'}} level={3} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>
                         </Col>
                         <Col className="gutter-row" span={4} offset={7}>
                             <div  ><Search placeholder="Search Client" allowClear style={{ width: 250, marginTop:'16px' }} /></div>

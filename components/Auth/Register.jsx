@@ -140,11 +140,9 @@ function Register() {
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
-        <Row justify="space-around" className="mt-5 border-top">
-            <Col span={8} offset={1}>
-                <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
-                    <span>Google</span>
-                </GoogleLoginButton>
+        <Row justify="space-around" className="mt-2 border-top">
+            <Col span={10} offset={1}>
+                <center> <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}/></center>
             </Col>
             {/* <Col span={8}>
                 <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
