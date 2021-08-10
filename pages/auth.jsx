@@ -21,9 +21,10 @@ function Auth() {
         </Head>
 
             <Row>
-                <Col sm={0} lg={12} className={styles.authBgImg}>
+                <Col xs={0} lg={12} className={styles.authBgImg}>
                 </Col>
-                <Col sm={24} lg={12} style={{paddingLeft:"7vw",paddingRight:"7vw"}}>
+                <Col xs={24} lg={12} style={{paddingLeft:"7vw",paddingRight:"7vw"}}>
+
                     <div className={'mt-3'}>
                         <Space>
                             <Image src={logoImg} alt="img" width={35} height={35} className={styles.authLogo} />
