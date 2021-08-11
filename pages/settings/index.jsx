@@ -47,12 +47,12 @@ const Settings = ({data}) => {
 
         <div className="mx-5 mt-5">
                 <Row gutter={24}>
-                    <Col span={5}>
+                    <Col span={6}>
                         <Card size="large"  >
-                           <MyProfile/>
+                              <MyProfile/>
                         </Card>
                     </Col>
-                    <Col span={19} >
+                    <Col span={18} >
                         <div className="card-container">
                         <Tabs type="card" size='large'>
                             <TabPane tab="General" key="1">

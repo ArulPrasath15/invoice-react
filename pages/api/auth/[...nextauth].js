@@ -17,9 +17,11 @@ const providers = [
                 if (res) {
                     return res.data;
                 }
-                return null
+                return Promise.reject('?authError=failed');
             }catch(err){
-                return null;
+
+                return Promise.reject('?authError=Server Error! Please try again later');
+
             }
             // If no error and we have user data, return it
             // Return null if user data could not be retrieved

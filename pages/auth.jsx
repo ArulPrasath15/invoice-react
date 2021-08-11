@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Link from 'next/link'
 import styles from '../assets/css/Auth.module.css';
 import {Row, Col, Card, Space, Button} from 'antd';
@@ -9,9 +9,18 @@ import Image from 'next/image'
 import Login from '../components/Auth/Login';
 import Register from '../components/Auth/Register';
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import notify from "../components/Utils/notify";
+
 
 function Auth() {
     const [showLogin, setLogin] = useState(true);
+    const router = useRouter()
+
+    useEffect(()=>{
+        const { authError }=router.query
+        if(authError) {notify({type:'error',msg:`${authError}`,des:''})}
+    },[])
 
     return (
         <>

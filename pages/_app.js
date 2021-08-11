@@ -28,13 +28,14 @@ function _App({ Component, pageProps, reduxStore }) {
 
     useEffect(() => {
         getSession().then((session,loading) => {
+
             setLoader(true)
             if (session) {
                 setAuthToken(session.user.jwt);
                 setLoader(false);
                 console.log("Index Session",session)
             } else {
-                Router.push('/')
+                if(!Router.query.autherror) {Router.push('/auth')}
                 setLoader(false);
             }
         });
