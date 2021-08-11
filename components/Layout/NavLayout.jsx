@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import React from "react"
-import {signout, useSession} from "next-auth/client";
+import {signout, useSession,signOut} from "next-auth/client";
 import Link from 'next/link'
 import Image from 'next/image'
 // React.useLayoutEffect = React.useEffect
@@ -109,7 +109,7 @@ const userMenu = (
                                  icon={<SettingOutlined style={{fontSize: '18px'}}/>}><Link
                           href='/settings'><a>Settings</a></Link></Menu.Item>
                       <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize: '18px'}}/>}
-                                 onClick={() => signout()}>Logout</Menu.Item>
+                                 onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}>Logout</Menu.Item>
                   </Menu>}
               </Sider>
             <Layout className="site-layout">
