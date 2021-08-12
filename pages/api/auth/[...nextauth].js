@@ -5,15 +5,14 @@ import axios from "axios";
 const providers = [
     Providers.Credentials({
         id: "email-pass",
-        name: 'Credentials',
         credentials: {
             email: { label: "Email", type: "email" },
             password: {  label: "Password", type: "password" }
         },
         async authorize(credentials, req) {
-            try{
 
-                const res = await axios.post('/auth/login', credentials);
+            try{
+                const res = await axios.post('/auth/login', req.query);
                 if (res) {
                     return res.data;
                 }

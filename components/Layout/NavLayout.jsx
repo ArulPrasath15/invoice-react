@@ -84,7 +84,7 @@ const userMenu = (
                                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                     
                                     {!session && <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />}
-                                    {session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.name[0]}</Button>}
+                                    {/*{session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.name[0]}</Button>}*/}
                                 </a>
                             </Dropdown>
                         </Col>

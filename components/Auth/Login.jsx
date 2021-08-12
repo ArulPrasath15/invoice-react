@@ -7,17 +7,21 @@ import {login} from '../../store/authStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 import { useRouter } from 'next/router'
 
-function Login({auth,token,login}) {
+function Login({auth,token,login,deviceInfo}) {
     const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [ session, loading ] = useSession()
-
-    const onSubmit = (values)=>{
+    // console.log(deviceInfo);
+    const  onSubmit = async (values)=>{
+        let {browserMajorVersion, browserName, osName, osVersion}=deviceInfo;
+        console.log("Login",values)
         const payload={
-            email,password
+            email, password, browserMajorVersion, browserName, osName, osVersion
         }
-        const res=signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+        console.log("Payload",payload)
+        // const res=await fetch("http://localhost:3000/api/auth/signin/email-pass",{method:'POST',body:JSON.stringify(payload)})
+        const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
         console.log("Result"+res);
 
     }
