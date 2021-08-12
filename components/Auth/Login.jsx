@@ -7,6 +7,8 @@ import {login} from '../../store/authStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 import { useRouter } from 'next/router'
 
+// ToDo: Encrpt the Password which is being sent thourgh query params
+
 function Login({auth,token,login,deviceInfo}) {
     const router = useRouter()
     const [email, setEmail] = useState('');

@@ -11,7 +11,7 @@ import Register from '../components/Auth/Register';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import notify from "../components/Utils/notify";
-
+import {deviceDetect} from "react-device-detect";
 
 function Auth() {
     const [showLogin, setLogin] = useState(true);
@@ -20,7 +20,7 @@ function Auth() {
     useEffect(()=>{
         const { authError }=router.query
         if(authError) {notify({type:'error',msg:`${authError}`,des:''})}
-    },[])
+    },[router.query])
 
     return (
         <>
@@ -48,7 +48,7 @@ function Auth() {
                             <Button  danger={!showLogin} type="text" onClick={()=>setLogin(false)}>Signup</Button>
                         </Col>
                     </Row>
-                    { showLogin && <Login />}
+                    { showLogin && <Login deviceInfo={deviceDetect()}/>}
                     { !showLogin && <Register />}
                 </Col>
             </Row>
