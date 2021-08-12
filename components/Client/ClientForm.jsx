@@ -11,7 +11,9 @@ const { Option } = Select;
 function ClientForm(props) {
     const {data} = props
     const countryCode = (
-        <Form.Item name="phoneCode" noStyle>
+        <Form.Item name="phone_code"
+                   rules={[{ required: true, message: 'Please Choose Phonecode ' }]}
+                   noStyle>
             <Select style={{ width: 100 }}>
                 {data.length > 0 &&
                     data.map(country => {
@@ -42,9 +44,17 @@ function ClientForm(props) {
                 <Divider />
             </div>
             <Form.Item
-                label="Client Name"
-                name="clientName"
+                label="Client Business Name"
+                name="business_name"
                 rules={[{ required: true, message: 'Please enter Client Name ' }]}
+            >
+                <Input />
+            </Form.Item>
+
+            <Form.Item
+                label="GSTIN"
+                name="gstin"
+                rules={[{ required: true, message: 'Please enter GSTIN ' }]}
             >
                 <Input />
             </Form.Item>
@@ -57,7 +67,7 @@ function ClientForm(props) {
                 <Col span={11}>
                     <Form.Item
                         label="First Name"
-                        name="firstName"
+                        name="first_name"
                         rules={[{ required: true, message: 'Please enter First Name ' }]}
                     >
                         <Input />
@@ -66,7 +76,7 @@ function ClientForm(props) {
                 <Col span={11}>
                     <Form.Item
                         label="Last Name"
-                        name="lastName"
+                        name="last_name"
                         rules={[{ required: true, message: 'Please enter Last Name ' }]}
                     >
                         <Input />
@@ -82,6 +92,7 @@ function ClientForm(props) {
                 ]}>
                 <Input />
             </Form.Item>
+            <small className={'text-secondary'}>Invoices will be sent to this Email</small>
             <Form.Item
                 name="phone"
                 label="Phone Number"
@@ -90,26 +101,13 @@ function ClientForm(props) {
             </Form.Item>
 
             <div className="mt-3">
-                <Title type='secondary' level={5}>SETTINGS </Title>
-                <Divider />
-            </div>
-            <Form.Item name="profile" label="Profile" rules={[{ required: true }]}>
-                <Select
-                    placeholder="Profile Setting"
-                    allowClear
-                >
-                    <Option value="default">Default Setting</Option>
-                </Select>
-            </Form.Item>
-
-            <div className="mt-3">
                 <Title type='secondary' level={5}>BILLING ADDRESS</Title>
                 <Divider />
             </div>
 
             <Form.Item
-                label="Street / Number"
-                name="street"
+                label="Address"
+                name="address"
                 rules={[{ required: true, message: 'Please enter Street Name  ' }]}
             >
                 <Input />
@@ -117,9 +115,9 @@ function ClientForm(props) {
             <Row justify={"space-between"}>
                 <Col span={11}>
                     <Form.Item
-                        label="ZIP"
-                        name="zip"
-                        rules={[{ required: true, message: 'Please enter Zip code ' }]}
+                        label="Pincode"
+                        name="pincode"
+                        rules={[{ required: true, message: 'Please enter Pincode ' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -149,7 +147,6 @@ function ClientForm(props) {
                         <Select
                             placeholder="Country"
                             allowClear
-
                         >
                             {data.length > 0 &&
                             data.map(country => {
@@ -177,7 +174,7 @@ function ClientForm(props) {
                 </Col>
                 <Col span='11'>
                     <Form.Item
-                        name="vat"
+                        name="vatid"
                         label="VAT ID"
                     >
                         <Input />

@@ -11,7 +11,7 @@ import '../assets/css/color.css'
 import NavLayout from "../components/Layout/NavLayout";
 import {getSession} from "next-auth/client";
 import Router from 'next/router'
-
+import {Spin, Row, Col} from 'antd'
 
 
 NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 });Router.events.on('routeChangeStart', () => {NProgress.start()});Router.events.on('routeChangeComplete', () => {NProgress.done();});Router.events.on('routeChangeError', () => {NProgress.done();});
@@ -20,20 +20,23 @@ NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 })
 
 function _App({ Component, pageProps, reduxStore }) {
     const [authToken, setAuthToken] = useState('');
-
+    const [loader , setLoader] = useState(true);
     axios.defaults.baseURL = 'http://localhost:8800';
     axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 
     useEffect(() => {
-        getSession().then((session) => {
+        getSession().then((session,loading) => {
+
+            setLoader(true)
             if (session) {
                 setAuthToken(session.user.jwt);
+                setLoader(false);
                 console.log("Index Session",session)
-                Router.push('/dashboard')
             } else {
-                Router.push('/')
+                if(!Router.query.autherror) {Router.push('/auth')}
+                setLoader(false);
             }
         });
     }, []);
@@ -44,8 +47,15 @@ function _App({ Component, pageProps, reduxStore }) {
     return (
       <>
           <Provider store={reduxStore} session={pageProps.session}>
-              { !hideList.includes(router.pathname) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
-              { hideList.includes(router.pathname) && <Component {...pageProps} /> }
+              {loader &&
+              <Row align={'middle'} className={'h-100'}>
+                  <Col offset={12}>
+                      <Spin></Spin>
+                  </Col>
+              </Row>
+              }
+            { (!hideList.includes(router.pathname) && !loader) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
+            { (hideList.includes(router.pathname) && !loader) && <Component {...pageProps} /> }
           </Provider>
       </>
   );
