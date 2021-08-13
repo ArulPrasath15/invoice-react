@@ -13,7 +13,8 @@ const providers = [
 
             try{
                 const res = await axios.post('/auth/login', req.query);
-                if (res) {
+                console.log("Response Data",res.data)
+                if (res.data!==null) {
                     return res.data;
                 }
                 return Promise.reject('?authError=failed');
@@ -45,16 +46,18 @@ const providers = [
 
 const callbacks = {
     async signIn(user, account, profile) {
-        return true;
+        return user;
     },
     async session(session, user) {
+        console.log("Inside session")
+        console.log(session,user)
         session.user=user;
         return session
     },
-    async jwt(token, user, account, profile, isNewUser) {
-        const isUserSignedIn = !!user;
-        if(isUserSignedIn && user.token) {
-            token.jwt = user.token.toString();
+    async jwt(token, user) {
+        if (user) {
+            token.jwt = user.jwt;
+            token.user = user.user;
         }
         return Promise.resolve(token);
     },

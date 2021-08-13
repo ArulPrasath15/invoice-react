@@ -3,13 +3,15 @@ import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { signIn,useSession } from "next-auth/client"
 const { Title, Text } = Typography;
 import {connect} from 'react-redux'
-import {login} from '../../store/authStore'
+import {login} from '../../store/userStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 import { useRouter } from 'next/router'
 
+
+
 // ToDo: Encrpt the Password which is being sent thourgh query params
 
-function Login({auth,token,login,deviceInfo}) {
+function Login({login,deviceInfo}) {
     const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,14 +19,12 @@ function Login({auth,token,login,deviceInfo}) {
     // console.log(deviceInfo);
     const  onSubmit = async (values)=>{
         let {browserMajorVersion, browserName, osName, osVersion}=deviceInfo;
-        console.log("Login",values)
         const payload={
             email, password, browserMajorVersion, browserName, osName, osVersion
         }
-        console.log("Payload",payload)
-        // const res=await fetch("http://localhost:3000/api/auth/signin/email-pass",{method:'POST',body:JSON.stringify(payload)})
         const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
-        console.log("Result"+res);
+        console.log("Result",res);
+        await login({auth: true, user: res});
 
     }
     const onGoogle = (values)=>{
@@ -85,8 +85,8 @@ function Login({auth,token,login,deviceInfo}) {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.authStore.auth,
-    token: state.authStore.token
+    auth: state.userStore.auth,
+    user: state.userStore.user
 })
 
 const mapDispatchToProps = { login }
