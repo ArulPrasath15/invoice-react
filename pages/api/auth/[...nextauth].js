@@ -13,7 +13,6 @@ const providers = [
 
             try{
                 const res = await axios.post('/auth/login', req.query);
-                console.log("Response Data",res.data)
                 if (res.data!==null) {
                     return res.data;
                 }
@@ -49,14 +48,12 @@ const callbacks = {
         return user;
     },
     async session(session, user) {
-        console.log("Inside session")
-        console.log(session,user)
         session.user=user;
         return session
     },
     async jwt(token, user) {
         if (user) {
-            token.jwt = user.jwt;
+            token.token = user.token;
             token.user = user.user;
         }
         return Promise.resolve(token);
