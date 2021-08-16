@@ -21,7 +21,7 @@ function Register({deviceInfo}) {
                 const payload={
                     email:values.email, password:values.password, browserMajorVersion, browserName, osName, osVersion
                 }
-                const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+                const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/new' }, payload);
             }
             else{
                 throw Error(res.data.msg);
@@ -68,12 +68,9 @@ function Register({deviceInfo}) {
               </Form.Item>
             </Col>
             <Col xs={11}>
-              <Form.Item name="btype" rules={[{ required: true , message:"Choose your business type"  }]}>
-                <Select placeholder='Business Type' className='w-100'>
-                    <Option value="Retailer">Retailer</Option>
-                    <Option value="Freelancer">Freelancer</Option>
-                </Select>
-              </Form.Item>
+                <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' }]}>
+                    <Input allowClear placeholder="Mobile"  />
+                </Form.Item>
             </Col>
           </Row>
 
@@ -81,20 +78,6 @@ function Register({deviceInfo}) {
           <Form.Item name="email" rules={[{ required: true, message: 'Please enter your Email id ' }, { type:'email' , message:"Enter a valid Email id" }]}>
             <Input allowClear placeholder="Email"  />
           </Form.Item>
-        
-          <Row justify="space-between">
-            <Col xs={24} lg={11}>
-              <Form.Item name="bname" rules={[{ required: true, message: 'Please enter your Business Name ' },]}>
-                <Input allowClear placeholder="Business Name"  />
-              </Form.Item>
-            </Col>
-            <Col xs={24} lg={11}>
-              <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' },{type:'number',message: 'Please enter valid Mobile Number '}]}>
-                  <Input allowClear placeholder="Mobile"  />
-              </Form.Item>
-            </Col>
-          </Row>
-
 
           <Row justify="space-between">
             <Col xs={24} lg={11}>

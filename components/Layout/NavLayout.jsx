@@ -13,7 +13,7 @@ const { Option } = Select;
 const { Header, Sider } = Layout;
 const { Title } = Typography;
 import Router from 'next/router'
-
+import AuthRoute from '../../hoc/auth.hoc'
 
 
 const userMenu = (
@@ -124,4 +124,5 @@ const userMenu = (
 
 }
 
+// export default AuthRoute(NavLayout);
 export default NavLayout;

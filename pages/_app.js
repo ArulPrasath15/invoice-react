@@ -31,18 +31,18 @@ function _App({ Component, pageProps, reduxStore }) {
 
             setLoader(true)
             if (session) {
-                setAuthToken(session.user.jwt);
+                setAuthToken(session.user.token);
                 setLoader(false);
                 console.log("Index Session",session)
             } else {
-                if(!Router.query.autherror) {Router.push('/auth')}
+                // if(!Router.query.autherror) {Router.push('/auth')}
                 setLoader(false);
             }
         });
     }, []);
     const router = useRouter()
     const [auth, setAuth] = useState(false);
-    const hideList=['/','/auth']
+    const hideList=['/','/auth','/new']
 
     return (
       <>
