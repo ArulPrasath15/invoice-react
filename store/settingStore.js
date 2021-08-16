@@ -1,5 +1,5 @@
 /*
-* @created: 03/08/2021 - 2:32 PM
+* @created: 16/08/2021 - 7:30 PM
 * @author: Abi
 * @description: ----------------
 */
@@ -14,10 +14,13 @@ const authSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser(state, action) {
+        login(state, action) {
             console.log(action.payload);
             state.auth=action.payload.auth;
             state.user=action.payload.user;
+        },
+        logout(state, action) {
+            state=initialState
         },
         resetStore(state, action){
             state=initialState
@@ -25,6 +28,6 @@ const authSlice = createSlice({
     }
 })
 
-export const { setUser, resetStore } = authSlice.actions
+export const { login, logout, resetStore } = authSlice.actions
 
 export default authSlice.reducer

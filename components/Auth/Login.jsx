@@ -2,14 +2,12 @@ import { useEffect,useState } from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { signIn,useSession } from "next-auth/client"
 const { Title, Text } = Typography;
-import {connect} from 'react-redux'
-import {login} from '../../store/userStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 import { useRouter } from 'next/router'
 
 
 
-// ToDo: Encrpt the Password which is being sent thourgh query params
+// ToDo: Encrypt the Password which is being sent through query params
 
 function Login({login,deviceInfo}) {
     const router = useRouter()
@@ -25,7 +23,6 @@ function Login({login,deviceInfo}) {
         try{
             const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
             console.log("Result",res);
-            await login({auth: true, user: res});
         }catch (e){
             console.log(e)
         }
@@ -87,11 +84,6 @@ function Login({login,deviceInfo}) {
     );
 }
 
-const mapStateToProps = (state) => ({
-    auth: state.userStore.auth,
-    user: state.userStore.user
-})
 
-const mapDispatchToProps = { login }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login;

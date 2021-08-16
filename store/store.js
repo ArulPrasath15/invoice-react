@@ -4,6 +4,7 @@ import { combineReducers } from 'redux'
 import userStore from './userStore'
 import {persistReducer} from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import businessStore from "./businessStore";
 
 const createNoopStorage = () => {
     return {getItem(_key) {return Promise.resolve(null);}, setItem(_key, value) {return Promise.resolve(value);}, removeItem(_key) {return Promise.resolve();},};
@@ -13,7 +14,7 @@ const storage = typeof window !== "undefined" ? createWebStorage("local") : crea
 
 
 const reducers = combineReducers({
-    userStore
+    userStore, businessStore
 })
 
 const persistConfig = {
