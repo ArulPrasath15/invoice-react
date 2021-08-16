@@ -49,7 +49,7 @@ function Auth() {
                         </Col>
                     </Row>
                     { showLogin && <Login deviceInfo={deviceDetect()}/>}
-                    { !showLogin && <Register />}
+                    { !showLogin && <Register deviceInfo={deviceDetect()}/>}
                 </Col>
             </Row>
 

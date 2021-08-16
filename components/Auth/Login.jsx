@@ -22,10 +22,13 @@ function Login({login,deviceInfo}) {
         const payload={
             email, password, browserMajorVersion, browserName, osName, osVersion
         }
-        const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
-        console.log("Result",res);
-        await login({auth: true, user: res});
-
+        try{
+            const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+            console.log("Result",res);
+            await login({auth: true, user: res});
+        }catch (e){
+            console.log(e)
+        }
     }
     const onGoogle = (values)=>{
         const res=signIn("google",{ callbackUrl: 'http://localhost:3000/dashboard' });
