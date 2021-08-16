@@ -1,3 +1,4 @@
+import { signIn,useSession } from "next-auth/client"
 import {Row, Col, Typography, Space, Button, Form, Input, Select, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import axios from "axios";
@@ -5,34 +6,35 @@ import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-function Register() {
+function Register({deviceInfo}) {
     const [form] = Form.useForm();
 
-    const onSubmit = (payload)=>{
-      console.log(payload);
+    const onSubmit = async (values)=>{
         const hide=message.loading('Please wait...',0);
-        axios.post('/auth/register',payload)
-            .then(res=>{
-                if(res.status===200)
-                {
-                    console.log(res)
-                    console.log(res.data.token);
-                    hide();
-                    message.success('Register Successful',2);
-                }
-                else{
-                    throw Error(res.data.msg);
-                }
-            })
-            .catch(err=>{
+        try{
+            const res = await axios.post('/auth/register',values);
+            if(res.status===200)
+            {
                 hide();
-                if (!err.response) {
-                    console.log("Custom Network Error")
-                    message.error('Network Error',2);
-                } else {
-                    message.error(err.message,2)
+                message.success('Register Successful',2);
+                let {browserMajorVersion, browserName, osName, osVersion}=deviceInfo;
+                const payload={
+                    email:values.email, password:values.password, browserMajorVersion, browserName, osName, osVersion
                 }
-            });
+                const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+            }
+            else{
+                throw Error(res.data.msg);
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error',2);
+            } else {
+                message.error(err.message,2)
+            }
+        }
     }
 
     return (
@@ -58,7 +60,7 @@ function Register() {
           <Row justify="space-between">
             <Col xs={11}>
               <Form.Item name="gender" rules={[{ required: true , message:"Choose your gender" }]}>
-                <Select placeholder='Choose'>
+                <Select placeholder='Gender'>
                   <Option value="M">Male</Option>
                   <Option value="F">Female</Option>
                   <Option value="O">Other</Option>
@@ -87,7 +89,7 @@ function Register() {
               </Form.Item>
             </Col>
             <Col xs={24} lg={11}>
-              <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' }]}>
+              <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' },{type:'number',message: 'Please enter valid Mobile Number '}]}>
                   <Input allowClear placeholder="Mobile"  />
               </Form.Item>
             </Col>
