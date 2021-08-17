@@ -5,11 +5,15 @@
 */
 import React from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, Select, message , Divider} from 'antd';
+import axios from 'axios'
+import {useRouter } from 'next/router'
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 function ClientForm(props) {
+    const Router  = useRouter()
     const {data} = props
+    const business_id = "611ac3d2480caf33e03cb4f6"
     const countryCode = (
         <Form.Item name="phone_code"
                    rules={[{ required: true, message: 'Please Choose Phonecode ' }]}
@@ -26,9 +30,28 @@ function ClientForm(props) {
         </Form.Item>
     );
 
-    const onSubmit = (values)=>{
-        // post from here
-        console.log(values)
+    const onSubmit = async (values)=>{
+        // adding bid to post payload
+        values.business_id = business_id;
+        const hide=message.loading('Please wait...',0);
+        try{
+            const res = await axios.post('/client',values);
+            if(res.status == 200){
+                hide();
+                message.success('Added New Client',2);
+                Router.replace('/client')
+            }else{
+                throw Error(res.data.msg)
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error',2);
+            } else {
+                message.error(err.message,2)
+            }
+        }
     }
     return (
 
