@@ -20,7 +20,8 @@ import axios from "axios";
                      try{
                          let res=await axios('auth/getUser/'+id)
                          await setUser({auth: true, user: res.data.user});
-                         console.log("23",res.data.user);
+                         res = await axios('/business/'+id)
+                         await setBusiness({business:res.data.business,default:0});
                      }
                      catch (e) {
                          console.error(e);

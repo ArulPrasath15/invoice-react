@@ -6,14 +6,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 let initialState = {
-    user_id:'',
-    business_name:'',
-    gstin: '',
-    address: '',
-    pincode: '',
-    city: '',
-    state: '',
-    country: '',
+    business:[],
+    default_business:0,
 }
 
 const businessSlice = createSlice({
@@ -21,7 +15,8 @@ const businessSlice = createSlice({
     initialState,
     reducers: {
         setBusiness(state, action) {
-           state=action.payload;
+           state.business = action.payload.business;
+           state.default_business = action.payload.default;
         },
         resetStore(state, action){
             state=initialState
