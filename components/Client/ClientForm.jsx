@@ -9,11 +9,11 @@ import axios from 'axios'
 import {useRouter } from 'next/router'
 const { Title, Text } = Typography;
 const { Option } = Select;
+import {connect} from 'react-redux'
 
 function ClientForm(props) {
     const Router  = useRouter()
-    const {data} = props
-    const business_id = "611ac3d2480caf33e03cb4f6"
+    const {data,default_business} = props
     const countryCode = (
         <Form.Item name="phone_code"
                    rules={[{ required: true, message: 'Please Choose Phonecode ' }]}
@@ -32,7 +32,7 @@ function ClientForm(props) {
 
     const onSubmit = async (values)=>{
         // adding bid to post payload
-        values.business_id = business_id;
+        values.business_id = default_business._id;
         const hide=message.loading('Please wait...',0);
         try{
             const res = await axios.post('/client',values);
@@ -215,4 +215,12 @@ function ClientForm(props) {
     );
 }
 
-export default ClientForm;
+
+const mapStateToProps = (state) => ({
+    default_business: state.businessStore.default_business,
+})
+
+const mapDispatchToProps = { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientForm);

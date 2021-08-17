@@ -8,7 +8,7 @@ import Head from "next/head";
 import axios from "axios";
 
 // ToDo: Get Business details and settings and store them in store
- function Dashboard({ setUser, setBusiness }) {
+ function Dashboard({ setUser, setBusiness}) {
      const router = useRouter()
      const [username, setUsername] = useState('');
      useEffect(() => {
