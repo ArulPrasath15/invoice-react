@@ -12,6 +12,8 @@ import NavLayout from "../components/Layout/NavLayout";
 import {getSession} from "next-auth/client";
 import Router from 'next/router'
 import {Spin, Row, Col} from 'antd'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 
 
 NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 });Router.events.on('routeChangeStart', () => {NProgress.start()});Router.events.on('routeChangeComplete', () => {NProgress.done();});Router.events.on('routeChangeError', () => {NProgress.done();});
@@ -43,19 +45,21 @@ function _App({ Component, pageProps, reduxStore }) {
     const router = useRouter()
     const [auth, setAuth] = useState(false);
     const hideList=['/','/auth','/new']
-
+    const persistor = persistStore(reduxStore);
     return (
       <>
           <Provider store={reduxStore} session={pageProps.session}>
+              <PersistGate loading={null} persistor={persistor}>
               {loader &&
               <Row align={'middle'} className={'h-100'}>
                   <Col offset={12}>
-                      <Spin></Spin>
+                      <Spin/>
                   </Col>
               </Row>
               }
             { (!hideList.includes(router.pathname) && !loader) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
             { (hideList.includes(router.pathname) && !loader) && <Component {...pageProps} /> }
+              </PersistGate>
           </Provider>
       </>
   );
