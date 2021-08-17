@@ -46,7 +46,7 @@ import axios from "axios";
 const mapStateToProps = (state) => ({
     auth: state.userStore.auth,
     user: state.userStore.user,
-    business: state.businessStore,
+    business: state.businessStore.business,
 })
 
 const mapDispatchToProps = { setUser, setBusiness }
