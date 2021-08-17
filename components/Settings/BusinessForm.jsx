@@ -13,16 +13,6 @@ import {useRouter } from 'next/router'
 function BusinessForm({countryData,redirect}){
     const Router  = useRouter()
 
-    const tempdata={
-        business_type: "Business",
-        business_name: "Vspace",
-        city: "Namakkal",
-        country: "India",
-        phoneNumber: "+919994198353",
-        state: "Tamil Nadu",
-        street: "4/450 ",
-        zip: "637001"
-    }
     const onSubmit = async (values)=>{
         const hide=message.loading('Please wait...',0);
         try{

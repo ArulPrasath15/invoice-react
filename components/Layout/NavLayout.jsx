@@ -14,7 +14,8 @@ const { Header, Sider } = Layout;
 const { Title } = Typography;
 import Router from 'next/router'
 import AuthRoute from '../../hoc/auth.hoc'
-
+//redux
+import {connect} from 'react-redux'
 
 const userMenu = (
     <Menu className='mx-5 mt-5'>
@@ -29,7 +30,7 @@ const userMenu = (
   );
   
   
-  function NavLayout({children,pathname}){
+  function NavLayout({children,pathname,business,default_business}){
     const [session , loading] = useSession()
     const [menuSelected, setMenuSelected] = useState();
     const [collapsed, setCollapsed] = useState(false);
@@ -67,10 +68,11 @@ const userMenu = (
                         </Col>
                         <Col className="gutter-row"  offset = {1} span={2}>
                             <div >
-                                <Select defaultValue="Vspace" style={{ width: 120 }} >
-                                <Option value="Vspace">Vspace</Option>
-                                <Option value="Pentafox">Pentafox</Option>
-                            </Select>
+                                <Select style={{ width: 120 }} defaultValue={default_business._id} >
+                                    { business.length && business.map(bus=>{
+                                       return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
+                                    })}
+                                </Select>
                             </div>
                         </Col>
                         <Col className="gutter-row" offset = {1} span={1}>
@@ -124,5 +126,13 @@ const userMenu = (
 
 }
 
+
+const mapStateToProps = (state) => ({
+    business: state.businessStore.business,
+    default_business: state.businessStore.default_business,
+})
+
+const mapDispatchToProps = { }
+
 // export default AuthRoute(NavLayout);
-export default NavLayout;
+export default connect(mapStateToProps, mapDispatchToProps)(NavLayout);

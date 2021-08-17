@@ -9,15 +9,15 @@ import {MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 const ClientCard = ({client}) => {
-    const {name , email , phone} = client
+    const {business_name , email , phone} = client
     return (
         <Card className='shadow-hv shadow br-5'>
             <Row align='middle'>
                 <Col span={12}>
                     <Button type="danger"  shape="circle" size={"large"} >
-                        {name[0]}
+                        {business_name[0]}
                     </Button>
-                    <Title className='mt-2' type='secondary' level={5}>{name}</Title>
+                    <Title className='mt-2' type='secondary' level={5}>{business_name}</Title>
                 </Col>
                 <Col span={12}>
                     <Space direction='vertical' className='mt-2'>

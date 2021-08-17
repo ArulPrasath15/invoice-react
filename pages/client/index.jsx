@@ -5,18 +5,23 @@ import ClientCard from "../../components/Client/ClientCard";
 import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
+import axios from 'axios';
+import {connect} from 'react-redux'
 
-export async function getStaticProps() {
-    const res = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await res.json();
-    return {
-        props: {data}, // will be passed to the page component as props
-    }
-}
-
-function Client({data}) {
-    const [clients,setClients] = useState(data);
-
+function Client( {default_business}) {
+    const [clients,setClients] = useState([]);
+    useEffect(()=>{
+        (async ()=>{
+            try{
+                const res = await axios.get(`/client/${default_business._id}`);
+                if(res.status == 200){
+                    setClients(res.data.clients);
+                }
+            }catch (err){
+                console.log(err);
+            }
+        })();
+    },[])
     return (
         <>
             <Head>
@@ -66,5 +71,11 @@ function Client({data}) {
         </>
     )
 }
+const mapStateToProps = (state) => ({
+    default_business: state.businessStore.default_business,
+})
 
-export default Client
+const mapDispatchToProps = { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Client);
