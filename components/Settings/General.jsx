@@ -31,7 +31,7 @@ function General({countryData}) {
         setEditing(!editing)
         console.log(editing)
     }
-    const AccTypeOptions = [{ label: 'Freelancer', value: 'Freelancer' }, { label: 'Business', value: 'Business' }];
+    const AccTypeOptions = [{ label: 'Freelancer', value: 'Freelancer' }, { label: 'Retailer', value: 'Retailer' }];
 
     const onChangeAccType = e => {
         console.log(' checked', e.target.value);
@@ -125,18 +125,17 @@ function General({countryData}) {
 
                     <Title level={5} type={'secondary'}>ACCOUNT </Title>
                     <Row justify="start" className='pt-2'>
-                        <Text className='pt-1'><span className='px-1' style={{color:"red"}}>*</span>Account Type </Text>
-                        <Form.Item  name="accountType" rules={[{ required: true, message: 'Please enter Business Type ' }]}>
-                            <Radio.Group className='px-5' options={AccTypeOptions} value={acctype}  onChange={onChangeAccType} optionType="button" buttonStyle="solid"/>
+                        <Form.Item  name="accountType" label={"Account Type"} rules={[{ required: true, message: 'Please enter Business Type ' }]}>
+                            <Radio.Group className='px-0' options={AccTypeOptions} value={acctype}  onChange={onChangeAccType} optionType="button" buttonStyle="solid"/>
                         </Form.Item>
+                    </Row>
 
-                        {acctype==='Business' &&
-                        <Col>
+
                             <Form.Item  name="businessName" rules={[{ required: true, message: 'Please enter Business Name ' }]}>
                                 <Input placeholder="Business Name" prefix={<ShopOutlined />}/>
                             </Form.Item>
-                        </Col>}
-                    </Row>
+
+
 
                     <Title level={5} type={'secondary'}>ADDRESS </Title>
                     <Form.Item className='pt-3' label="Street / Number" name="street" rules={[{ required: true, message: 'Please enter Street Name ' }]}>
