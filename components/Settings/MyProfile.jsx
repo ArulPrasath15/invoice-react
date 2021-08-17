@@ -4,11 +4,14 @@ import { Typography } from 'antd';
 const { Title,Text } = Typography;
 const { TextArea } = Input;
 import Styles from '../../assets/css/General.module.css'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 const { Option } = Select;
 import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import notify from  '../../components/Utils/notify'
+import axios from "axios";
+import {getSession} from "next-auth/client";
+import Router from "next/router";
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -25,7 +28,6 @@ function beforeUpload(file) {
     if (!isLt2M) {
         message.error('Image must smaller than 2MB!');
     }
-    console.log("success")
     return isJpgOrPng && isLt2M;
 }
 
@@ -34,6 +36,7 @@ export function MyProfile() {
     const [editing, setEditing] = useState(false);
     const [imgUploadLoading, setImgUploadLoading] = useState(false);
     const [imgUrl, setImgUrl] = useState('');
+    const [userData, setUserData] = useState();
     const handleChange = info => {
         if (info.file.status === 'uploading') {
             setImgUploadLoading(true)
@@ -44,26 +47,60 @@ export function MyProfile() {
             getBase64(info.file.originFileObj, imageUrl => {
                     setImgUploadLoading(false)
                     setImgUrl(imageUrl)
+                console.log(imageUrl)
                 }
             );
         }
     };
-    const uploadButton = (
-        <div>
-            {imgUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
-    function ChangeEdit() {setEditing(!editing)}
-
-    const onSubmit = (values)=>{
-        console.log(values)
-        notify({type:'success',msg:'Updated successfully',des:'General settings updated successfully'})
+    const uploadButton = (<div>{imgUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}<div style={{ marginTop: 8 }}>Upload</div></div>);function ChangeEdit() {setEditing(!editing)}
+    const onSubmit = async (values)=>{
+        const params={
+            'id':userData.id==null?userData._id:userData.id,
+            'updates':{
+                'imgurl':imgUrl===''?userData.imgurl:imgUrl,
+                'fname':values.firstname,
+                'lname':values.lastname,
+            }
+        }
+        try{
+            const res = await axios.post('/setting/updatemyprofile', params);
+            if (res.status===200 && res.data.user_id!=null) {
+                setUserData(res.data.user_data)
+                notify({type:'success',msg:'Updated successfully',des:'General settings updated successfully'})
+                setEditing(false)
+                setImgUrl('')
+            }
+            else {
+                console.log(params)
+                console.log(res.data)
+                notify({type:'warning',msg:'Failed ',des:'General settings updation Failed'})
+                setEditing(false)
+                setImgUrl('')
+            }
+        }catch(err){
+            notify({type:'warning',msg:'Failed ',des:'General settings updation Failed'})
+            setEditing(false)
+            setImgUrl('')
+        }
     }
-    return (
+    useEffect(()=>{
+        getSession().then(async (session,loading) => {
+            if (session ) {
+                console.log(session.user.user.id)
+                try{
+                    const res = await axios.get('/auth/getUser/'+session.user.user.id );
+                    if (res.status===200) {
+                        setUserData(res.data.user)
+                    }
+                }catch(err){
+                }
+            }
+        });
+    },[])
 
+    return (
         <>
-            {!editing && <div>
+            {!editing && userData && <div>
                 <Row justify={"space-between"} align={"middle"}>
                     <Col>
                         <Title level={5} type={'secondary'}>PROFILE </Title>
@@ -73,35 +110,29 @@ export function MyProfile() {
                 <hr style={{border: "none", borderTop: "1px dotted #4d4d4d", height: "1px", width: "100%"}}/>
                 <Space direction={'vertical'}>
                     <div style={{padding: "10px"}}>
-                        <Image width={150} height={150}
-                               src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                               alt="Picture of the author"/>
-
+                        {
+                            userData.imgurl==='' ? <Image width={150} height={150} src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" alt="Picture of the author"/> :<Image width={150} height={150} src={userData.imgurl} alt="Picture of the author"/>
+                        }
                     </div>
                     <Space>
                         <Text className={'text-secondary'}>Email : </Text>
-                        <Text className='px-2' strong>Arul Prasath</Text>
+                        <Text className='px-2' strong>{userData.email}</Text>
                     </Space>
                     <Space>
                         <Text className={'text-secondary'}>First Name : </Text>
-                        <Text className='px-2' strong>Arul</Text>
+                        <Text className='px-2' strong>{userData.fname}</Text>
                     </Space>
                     <Space>
                         <Text className={'text-secondary'}>Last Name : </Text>
-                        <Text className='px-2' strong>Prasath</Text>
-                    </Space>
-                    <Space>
-                        <Text className={'text-secondary'}>Date of Birth : </Text>
-                        <Text className='px-2' strong>15/03/2001</Text>
+                        <Text className='px-2' strong>{userData.lname}</Text>
                     </Space>
                 </Space>
-
                 <Row className='mt-5' justify={"center"}>
                     <Button type="primary" icon={<EditOutlined/>} onClick={()=>ChangeEdit()}>Edit</Button>
                 </Row>
             </div>}
 
-            { editing && <div>
+            { editing && userData && <div>
                 <Form layout="vertical"
                       name="basic"
                       onFinish={onSubmit}
@@ -120,47 +151,33 @@ export function MyProfile() {
                             listType="picture-card"
                             className="avatar-uploader"
                             showUploadList={false}
-                            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            howUploadList={false}
                             beforeUpload={beforeUpload}
                             onChange={handleChange}
                         >
                             {imgUrl ? <Image src={imgUrl} alt="avatar" style={{width: '100%'}}/> : uploadButton}
                         </Upload>
-
                     </div>
                 </Space>
 
                 <Row>
                     <Col>
-                        <Form.Item label="Email" name="email"
-                                   rules={[{required: true, message: 'Please enter valid email '}]}>
-                            <Input disabled/>
+                        <Form.Item label="Email" name="email" initialValue={userData.email} >
+                            <Input   disabled />
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <Form.Item label="First Name" name="firstname"
-                                   rules={[{required: true, message: 'Please enter First Name '}]}>
+                        <Form.Item label="First Name" name="firstname" initialValue={userData.fname} rules={[{required: true, message: 'Please enter First Name '}]}>
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form.Item label="Last Name" name="lastname" initialValue={userData.lname} rules={[{required: true, message: 'Please enter Last Name '}]}>
                             <Input/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Form.Item label="Last Name" name="lastname"
-                                   rules={[{required: true, message: 'Please enter Last Name '}]}>
-                            <Input/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Form.Item label="Date of Birth" name="phoneNumber"
-                                   rules={[{required: true, message: 'Please enter Phone Number '}]}>
-                            <Space direction="vertical">
-                                <DatePicker  />
-                            </Space>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -175,8 +192,6 @@ export function MyProfile() {
                 </Row>
                     </Form>
             </div>}
-
-
         </>
     );
 }
