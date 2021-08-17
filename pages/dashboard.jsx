@@ -20,8 +20,8 @@ import axios from "axios";
                      try{
                          let res=await axios('auth/getUser/'+id)
                          await setUser({auth: true, user: res.data.user});
-                         res = await axios('/business/'+id)
-                         await setBusiness({business:res.data.business,default:0});
+                         res = await axios.get('/business')
+                         await setBusiness({business:res.data.business,default:res.data.business[0]});
                      }
                      catch (e) {
                          console.error(e);

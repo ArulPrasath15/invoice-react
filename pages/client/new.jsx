@@ -47,7 +47,7 @@ function NewClient(props) {
                         <Popconfirm
                             title="Your changes will not be saved ?"
                             onConfirm={closeForm}
-                            okText="Close Any"
+                            okText="Close anyway"
                             cancelText="No"
                         >
                             <Button type='danger'>Cancel</Button>
