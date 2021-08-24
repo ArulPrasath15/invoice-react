@@ -15,7 +15,8 @@ function Client( {default_business}) {
             try{
                 const res = await axios.get(`/client/${default_business._id}`);
                 if(res.status == 200){
-                    setClients(res.data.clients);
+                    if(res.data.clients)
+                        setClients(res.data.clients);
                 }
             }catch (err){
                 console.log(err);

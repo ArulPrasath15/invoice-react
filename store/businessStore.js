@@ -16,7 +16,9 @@ const businessSlice = createSlice({
     reducers: {
         setBusiness(state, action) {
            state.business = action.payload.business;
-           state.default_business = action.payload.default;
+        },
+        setDefaultBusiness(state,action){
+            state.default_business = action.payload.default;
         },
         resetStore(state, action){
             state=initialState
@@ -24,6 +26,6 @@ const businessSlice = createSlice({
     }
 })
 
-export const { setBusiness, resetStore } = businessSlice.actions
+export const { setBusiness, resetStore,setDefaultBusiness } = businessSlice.actions
 
 export default businessSlice.reducer
