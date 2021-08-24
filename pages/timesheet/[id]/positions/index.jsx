@@ -7,8 +7,10 @@ import React from 'react';
 import Head from "next/head";
 import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
-import TimesheetForm from "../../components/Timesheet/TimesheetForm";
-import PositionDetails from "../../components/Timesheet/PositionDetails";
+import TimesheetForm from "../../../../components/Timesheet/TimesheetForm";
+import PositionList from "../../../../components/Timesheet/PositionList";
+import {PlusOutlined} from "@ant-design/icons";
+import Link from "next/link";
 const { Title, Text } = Typography;
 
 const TimesheetDetail = () => {
@@ -27,21 +29,23 @@ const TimesheetDetail = () => {
                     <Col span={8}>
                         <Title level={4}  >Create New Position</Title>
                     </Col>
-                    <Col span={2} offset={12}>
-                        <Popconfirm title="Your changes will not be saved ?" onConfirm={closeForm} okText="Close Any" cancelText="No">
-                            <Button type='danger'>Cancel</Button>
-                        </Popconfirm>
+                    <Col span={3} offset={12}>
+                        <Link href='/timesheet/1234/position/new'>
+                            <a>
+                                <Button type="primary"    icon={<PlusOutlined />} > Add Position</Button>
+                            </a>
+                        </Link>
                     </Col>
                 </Row>
-                <div>
-                    <Row >
-                        <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
-                            <PositionDetails/>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
+                {/*<div>*/}
+                    {/*<Row >*/}
+                        {/*<Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>*/}
 
+                        {/*</Col>*/}
+                    {/*</Row>*/}
+                {/*</div>*/}
+            </div>
+            <PositionList/>
         </>
     );
 };

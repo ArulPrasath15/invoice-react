@@ -64,7 +64,7 @@ const userMenu = (
                             <Title style={{color:'#ff0202'}} level={3} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>
                         </Col>
                         <Col className="gutter-row" span={4} offset={7}>
-                            <div  ><Search placeholder="Search Client" allowClear style={{ width: 250, marginTop:'16px' }} /></div>
+                            {/*<div  ><Search placeholder="Search Client" allowClear style={{ width: 250, marginTop:'16px' }} /></div>*/}
                         </Col>
                         <Col className="gutter-row"  offset = {1} span={2}>
                             <div >
