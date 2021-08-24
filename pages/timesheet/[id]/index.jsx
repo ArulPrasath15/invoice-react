@@ -8,14 +8,13 @@ import PositionList from "../../../components/Timesheet/PositionList";
 import Head from "next/head";
 import {Button, Col, Empty, Row, Typography} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
-import {useRouter} from "next/router";
-import Timesheet from "../index";
+import Breadcrumbs from "../../../components/Utils/Breadcrumb";
 import TimesheetInfo from "../../../components/Timesheet/TimesheetInfo";
 const {Title, Text} = Typography;
 
 const TimesheetDetails = () => {
-    const router = useRouter();
     const [isEmpty, setIsEmpty] = useState(false);
+
     return (
         <>
             <Head>
@@ -30,6 +29,9 @@ const TimesheetDetails = () => {
                     <Col span={4} offset={11}>
                         <Button type="primary" icon={<PlusOutlined />} onClick={()=>router.push('/timesheet/123/positions/new')}>Add Position</Button>
                     </Col>
+                </Row>
+                <Row>
+                    <Breadcrumbs/>
                 </Row>
             </div>
             {

@@ -3,11 +3,12 @@
 * @author: Abi
 * @description: ----------------
 */
-import React from 'react';
+import React, {useState} from 'react';
 import {Col, Row, Space, Table} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 
 const PositionList = () => {
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const columns = [
         {
             title: 'Title',
@@ -54,7 +55,6 @@ const PositionList = () => {
             ),
         },
     ];
-
     const data = [
         {
             key: '1',
@@ -92,18 +92,21 @@ const PositionList = () => {
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
-
-    function selection(changeableRowKeys) {
-        console.log(changeableRowKeys)
-    }
-
+    const onSelectChange = selectedRowKeys => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        setSelectedRowKeys(selectedRowKeys);
+    };
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
     return (
         <div>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
 
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onSelect={selection} onChange={onChange} />
+                        <Table columns={columns} rowSelection={rowSelection} dataSource={data} onChange={onChange} />
                     </Col>
                 </Row>
             </div>

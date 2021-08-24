@@ -6,9 +6,12 @@
 import React from 'react';
 import {Table, Col, Row, Space} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {useRouter} from "next/router";
+
 
 
 const TimesheetList = () => {
+    const router = useRouter();
     const columns = [
         {
             title: 'Name',
@@ -85,7 +88,14 @@ const TimesheetList = () => {
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
 
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer'  onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    console.log(record.key)
+                                    router.push('/timesheet/'+record.key);
+                                },
+                            };
+                        }}/>
                     </Col>
                 </Row>
             </div>
