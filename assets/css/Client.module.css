@@ -1,3 +1,43 @@
 h3.ant-typography, .ant-typography h3{
-    margin-bottom: 0;
-  }
+  margin-bottom: 0;
+}
+
+.gen{
+  box-shadow: 1px 2px 5px grey;
+  margin:2px;
+  margin-bottom:50px;
+}
+
+.gen h3{
+  color:grey;
+  
+}
+
+.btn{
+  margin-left:900px;
+  
+}
+.head{
+  display:inline-flex;
+  
+  border-bottom:1px solid grey;
+}
+.head h3{
+  padding-right:250px;
+}
+.details{
+  display:inline-flex;
+  
+
+}
+.details p{
+ background-color:whitesmoke;
+ padding:8px;
+}
+.details h4{
+  text-align:center;
+}
+.btn1{
+  margin-left:1050px;
+  
+}
