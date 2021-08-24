@@ -62,7 +62,11 @@ function Client( {default_business}) {
                      {clients.map(client=>{
                          return (
                              <Col span={11} key={client._id} className="mt-5">
-                                 <ClientCard client={client}  />
+                                 <Link href={`/client/${client._id}`}>
+                                     <a>
+                                         <ClientCard client={client}/>
+                                     </a>
+                                 </Link>
                              </Col>
                          )
                      })}

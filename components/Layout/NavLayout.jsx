@@ -39,7 +39,7 @@ const userMenu = (
     };
 
     const updateBusiness = async (value)=>{
-        if(value!=null){
+        if(value!='new'){
             const res = await axios.get(`/business/${value}`);
             if(res.data){
                 await setDefaultBusiness({default:res.data.business});
