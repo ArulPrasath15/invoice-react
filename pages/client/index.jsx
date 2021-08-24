@@ -60,7 +60,7 @@ function Client( {default_business}) {
                 <Row  justify='space-between'>
                      {clients.map(client=>{
                          return (
-                             <Col span={11} key={client.id} className="mt-5">
+                             <Col span={11} key={client._id} className="mt-5">
                                  <ClientCard client={client}  />
                              </Col>
                          )
