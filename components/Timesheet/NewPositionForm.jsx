@@ -16,7 +16,7 @@ const NewPositionForm = () => {
         <div>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className='bg-white px-5 py-2 br-5' style={{minHeight: '60vh'}}>
-                    <Card title="Add Timesheet" bordered={false} style={{ width: '40vw' }}>
+                    <Card title="Add Position" bordered={false} style={{ width: '40vw' }}>
                         <Form form={form} layout="vertical">
                             <Form.Item label="Title" required>
                                 <Input />
@@ -26,7 +26,7 @@ const NewPositionForm = () => {
                             </Form.Item>
                             <Row gutter={8}>
                                 <Col span={12}>
-                                    <Form.Item label="Client" required>
+                                    <Form.Item label="Fee Type" required>
                                         <Select placeholder="Select a Type" allowClear>
                                             <Option value="fxd">Fixed</Option>
                                             <Option value="hr">Per Hour</Option>
@@ -49,7 +49,7 @@ const NewPositionForm = () => {
                             </Row>
 
                             <Form.Item>
-                                <Button type="primary" icon={<PlusOutlined />}>Create</Button>
+                                <Button type="primary" icon={<PlusOutlined />}>Add Position</Button>
                             </Form.Item>
                         </Form>
 

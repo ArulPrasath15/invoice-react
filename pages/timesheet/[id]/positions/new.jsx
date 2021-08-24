@@ -4,7 +4,7 @@
 * @description: ----------------
 */
 import React from 'react';
-import NewPositionForm from "../../../components/Timesheet/NewPositionForm";
+import NewPositionForm from "../../../../components/Timesheet/NewPositionForm";
 
 const NewPosition = () => {
     return (

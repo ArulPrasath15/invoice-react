@@ -7,7 +7,7 @@ import React from 'react';
 import {Col, Row, Space, Table} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 
-const PositionDetails = () => {
+const PositionList = () => {
     const columns = [
         {
             title: 'Title',
@@ -107,4 +107,4 @@ const PositionDetails = () => {
     );
 };
 
-export default PositionDetails;
+export default PositionList;
