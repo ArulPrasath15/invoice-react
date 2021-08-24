@@ -93,13 +93,17 @@ const PositionList = () => {
         console.log('params', pagination, filters, sorter, extra);
     }
 
+    function selection(changeableRowKeys) {
+        console.log(changeableRowKeys)
+    }
+
     return (
         <div>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
 
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={data} onSelect={selection} onChange={onChange} />
                     </Col>
                 </Row>
             </div>
