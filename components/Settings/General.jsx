@@ -7,7 +7,8 @@ import Styles from '../../assets/css/General.module.css'
 import React, {useState} from "react";
 const { Option } = Select;
 import notify from  '../../components/Utils/notify'
-
+import BusinessView from './BusinessView'
+import BusinessForm from './BusinessForm'
 
 
 
@@ -24,12 +25,28 @@ function General({countryData}) {
         zip: "637001"
     }
     const [editing, setEditing] = useState(false);
+    const [showNew, setNew] = useState(false);
     const [acctype, setAcctype] = useState('Freelancer');
     const [formdata, setFormdata] = useState(tempdata);
 
     const onEdit = () => {
         setEditing(!editing)
         console.log(editing)
+    }
+
+    const handleSelection = (value)=>{
+        switch (value){
+            case 'new':setNew(true);
+                       setEditing(false);
+                       break;
+            case 'edit':setNew(false);
+                setEditing(true);
+                break;
+            case 'cancel':setNew(false);
+                setEditing(false);
+                break;
+
+        }
     }
     const AccTypeOptions = [{ label: 'Freelancer', value: 'Freelancer' }, { label: 'Retailer', value: 'Retailer' }];
 
@@ -46,82 +63,39 @@ function General({countryData}) {
 
     return (
         <>
-            {!editing &&
+
+            {!editing && !showNew && <BusinessView onEdit={onEdit} handleSelection={handleSelection} />}
+            {showNew &&
             <div>
-                <Row justify="end">
-                    <Button type="primary" icon={<EditOutlined/>}
-                            onClick={() => {onEdit()}}>Edit
-                    </Button>
+                <Row justify="space-between">
+                    <Col>
+                        <Title level={4} type={'secondary'}>Add New Business</Title>
+                    </Col>
+                    <Col>
+                        <Button className='mx-2' type="dashed" icon={<CloseOutlined />} onClick={() => {handleSelection('cancel')}}>Cancel</Button>
+                    </Col>
                 </Row>
                 <Divider className="mt-3 mb-2"/>
-                <div style={{paddingRight:"20vw",paddingLeft:"20vw"}}>
-                    <Title className={'mt-5'}  level={5} type={'secondary'} >ACCOUNT </Title>
-                    <Space direction={'vertical'}>
-                        <Space>
-                            <Text className={'text-secondary'}>Account Type : </Text>
-                            <Text className='px-2' strong>{formdata.accountType}</Text>
-                        </Space>
-                        {formdata.businessName  &&
-                        <Space >
-                            <Text className={'text-secondary'}>Business Name : </Text>
-                            <Text className='px-2' strong>{formdata.businessName}</Text>
-                        </Space>
-                        }
-                    </Space>
-
-                    <Title className={'mt-5'} level={5} type={'secondary'}>ADDRESS </Title>
-                    <Space direction={'vertical'}>
-                        <Space>
-                            <Text className={'text-secondary'}>Street/Number : </Text>
-                            <Text className='px-2' strong>{formdata.street}</Text>
-                        </Space>
-
-                        <Space >
-                            <Text className={'text-secondary'}>ZIP : </Text>
-                            <Text className='px-2' strong>{formdata.zip}</Text>
-                        </Space>
-                        <Space>
-                            <Text className={'text-secondary'}>City : </Text>
-                            <Text className='px-2' strong>{formdata.city}</Text>
-                        </Space>
-                        <Space>
-                            <Text className={'text-secondary'}>State : </Text>
-                            <Text className='px-2' strong>{formdata.state}</Text>
-                        </Space>
-                        <Space>
-                            <Text className={'text-secondary'}>Country : </Text>
-                            <Text className='px-2' strong>{formdata.country}</Text>
-                        </Space>
-                    </Space>
-
-                    <Title level={5} type={'secondary'} className={'mt-5'}>CONTACT INFORMATION </Title>
-                    <Space justify="start">
-                        <Text className={'text-secondary'}>Phone number : </Text>
-                        <Text className='px-2' strong>{formdata.phoneNumber}</Text>
-                    </Space>
-                </div>
-
-            </div>
-            }
-
+                <BusinessForm countryData={countryData}/>
+                </div>}
             {editing &&
             <div>
                 <Form layout="vertical"
                       name="basic"
                       onFinish={onSubmit}
                 >
-                <Row justify="space-between">
-                    <Col>
-                        <Text className={'text-secondary'}>Edit your general account settings</Text>
-                    </Col>
-                    <Col>
-                       <Button type="primary" icon={<SaveOutlined />} htmlType="submit" >Save</Button>
-                       <Button className='mx-2' type="dashed" icon={<CloseOutlined />} onClick={() => {onEdit()}}>Cancel</Button>
-                    </Col>
-                </Row>
-                <Divider className="mt-3 mb-2"/>
+                    <Row justify="space-between">
+                        <Col>
+                            <Title level={4} type={'secondary'}>Edit your general account settings</Title>
+                        </Col>
+                        <Col>
+                            <Button type="primary" icon={<SaveOutlined />} htmlType="submit" >Save</Button>
+                            <Button className='mx-2' type="dashed" icon={<CloseOutlined />} onClick={() => {onEdit()}}>Cancel</Button>
+                        </Col>
+                    </Row>
+                    <Divider className="mt-3 mb-2"/>
 
-                <div style={{paddingLeft:"20vw",paddingRight:"20vw"}}>
+                <div style={{paddingLeft:"10vw",paddingRight:"10vw"}}>
 
                     <Title level={5} type={'secondary'}>ACCOUNT </Title>
                     <Row justify="start" className='pt-2'>
@@ -183,7 +157,7 @@ function General({countryData}) {
                </Form>
             </div>
             }
-        </>
+            </>
     )
 }
 
