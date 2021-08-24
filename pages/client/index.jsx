@@ -15,7 +15,8 @@ function Client( {default_business}) {
             try{
                 const res = await axios.get(`/client/${default_business._id}`);
                 if(res.status == 200){
-                    setClients(res.data.clients);
+                    if(res.data.clients)
+                        setClients(res.data.clients);
                 }
             }catch (err){
                 console.log(err);
@@ -61,7 +62,11 @@ function Client( {default_business}) {
                      {clients.map(client=>{
                          return (
                              <Col span={11} key={client._id} className="mt-5">
-                                 <ClientCard client={client}  />
+                                 <Link href={`/client/${client._id}`}>
+                                     <a>
+                                         <ClientCard client={client}/>
+                                     </a>
+                                 </Link>
                              </Col>
                          )
                      })}

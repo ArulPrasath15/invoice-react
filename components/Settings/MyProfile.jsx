@@ -100,36 +100,31 @@ export function MyProfile() {
 
     return (
         <>
-            {!editing && userData && <div>
+            {!editing && userData &&
+            <div style={{paddingBottom:'18px'}}>
                 <Row justify={"space-between"} align={"middle"}>
                     <Col>
                         <Title level={5} type={'secondary'}>PROFILE </Title>
+                    </Col>
+                    <Col>
+                        <Button type={'text'} icon={<EditOutlined/>} onClick={()=>ChangeEdit()} />
                     </Col>
                 </Row>
 
                 <hr style={{border: "none", borderTop: "1px dotted #4d4d4d", height: "1px", width: "100%"}}/>
                 <Space direction={'vertical'}>
-                    <div style={{padding: "10px"}}>
+                    <div style={{padding: "6px"}}>
                         {
                             userData.imgurl==='' ? <Image width={150} height={150} src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" alt="Picture of the author"/> :<Image width={150} height={150} src={userData.imgurl} alt="Picture of the author"/>
                         }
                     </div>
                     <Space>
-                        <Text className={'text-secondary'}>Email : </Text>
-                        <Text className='px-2' strong>{userData.email}</Text>
+                        <Title level={4} type={'secondary'} className='px-2' strong>{userData.fname} {userData.lname}</Title>
                     </Space>
                     <Space>
-                        <Text className={'text-secondary'}>First Name : </Text>
-                        <Text className='px-2' strong>{userData.fname}</Text>
-                    </Space>
-                    <Space>
-                        <Text className={'text-secondary'}>Last Name : </Text>
-                        <Text className='px-2' strong>{userData.lname}</Text>
+                        <Text type={'secondary'} className='px-2'>{userData.email}</Text>
                     </Space>
                 </Space>
-                <Row className='mt-5' justify={"center"}>
-                    <Button type="primary" icon={<EditOutlined/>} onClick={()=>ChangeEdit()}>Edit</Button>
-                </Row>
             </div>}
 
             { editing && userData && <div>
