@@ -30,7 +30,7 @@ const TimesheetDetails = () => {
                         <Button type="primary" icon={<PlusOutlined />} onClick={()=>router.push('/timesheet/123/positions/new')}>Add Position</Button>
                     </Col>
                 </Row>
-                <Row>
+                <Row className='bg-white px-5 py-2 br-5'>
                     <Breadcrumbs/>
                 </Row>
             </div>
