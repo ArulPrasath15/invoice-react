@@ -11,10 +11,12 @@ import {PlusOutlined} from "@ant-design/icons";
 import Breadcrumbs from "../../../components/Utils/Breadcrumb";
 import TimesheetInfo from "../../../components/Timesheet/TimesheetInfo";
 const {Title, Text} = Typography;
+import {useRouter} from "next/router";
+
 
 const TimesheetDetails = () => {
     const [isEmpty, setIsEmpty] = useState(false);
-
+    const router=useRouter();
     return (
         <>
             <Head>

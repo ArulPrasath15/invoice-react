@@ -86,15 +86,8 @@ const TimesheetList = () => {
         <div>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
-
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer'  onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    console.log(record.key)
-                                    router.push('/timesheet/'+record.key);
-                                },
-                            };
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer'  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('/timesheet/'+record.key);},};
                         }}/>
                     </Col>
                 </Row>

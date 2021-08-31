@@ -32,7 +32,6 @@ const Breadcrumbs = () => {
        <>
            <Breadcrumb separator=">">
                <Breadcrumb.Item href="/"><HomeOutlined /></Breadcrumb.Item>
-
                {
                    routes.map((route, index) => (
                        <Breadcrumb.Item key={index}  href={hlinks[index]} style={{textTransform: 'capitalize'}}>{route}</Breadcrumb.Item>
