@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from "next/head";
-import Template1 from "../../components/Templates/template-1";
+import Template1 from "../../../components/Templates/template-1";
 
-function Template(props) {
+function Index(props) {
     return (
         <>
             <Head>
@@ -17,4 +17,4 @@ function Template(props) {
 
 
 
-export default Template;
+export default Index;
