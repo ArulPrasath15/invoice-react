@@ -4,6 +4,7 @@ import {MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 function ClientProfile(props) {
+    const {client} = props;
     return (
         <>
             <Row>
@@ -12,17 +13,21 @@ function ClientProfile(props) {
                         P
                     </Button>
                 </Col>
-                <Col span={10}>
-                    <Title level={3} type={'secondary'}>PSG</Title>
-                    <Text type={'secondary'}>GST ID: <strong>OWJED092EJ0D9J2</strong></Text>
-                </Col>
-                <Col>
-                    <Space direction={'vertical'}>
-                        <Text type={'secondary'}>Email: <Text strong>yashwanth55@gmail.com</Text> </Text>
-                        <Text type={'secondary'}>Phone: <Text strong>9909898767</Text></Text>
-                        <Text type={'secondary'}>Address: <Text strong>Chennai,Tamilnadu,India</Text></Text>
-                    </Space>
-                </Col>
+                {client &&
+                    <>
+                        <Col span={10}>
+                            <Title level={3} type={'secondary'}>{client.business_name}</Title>
+                            <Text type={'secondary'}>GST ID: <strong>{client.gstin}</strong></Text>
+                        </Col>
+                        <Col>
+                            <Space direction={'vertical'}>
+                                <Text type={'secondary'}>Email: <Text strong>{client.email}</Text> </Text>
+                                <Text type={'secondary'}>Phone: <Text strong>{client.phone}</Text></Text>
+                                <Text type={'secondary'}>Address: <Text strong>{client.state}, {client.country}</Text></Text>
+                            </Space>
+                        </Col>
+                    </>
+                }
             </Row>
         </>
     );

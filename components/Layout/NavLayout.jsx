@@ -82,7 +82,9 @@ const userMenu = (
                                     { business && business.map(bus=>{
                                        return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
                                     })}
-                                    <Option value={'new'}>Add Busniess</Option>
+                                    <Option value={'new'}>
+                                        <Link href={'/settings'}>Add Business</Link>
+                                    </Option>
                                 </Select>
                             </div>
                         </Col>

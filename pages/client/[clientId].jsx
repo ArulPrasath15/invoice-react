@@ -60,7 +60,7 @@ function ClientView(props) {
                <Row gutter={24}>
                    <Col span={24}>
                        <Card size="large"  >
-                           <ClientProfile />
+                           <ClientProfile client={client} />
                        </Card>
                    </Col>
                    <Col span={24} className={'mt-5'}>
