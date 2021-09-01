@@ -11,7 +11,9 @@ import '../assets/css/color.css'
 import NavLayout from "../components/Layout/NavLayout";
 import {getSession} from "next-auth/client";
 import Router from 'next/router'
-
+import {Spin, Row, Col} from 'antd'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 
 
 NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 });Router.events.on('routeChangeStart', () => {NProgress.start()});Router.events.on('routeChangeComplete', () => {NProgress.done();});Router.events.on('routeChangeError', () => {NProgress.done();});
@@ -20,40 +22,53 @@ NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 })
 
 function _App({ Component, pageProps, reduxStore }) {
     const [authToken, setAuthToken] = useState('');
-
+    const [loader , setLoader] = useState(true);
     axios.defaults.baseURL = 'http://localhost:8800';
     axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 
     useEffect(() => {
-        getSession().then((session) => {
+        getSession().then((session,loading) => {
+
+            setLoader(true)
             if (session) {
-                setAuthToken(session.user.jwt);
+                setAuthToken(session.user.token);
+                setLoader(false);
                 console.log("Index Session",session)
             } else {
-                Router.push('/')
+                // if(!Router.query.autherror) {Router.push('/auth')}
+                setLoader(false);
             }
         });
     }, []);
     const router = useRouter()
     const [auth, setAuth] = useState(false);
-    const hideList=['/','/auth']
-
+    const hideList=['/','/auth','/new']
+    const persistor = persistStore(reduxStore);
     return (
       <>
           <Provider store={reduxStore} session={pageProps.session}>
-              { !hideList.includes(router.pathname) && <NavLayout><Component {...pageProps} /></NavLayout> }
-              { hideList.includes(router.pathname) && <Component {...pageProps} /> }
+              <PersistGate loading={null} persistor={persistor}>
+              {loader &&
+              <Row align={'middle'} className={'h-100'}>
+                  <Col offset={12}>
+                      <Spin/>
+                  </Col>
+              </Row>
+              }
+            { (!hideList.includes(router.pathname) && !loader) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
+            { (hideList.includes(router.pathname) && !loader) && <Component {...pageProps} /> }
+              </PersistGate>
           </Provider>
       </>
   );
 }
 
-_App.getInitialProps = async ({Component,ctx}) => {
+_App.getServerSideProps = async ({Component,ctx}) => {
   let pageProps = {};
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
+  if (Component.getServerSideProps) {
+    pageProps = await Component.getServerSideProps(ctx);
   }
   return {pageProps,};
 }

@@ -1,3 +1,4 @@
+import { signIn,useSession } from "next-auth/client"
 import {Row, Col, Typography, Space, Button, Form, Input, Select, message} from 'antd';
 import { GoogleOutlined ,FacebookOutlined} from '@ant-design/icons';
 import axios from "axios";
@@ -5,34 +6,35 @@ import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-function Register() {
+function Register({deviceInfo}) {
     const [form] = Form.useForm();
 
-    const onSubmit = (payload)=>{
-      console.log(payload);
+    const onSubmit = async (values)=>{
         const hide=message.loading('Please wait...',0);
-        axios.post('/auth/register',payload)
-            .then(res=>{
-                if(res.status===200)
-                {
-                    console.log(res)
-                    console.log(res.data.token);
-                    hide();
-                    message.success('Register Successful',2);
-                }
-                else{
-                    throw Error(res.data.msg);
-                }
-            })
-            .catch(err=>{
+        try{
+            const res = await axios.post('/auth/register',values);
+            if(res.status===200)
+            {
                 hide();
-                if (!err.response) {
-                    console.log("Custom Network Error")
-                    message.error('Network Error',2);
-                } else {
-                    message.error(err.message,2)
+                message.success('Register Successful',2);
+                let {browserMajorVersion, browserName, osName, osVersion}=deviceInfo;
+                const payload={
+                    email:values.email, password:values.password, browserMajorVersion, browserName, osName, osVersion
                 }
-            });
+                const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/new' }, payload);
+            }
+            else{
+                throw Error(res.data.msg);
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error',2);
+            } else {
+                message.error(err.message,2)
+            }
+        }
     }
 
     return (
@@ -58,7 +60,7 @@ function Register() {
           <Row justify="space-between">
             <Col xs={11}>
               <Form.Item name="gender" rules={[{ required: true , message:"Choose your gender" }]}>
-                <Select placeholder='Choose'>
+                <Select placeholder='Gender'>
                   <Option value="M">Male</Option>
                   <Option value="F">Female</Option>
                   <Option value="O">Other</Option>
@@ -66,12 +68,9 @@ function Register() {
               </Form.Item>
             </Col>
             <Col xs={11}>
-              <Form.Item name="btype" rules={[{ required: true , message:"Choose your business type"  }]}>
-                <Select placeholder='Business Type' className='w-100'>
-                    <Option value="Retailer">Retailer</Option>
-                    <Option value="Freelancer">Freelancer</Option>
-                </Select>
-              </Form.Item>
+                <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' }]}>
+                    <Input allowClear placeholder="Mobile"  />
+                </Form.Item>
             </Col>
           </Row>
 
@@ -79,20 +78,6 @@ function Register() {
           <Form.Item name="email" rules={[{ required: true, message: 'Please enter your Email id ' }, { type:'email' , message:"Enter a valid Email id" }]}>
             <Input allowClear placeholder="Email"  />
           </Form.Item>
-        
-          <Row justify="space-between">
-            <Col xs={24} lg={11}>
-              <Form.Item name="bname" rules={[{ required: true, message: 'Please enter your Business Name ' },]}>
-                <Input allowClear placeholder="Business Name"  />
-              </Form.Item>
-            </Col>
-            <Col xs={24} lg={11}>
-              <Form.Item name="mobile" rules={[{ required: true, message: 'Please enter your Mobile Number ' }]}>
-                  <Input allowClear placeholder="Mobile"  />
-              </Form.Item>
-            </Col>
-          </Row>
-
 
           <Row justify="space-between">
             <Col xs={24} lg={11}>
@@ -140,11 +125,9 @@ function Register() {
         <Typography className="text-center mt-5">
           <Text type="secondary"> OR </Text>
         </Typography>
-        <Row justify="space-around" className="mt-5 border-top">
-            <Col span={8} offset={1}>
-                <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>
-                    <span>Google</span>
-                </GoogleLoginButton>
+        <Row justify="space-around" className="mt-2 border-top">
+            <Col span={10} offset={1}>
+                <center> <GoogleLoginButton style={{height:'6vh',width:'20vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>Google</GoogleLoginButton></center>
             </Col>
             {/* <Col span={8}>
                 <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => alert("Hello")}>

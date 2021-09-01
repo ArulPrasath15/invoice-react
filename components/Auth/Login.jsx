@@ -2,24 +2,30 @@ import { useEffect,useState } from 'react';
 import {Row, Col, Typography, Space, Button, Form, Input, message} from 'antd';
 import { signIn,useSession } from "next-auth/client"
 const { Title, Text } = Typography;
-import {connect} from 'react-redux'
-import {login} from '../../store/authStore'
 import {FacebookLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 import { useRouter } from 'next/router'
 
-function Login({auth,token,login}) {
+
+
+// ToDo: Encrypt the Password which is being sent through query params
+
+function Login({login,deviceInfo}) {
     const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [ session, loading ] = useSession()
-
-    const onSubmit = (values)=>{
+    // console.log(deviceInfo);
+    const  onSubmit = async (values)=>{
+        let {browserMajorVersion, browserName, osName, osVersion}=deviceInfo;
         const payload={
-            email,password
+            email, password, browserMajorVersion, browserName, osName, osVersion
         }
-        const res=signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
-        console.log("Result"+res);
-
+        try{
+            const res=await signIn("email-pass",{ callbackUrl: 'http://localhost:3000/dashboard' }, payload);
+            console.log("Result",res);
+        }catch (e){
+            console.log(e)
+        }
     }
     const onGoogle = (values)=>{
         const res=signIn("google",{ callbackUrl: 'http://localhost:3000/dashboard' });
@@ -64,10 +70,8 @@ function Login({auth,token,login}) {
         </Typography>
 
           <Row justify="space-around" className="mt-5 border-top">
-              <Col span={8} offset={1}>
-                  <GoogleLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>
-                      <span>Google</span>
-                  </GoogleLoginButton>
+              <Col span={10} offset={1}>
+                  <center> <GoogleLoginButton style={{height:'6vh',width:'2so0vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onGoogle()}>Google</GoogleLoginButton></center>
               </Col>
               {/* <Col span={8}>
                   <FacebookLoginButton style={{height:'6vh',borderRadius:'5vh',fontSize:'16px'}}   onClick={() => onFacebook()}>
@@ -80,11 +84,6 @@ function Login({auth,token,login}) {
     );
 }
 
-const mapStateToProps = (state) => ({
-    auth: state.authStore.auth,
-    token: state.authStore.token
-})
 
-const mapDispatchToProps = { login }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login;

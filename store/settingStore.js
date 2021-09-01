@@ -1,5 +1,5 @@
 /*
-* @created: 03/08/2021 - 2:32 PM
+* @created: 16/08/2021 - 7:30 PM
 * @author: Abi
 * @description: ----------------
 */
@@ -7,17 +7,17 @@ import {createSlice} from '@reduxjs/toolkit'
 
 let initialState = {
     auth: false,
-    token: ''
+    user:{}
 }
 
 const authSlice = createSlice({
-    name: 'counter',
+    name: 'user',
     initialState,
     reducers: {
         login(state, action) {
             console.log(action.payload);
             state.auth=action.payload.auth;
-            state.token=action.payload.token;
+            state.user=action.payload.user;
         },
         logout(state, action) {
             state=initialState
@@ -28,6 +28,6 @@ const authSlice = createSlice({
     }
 })
 
-export const { login } = authSlice.actions
+export const { login, logout, resetStore } = authSlice.actions
 
 export default authSlice.reducer

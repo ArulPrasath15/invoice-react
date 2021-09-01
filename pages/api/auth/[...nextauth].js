@@ -5,21 +5,22 @@ import axios from "axios";
 const providers = [
     Providers.Credentials({
         id: "email-pass",
-        name: 'Credentials',
         credentials: {
             email: { label: "Email", type: "email" },
             password: {  label: "Password", type: "password" }
         },
         async authorize(credentials, req) {
-            try{
 
-                const res = await axios.post('/auth/login', credentials);
-                if (res) {
+            try{
+                const res = await axios.post(`${process.env.SERVER_URL}/auth/login`, req.query);
+                if (res.data!==null) {
                     return res.data;
                 }
-                return null
+                return Promise.reject('?authError=failed');
             }catch(err){
-                return null;
+
+                return Promise.reject('?authError=Server Error! Please try again later');
+
             }
             // If no error and we have user data, return it
             // Return null if user data could not be retrieved
@@ -39,37 +40,21 @@ const providers = [
             }
         },
 
-    }),
-    Providers.Facebook({
-        clientId: process.env.FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-    })    
+    })
 ]
 
-// TESTING FB OAUTH 
-// use ngrok https domain as facebook only accepts req from https domains
-// use below command to bind local http to remote https (facebook testing):
-// ngrok http -bind-tls=true --host-header="localhost:80" 3000
-
-// update Valid OAuth Redirect URIs at dev.facebook dashboard
-// eg : https://548b9431d4d9.ngrok.io/api/auth/callback/facebook
-
-// add the domain to domain manager facebook dashborad
-// eg : https://548b9431d4d9.ngrok.io
-
-// change the .env next url to new https url
 const callbacks = {
     async signIn(user, account, profile) {
-        return true;
+        return user;
     },
     async session(session, user) {
         session.user=user;
         return session
     },
-    async jwt(token, user, account, profile, isNewUser) {
-        const isUserSignedIn = !!user;
-        if(isUserSignedIn && user.token) {
-            token.jwt = user.token.toString();
+    async jwt(token, user) {
+        if (user) {
+            token.token = user.token;
+            token.user = user.user;
         }
         return Promise.resolve(token);
     },

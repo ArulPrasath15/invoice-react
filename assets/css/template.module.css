@@ -1,6 +1,6 @@
-html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
+.template{ font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
 
-.pdf-page {
+.pdfPage {
     margin: 0 auto;
     box-sizing: border-box;
     box-shadow: 0 5px 10px 0 rgba(0,0,0,.3);
@@ -8,7 +8,9 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
     position: relative;
     background-color: white;
 }
-.pdf-header {
+.sizeA4 { width: 8.3in; height: 11.7in; }
+
+.pdfHeader {
     position: absolute;
     top: .5in;
     height: .6in;
@@ -16,11 +18,11 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
     right: .5in;
     border-bottom: 1px solid #e5e5e5;
 }
-.invoice-number {
+.invoiceNumber {
     padding-top: .17in;
     float: right;
 }
-.pdf-footer {
+.pdfFooter {
     position: absolute;
     bottom: .5in;
     height: .6in;
@@ -32,7 +34,7 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
     color: #787878;
     font-size: 12px;
 }
-.pdf-bank {
+.pdfBank {
     position: absolute;
     bottom: .5in;
     height: 2.5in;
@@ -43,7 +45,7 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
     text-align: left;
     font-size: 14px;
 }
-.pdf-body {
+.pdfBody {
     position: absolute;
     top: 3.7in;
     bottom: 1.2in;
@@ -51,11 +53,11 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
     right: .5in;
 }
 
-.size-a4 { width: 8.3in; height: 11.7in; }
+
 .size-letter { width: 8.5in; height: 11in; }
 .size-executive { width: 7.25in; height: 10.5in; }
 
-.company-logo {
+.companyLogo {
     font-size: 30px;
     font-weight: bold;
     color: #3aabf0;
@@ -69,15 +71,15 @@ html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
 .from {
     position: absolute;
     top: 1.5in;
-    right: .5in;
-    width: 2.5in;
+    right: 0.5in;
+    width: 2.6in;
 }
-.from p, .for p {
+.from p, .for p,.from div {
     color: #787878;
 }
 .signature {
     padding-top: .5in;
 }
-.box-col {
+.boxCol {
     float: left;
 }
