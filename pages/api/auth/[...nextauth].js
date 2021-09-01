@@ -12,7 +12,7 @@ const providers = [
         async authorize(credentials, req) {
 
             try{
-                const res = await axios.post('/auth/login', req.query);
+                const res = await axios.post(`${process.env.SERVER_URL}/auth/login`, req.query);
                 if (res.data!==null) {
                     return res.data;
                 }
