@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import ClientCard from "../../components/Client/ClientCard";
+import BreadCrumbs from '../../components/Utils/Breadcrumb'
 import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'antd';
 import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
 const { Title, Text } = Typography;
@@ -31,17 +32,22 @@ function Client( {default_business}) {
             </Head>
             <div className='mt-5 mx-5'>
                <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
-                    <Col span={8}>
-                        <Title level={4}  >Client</Title>
+                    <Col span={13}>
+                        <Title level={4} >My Clients</Title>
+                        <Text className={'mt-3'} type={'secondary'}>Add new clients and store all client related information in client profiles</Text>
                     </Col>
-                    <Col span={3} offset={12}>
+                    <Col span={3} offset={6}>
                         <Link href='/client/new'>
                             <a>
                                 <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
                             </a>
                         </Link>
                     </Col>
+                   <Col span={24} className={'mt-3'}>
+                       <BreadCrumbs />
+                   </Col>
                </Row>
+
             </div>
             <div className='mx-5 mt-5 mb-5'>
                 {clients.length == 0 &&

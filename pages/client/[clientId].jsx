@@ -3,9 +3,14 @@ import {useRouter} from 'next/router'
 import axios from 'axios';
 import {connect} from 'react-redux'
 import Head from 'next/head';
+import Link from 'next/link'
 import  styles from '../../assets/css/Client.module.css';
-import {Layout, Button, Typography, Col, Row, Table , Card, Space,Tabs} from 'antd';
-import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
+import {Layout, Button, Typography, Col, Row, Table , Card, Space,Tabs, Dropdown} from 'antd';
+import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined,EditOutlined} from '@ant-design/icons';
+import Breadcrumbs from '../../components/Utils/Breadcrumb'
+import ClientProfile from '../../components/Client/ClientProfile'
+import ClientRecipient from '../../components/Client/ClientRecipient';
+import ClientFiles from '../../components/Client/ClientFiles'
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
@@ -33,85 +38,46 @@ function ClientView(props) {
                <title>PentaFox | Client</title>
                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
            </Head>
-           {client &&
-               <div style={{paddingLeft:'10vh',paddingRight:'10vh'}} className={'mt-5'}>
-                   <Tabs type="card" size='large'>
-                       <TabPane tab="General" key="1">
-                           <div className={styles.gen}>
-                               <div className="site-card-wrapper">
-                                   <Row gutter={40}>
-                                       <Col span={30}>
-                                           <Card>
-                                               <h3> SETTING FOR THIS CLIENT</h3>
-                                               <hr/>
-                                               <br/>
-                                               <Row gutter={20}>
-                                                   <Col span={10}>
-                                                       <Card style={{width: 300}}>
-                                                           <h2>Accounting Profile</h2>
-                                                           <p>You banking and tax
-                                                               information assigned to this client
-                                                           </p>
-                                                           <Button type="primary">Create</Button>
-                                                       </Card>
-                                                   </Col>
-                                                   <Col span={10}>
-                                                       <Card style={{width: 300}}>
-                                                           <h2>Invoicing Profile</h2>
-                                                           <p>
-                                                               Information you want to print on this Client
-                                                           </p>
-                                                           <Button type="link">Default Settings</Button>
-                                                       </Card>
-                                                   </Col>
-                                               </Row>
-                                               <br/>
-                                               <h3>INVOICE RECEIPIENT</h3>
-                                               <hr/>
-                                               <br/>
-                                               <h3>Your Invoices wil be issued to the following Receipient(s)</h3>
-                                               <Button className={styles.btn} type="primary" ghost>
-                                                   ADD NEW
-                                               </Button>
+           <div className='mt-5 mx-5'>
+               <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
+                   <Col span={13}>
+                       <Title level={4} >Client Profile</Title>
+                       <Text className={'mt-3'} type={'secondary'}>View and update client related activities here</Text>
+                   </Col>
+                   <Col span={3} offset={6}>
+                       <Link href='/client/new'>
+                           <a>
+                               <Button type={'primary'} icon={<EditOutlined/>}> Edit</Button>
+                           </a>
+                       </Link>
+                   </Col>
+                   <Col span={24} className='bg-white py-2 br-5'>
+                       <Breadcrumbs/>
+                   </Col>
+               </Row>
+           </div>
+           <div className="mx-5 mt-5">
+               <Row gutter={24}>
+                   <Col span={24}>
+                       <Card size="large"  >
+                           <ClientProfile />
+                       </Card>
+                   </Col>
+                   <Col span={24} className={'mt-5'}>
+                       <div className="card-container">
+                           <Tabs type="card" size='large'>
+                               <TabPane tab="General" key="1">
+                                   <ClientRecipient/>
+                               </TabPane>
+                               <TabPane tab="Files" key="2">
+                                   <ClientFiles/>
+                               </TabPane>
+                           </Tabs>
+                       </div>
+                   </Col>
+               </Row>
 
-                                               <div className={styles.head}>
-                                                   <h3>Full name .</h3>
-                                                   <h3>Role</h3>
-                                                   <h3>Email</h3>
-                                               </div>
-                                               <div className={styles.details}>
-                                                   <h3>AdamWilson</h3>
-                                                   <h3>Nope</h3>
-                                                   <h3>adamwilson@gmail.com</h3>
-                                               </div>
-                                           </Card>
-
-                                       </Col>
-
-                                   </Row>
-                               </div>
-                           </div>
-                       </TabPane>
-
-                       <TabPane tab="Files" key="2">
-                           <div className={styles.details}>
-                               <Card style={{width: 1200}}>
-                                   <p>My Files</p>
-                                   <Button className={styles.btn1} type="primary" ghost>
-                                       UPLOAD
-                                   </Button>
-
-                                   <div>
-                                       <h4>Your uploaded files Show here</h4>
-                                   </div>
-                               </Card>
-                           </div>
-                       </TabPane>
-
-                   </Tabs>
-
-               </div>
-           }
+           </div>
        </>
     );
 }

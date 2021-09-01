@@ -92,7 +92,7 @@ function General({countryData}) {
 
             {!editing && generalData && !showNew && <BusinessView generalData = {generalData} onEdit={onEdit} handleSelection={handleSelection} />}
             {showNew &&
-            <div>
+            <div >
                 <Row justify="space-between">
                     <Col>
                         <Title level={4} type={'secondary'}>Add New Business</Title>
@@ -102,7 +102,9 @@ function General({countryData}) {
                     </Col>
                 </Row>
                 <Divider className="mt-3 mb-2"/>
-                <BusinessForm countryData={countryData}/>
+                <div style={{paddingLeft:"10vw",paddingRight:"10vw"}}>
+                    <BusinessForm countryData={countryData}/>
+                </div>
                 </div>
             }
 
