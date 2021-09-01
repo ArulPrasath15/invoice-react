@@ -166,10 +166,12 @@ function ClientForm(props) {
                     </Form.Item>
                 </Col>
                 <Col span={11}>
-                    <Form.Item name="country" label="Country" rules={[{ required: true }]}>
+                    <Form.Item name="country" label="Country" rules={[{ required: true }]} >
                         <Select
                             placeholder="Country"
                             allowClear
+                            showSearch
+                            filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             {data.length > 0 &&
                             data.map(country => {
