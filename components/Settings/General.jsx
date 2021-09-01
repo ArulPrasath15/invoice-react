@@ -12,17 +12,16 @@ import BusinessForm from './BusinessForm'
 import {getSession} from "next-auth/client";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {connect} from 'react-redux';
 
 
-
-function General({countryData}) {
+function General({countryData,default_business}){
     const router = useRouter()
     const [userId, setUserId] = useState();
     const [editing, setEditing] = useState(false);
     const [showNew, setNew] = useState(false);
     const [acctype, setAcctype] = useState('Freelancer');
     const [generalData, setGeneralData] = useState();
-    const currentBusinessId="611b74c8a9a37b2a6cca07cf"
 
     const onEdit = () => {
         setEditing(!editing)
@@ -51,7 +50,7 @@ function General({countryData}) {
     };
     const onSubmit = async(values)=> {
 
-        const params={'bid':currentBusinessId, 'updates':values}
+        const params={'bid':default_business._id, 'updates':values}
         try{
             const res = await axios.put('/business', params);
             if (res.status===200 && res.data.user_data ) {
@@ -78,7 +77,7 @@ function General({countryData}) {
                 try{
                     const res = await axios.get('/auth/getUser/'+session.user.user.id );
                     if (res.status===200) {
-                        const res = await axios.get('/business/'+currentBusinessId );
+                        const res = await axios.get('/business/'+default_business._id );
                         setGeneralData(res.data)
                     }
                 }catch(err){
@@ -120,7 +119,7 @@ function General({countryData}) {
                 <Form layout="vertical" name="basic" onFinish={onSubmit}>
                     <Row justify="space-between">
                         <Col>
-                            <Title level={4} type={'secondary'}>Edit your general account settings</Title>
+                            <Title level={5} type={'secondary'}>Edit your general account settings</Title>
                         </Col>
                         <Col>
                             <Button type="primary" icon={<SaveOutlined />} htmlType="submit" >Save</Button>
@@ -176,7 +175,7 @@ function General({countryData}) {
                     <Title level={5}  type={'secondary'}>CONTACT INFORMATION </Title>
                     <Row justify="start" className='pt-2'>
                         <Col span={12}>
-                            <Form.Item label="Phone Number" initialValue={generalData.business.phone_number} name="phone_number" rules={[{ required: true, message: 'Please enter Phone Number ' }]}>
+                            <Form.Item label="Phone Number" initialValue={generalData.business.phone_number} name="phone_number" rules={[{ message: 'Please enter Phone Number ' }]}>
                                 <Input  />
                             </Form.Item>
                         </Col>
@@ -190,4 +189,11 @@ function General({countryData}) {
     )
 }
 
-export default General;
+const mapStateToProps = (state) => ({
+    default_business: state.businessStore.default_business,
+})
+
+const mapDispatchToProps = { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(General);
