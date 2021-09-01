@@ -11,11 +11,12 @@ import BusinessView from './BusinessView'
 import BusinessForm from './BusinessForm'
 import {getSession} from "next-auth/client";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 
 
 function General({countryData}) {
-
+    const router = useRouter()
     const [userId, setUserId] = useState();
     const [editing, setEditing] = useState(false);
     const [showNew, setNew] = useState(false);
@@ -84,6 +85,12 @@ function General({countryData}) {
                 }
             }
         });
+        const { action }=router.query
+        if(action==='newBusiness') {
+            setNew(true);
+        }
+
+
     },[])
 
 

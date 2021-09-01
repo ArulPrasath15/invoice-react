@@ -34,17 +34,24 @@ const userMenu = (
     const [session , loading] = useSession()
     const [menuSelected, setMenuSelected] = useState();
     const [collapsed, setCollapsed] = useState(false);
-    const onCollapse = () => {
+    const [currentBusiness, setCurrentBusiness] = useState(default_business? default_business._id:'');
+
+      const onCollapse = () => {
         setCollapsed(!collapsed);
     };
 
     const updateBusiness = async (value)=>{
         if(value!='new'){
+            setCurrentBusiness(value)
             const res = await axios.get(`/business/${value}`);
             if(res.data){
                 await setDefaultBusiness({default:res.data.business});
                 Router.replace('/dashboard');
             }
+        }
+        else{
+            Router.replace('/settings?action=newBusiness');
+
         }
     }
 
@@ -78,17 +85,15 @@ const userMenu = (
                         </Col>
                         <Col   md={{span:2,offset:1}} xs={{span:0}} >
                             <div>
-                                <Select style={{ width: "100%" }} defaultValue={default_business? default_business._id:''} onChange={updateBusiness}>
+                                <Select style={{ width: "100%" }} value={currentBusiness}  onChange={updateBusiness}>
                                     { business && business.map(bus=>{
                                        return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
                                     })}
-                                    <Option value={'new'}>
-                                        <Link href={'/settings'}>Add Business</Link>
-                                    </Option>
+                                    <Option style={{color:"#1890ff"}} c value={'new'}>Add Business</Option>
                                 </Select>
                             </div>
                         </Col>
-                        <Col lg={{span:1,offset:1}} md={{span:1,offset:1}} md={{span:1,offset:1}} xs={{span:0}} >
+                        <Col lg={{span:1,offset:1}} md={{span:1,offset:1}}  xs={{span:0}} >
                             <Button type="dashed"  shape="circle" icon={<BellOutlined />} size={"large"} />
                         </Col>
                         <Col lg={{span:1,offset:0}} md={{span:1,offset:1 }} xs={{span:0}} >
