@@ -307,7 +307,7 @@ const InvoiceTable1= ({prop}) => {
         setITax((sum*(Number(IGST)/100)).toFixed(2));
         setSTax((sum*(Number(SGST)/100)).toFixed(2));
         setCTax((sum*(Number(CGST)/100)).toFixed(2));
-        setTotalAmount(sum-i_tax-c_tax-s_tax);
+        setTotalAmount(sum+i_tax+c_tax+s_tax);
     };
 
     const onConfirm = () => {
@@ -421,7 +421,7 @@ const InvoiceTable1= ({prop}) => {
                                         setITax((subTotal * (Number(IGST) / 100)).toFixed(2));
                                         setSTax((subTotal * (Number(SGST) / 100)).toFixed(2));
                                         setCTax((subTotal * (Number(CGST) / 100)).toFixed(2));
-                                        setTotalAmount(subTotal - i_tax - c_tax - s_tax);
+                                        setTotalAmount(subTotal + i_tax + c_tax + s_tax);
                                     }
 
                                 }} style={{ width: 100}} bordered={false}>
@@ -449,7 +449,7 @@ const InvoiceTable1= ({prop}) => {
                                         setITax((subTotal*(Number(IGST)/100)).toFixed(2));
                                         setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
                                         setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
-                                        setTotalAmount(subTotal-i_tax-c_tax-s_tax);
+                                        setTotalAmount(subTotal+i_tax+c_tax+s_tax);
                                     }
 
                                 }} style={{ width: 100}} bordered={false}>
@@ -477,7 +477,7 @@ const InvoiceTable1= ({prop}) => {
                                         setITax((subTotal*(Number(IGST)/100)).toFixed(2));
                                         setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
                                         setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
-                                        setTotalAmount(subTotal-(i_tax-c_tax-s_tax));
+                                        setTotalAmount(subTotal+i_tax+c_tax+s_tax);
                                     }
 
                                 }} style={{ width: 100}} bordered={false}>
