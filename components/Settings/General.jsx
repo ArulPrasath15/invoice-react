@@ -25,7 +25,6 @@ function General({countryData,default_business}){
 
     const onEdit = () => {
         setEditing(!editing)
-        console.log(editing)
     }
 
     const handleSelection = (value)=>{
@@ -45,7 +44,6 @@ function General({countryData,default_business}){
     const AccTypeOptions = [{ label: 'Freelancer', value: 'Freelancer' }, { label: 'Retailer', value: 'Retailer' }];
 
     const onChangeAccType = e => {
-        console.log(' checked', e.target.value);
         setAcctype(e.target.value);
     };
     const onSubmit = async(values)=> {
@@ -73,7 +71,7 @@ function General({countryData,default_business}){
         getSession().then(async (session,loading) => {
             if (session ) {
                 setUserId(session.user.user.id)
-                console.log('General User ID '+session.user.user.id)
+                // console.log('General User ID '+session.user.user.id)
                 try{
                     const res = await axios.get('/auth/getUser/'+session.user.user.id );
                     if (res.status===200) {
@@ -192,8 +190,5 @@ function General({countryData,default_business}){
 const mapStateToProps = (state) => ({
     default_business: state.businessStore.default_business,
 })
-
 const mapDispatchToProps = { }
-
-
 export default connect(mapStateToProps, mapDispatchToProps)(General);

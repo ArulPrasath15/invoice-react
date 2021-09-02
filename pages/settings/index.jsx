@@ -45,7 +45,7 @@ const Settings = ({data}) => {
                 </Row>
                 </div>
 
-        <div className="mx-5 mt-5">
+        <div className="mx-5 mt-5 mb-5">
                 <Row gutter={24}>
                     <Col span={6}>
                         <Card size="large"  >
