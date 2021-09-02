@@ -55,6 +55,12 @@ function Template1({default_business}) {
     const [allBanks,setAllBanks] = useState([]);
     const [bank,setBank] = useState({});
 
+    const [IGST,setIGST] = useState("0");
+    const [SGST,setSGST] = useState("0");
+    const [CGST,setCGST] = useState("0");
+
+
+
 
     useEffect(()=>{
         (async ()=>{
@@ -80,10 +86,9 @@ function Template1({default_business}) {
     function handleClientSelect(e) {
         if(e.key!=="Add_Client"){
             setClient(allClients.reduce(client=>client._id===e.key))
-            console.log(allClients.reduce(client=>client._id===e.key))
         }
         else {
-            console.log("Create Client");
+            router.push("../client/new");
         }
     }
     const clientMenu = (
@@ -102,7 +107,8 @@ function Template1({default_business}) {
             setBank(allBanks.reduce(Bank=>bank._id===e.key))
         }
         else {
-            console.log("Create Bank");
+            //Todo: Redirect to new Bank
+            router.push("../client/new");
         }
     }
     const bankMenu = (
@@ -111,7 +117,7 @@ function Template1({default_business}) {
                 allBanks.length !== 0 && allBanks.map(bank=> <Menu.Item key={bank._id} icon={<UserOutlined />}>{ bank.bank_name}</Menu.Item>)
             }
             <Menu.Divider />
-            <Menu.Item key="Add_Client" style={{color:"#3aabf0"}}><PlusOutlined /> &nbsp;Add New Bank</Menu.Item>
+            <Menu.Item key="Add_Bank" style={{color:"#3aabf0"}}><PlusOutlined /> &nbsp;Add New Bank</Menu.Item>
         </Menu>
     );
     const handleSave=(option)=>{
@@ -121,7 +127,11 @@ function Template1({default_business}) {
             project_id: "",
             client_id: client._id,
             amount: total,
-            gst_id: default_business._id,
+            gst:{
+                CGST:CGST,
+                SGST:SGST,
+                IGST:IGST
+            },
             bank_id: bank._id,
             invoice_date: invoiceDate,
             credit_period: invoiceDueDate,
@@ -136,7 +146,7 @@ function Template1({default_business}) {
                 if(res.status === 200){
                     if(res)
                     {
-                       console.log(res.msg);
+                        console.log(res.msg);
                     }
 
                 }
@@ -164,10 +174,10 @@ function Template1({default_business}) {
                     <div className={styles.pdfHeader}>
                             <span className={styles.companyLogo}>
                                  {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
-                                 {/*<Image src={"https://us.123rf.com/450wm/zhanna26/zhanna261709/zhanna26170900035/85712562-black-silhouette-of-cat-vector-illustration-.jpg?ver=6"} width={144} height={144} alt="avatar" style={{width: '100%'}}/>*/}
-                              {default_business.business_name}
+                                {/*<Image src={"https://us.123rf.com/450wm/zhanna26/zhanna261709/zhanna26170900035/85712562-black-silhouette-of-cat-vector-illustration-.jpg?ver=6"} width={144} height={144} alt="avatar" style={{width: '100%'}}/>*/}
+                                {default_business.business_name}
                             </span>
-                            <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
+                        <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
                     </div>
 
                     <div className={styles.for}>
@@ -207,13 +217,14 @@ function Template1({default_business}) {
                         <div style={{paddingTop: "20px"}}>
                             <span>Invoice ID: {invoiceNo}</span><br/>
                             Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false} /><br/>
-                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} bordered={false}/>
+                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(invoiceDate)} bordered={false}/>
                         </div>
                     </div>
 
                     <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
-                        <InvoiceTable1 prop={[tableData,setTableData,total,setTotalAmount]}/>
+                        <InvoiceTable1 prop={[tableData,setTableData,total,setTotalAmount,IGST,setIGST,SGST,setSGST,CGST,setCGST]}/>
                     </div>
+
                     <div className={styles.pdfBank}>
                         {Object.keys(bank).length===0 &&
                         <Dropdown overlay={bankMenu}  placement="bottomLeft" arrow>
@@ -254,11 +265,12 @@ function Template1({default_business}) {
 const dataSource=[];
 
 const InvoiceTable1= ({prop}) => {
-    const [tableData,setTableData,total,setTotalAmount] = prop;
+    const [tableData,setTableData,total,setTotalAmount,IGST,setIGST,SGST,setSGST,CGST,setCGST] = prop;
     const [subTotal, setSubTotal] = useState("");
 
-    const [gst, setGST] = useState("18");
-    const [tax, setTax] = useState("");
+    const [i_tax, setITax] = useState("");
+    const [s_tax, setSTax] = useState("");
+    const [c_tax, setCTax] = useState("");
 
     useEffect(() => {
         // Set totals on initial render
@@ -268,7 +280,8 @@ const InvoiceTable1= ({prop}) => {
             setTotal(newData, index);
         }
         setTableData(newData);
-    }, []);
+    }, [IGST, SGST, CGST]);
+
 
     const onInputChange = (key, index) => (e) => {
         const newData = [...tableData];
@@ -290,9 +303,11 @@ const InvoiceTable1= ({prop}) => {
             sum+=Number(amt);
         }
         setSubTotal(sum);
-        var tax=sum*(Number(gst)/100);
-        setTax(tax.toFixed(2));
-        setTotalAmount(sum-tax);
+
+        setITax((sum*(Number(IGST)/100)).toFixed(2));
+        setSTax((sum*(Number(SGST)/100)).toFixed(2));
+        setCTax((sum*(Number(CGST)/100)).toFixed(2));
+        setTotalAmount(sum-i_tax-c_tax-s_tax);
     };
 
     const onConfirm = () => {
@@ -397,31 +412,88 @@ const InvoiceTable1= ({prop}) => {
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
 
-                            <Table.Summary.Cell  ><b>VAT</b> </Table.Summary.Cell>
+                            <Table.Summary.Cell  style={{color:"grey"}}>IGST </Table.Summary.Cell>
                             <Table.Summary.Cell>
-                                <Select defaultValue={gst}  onChange={(vat)=>{
-                                    setGST(vat);
-                                    if(subTotal!==''){
-                                        var tax=subTotal*(vat/100);
-                                        setTax(tax.toFixed(2));
-                                        setTotalAmount(subTotal-tax);
+                                <Select defaultValue={IGST}  onChange={async (vat) => {
+                                    setIGST(vat);
+
+                                    if (subTotal !== '') {
+                                        setITax((subTotal * (Number(IGST) / 100)).toFixed(2));
+                                        setSTax((subTotal * (Number(SGST) / 100)).toFixed(2));
+                                        setCTax((subTotal * (Number(CGST) / 100)).toFixed(2));
+                                        setTotalAmount(subTotal - i_tax - c_tax - s_tax);
                                     }
 
-                                   }} style={{ width: 100}} bordered={false}>
-                                    <Option value="1">1%</Option>
-                                    <Option value="2">2%</Option>
-                                    <Option value="8">8%</Option>
-                                    <Option value="10">10%</Option>
+                                }} style={{ width: 100}} bordered={false}>
+                                    <Option value="0">0%</Option>
+                                    <Option value="5">5%</Option>
                                     <Option value="12">12%</Option>
-                                    <Option value="15">15%</Option>
                                     <Option value="18">18%</Option>
+                                    <Option value="28">28%</Option>
                                 </Select>
 
                             </Table.Summary.Cell>
                             <Table.Summary.Cell>
-                                {tax!=='' && "(-)"} {tax}
+                                {i_tax!=='' && "(-)"} {i_tax}
                             </Table.Summary.Cell>
                         </Table.Summary.Row>
+
+                        <Table.Summary.Row>
+                            <Table.Summary.Cell colSpan={2} />
+
+                            <Table.Summary.Cell  style={{color:"grey"}}>SGST</Table.Summary.Cell>
+                            <Table.Summary.Cell>
+                                <Select defaultValue={SGST}  onChange={(vat)=>{
+                                    setSGST(vat);
+                                    if(subTotal!==''){
+                                        setITax((subTotal*(Number(IGST)/100)).toFixed(2));
+                                        setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
+                                        setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
+                                        setTotalAmount(subTotal-i_tax-c_tax-s_tax);
+                                    }
+
+                                }} style={{ width: 100}} bordered={false}>
+                                    <Option value="0">0%</Option>
+                                    <Option value="5">5%</Option>
+                                    <Option value="12">12%</Option>
+                                    <Option value="18">18%</Option>
+                                    <Option value="28">28%</Option>
+                                </Select>
+
+                            </Table.Summary.Cell>
+                            <Table.Summary.Cell>
+                                {s_tax!=='' && "(-)"} {s_tax}
+                            </Table.Summary.Cell>
+                        </Table.Summary.Row>
+
+                        <Table.Summary.Row>
+                            <Table.Summary.Cell colSpan={2} />
+
+                            <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
+                            <Table.Summary.Cell>
+                                <Select defaultValue={CGST}  onChange={(vat)=>{
+                                    setCGST(vat);
+                                    if(subTotal!==''){
+                                        setITax((subTotal*(Number(IGST)/100)).toFixed(2));
+                                        setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
+                                        setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
+                                        setTotalAmount(subTotal-(i_tax-c_tax-s_tax));
+                                    }
+
+                                }} style={{ width: 100}} bordered={false}>
+                                    <Option value="0">0%</Option>
+                                    <Option value="5">5%</Option>
+                                    <Option value="12">12%</Option>
+                                    <Option value="18">18%</Option>
+                                    <Option value="28">28%</Option>
+                                </Select>
+
+                            </Table.Summary.Cell>
+                            <Table.Summary.Cell>
+                                {c_tax!=='' && "(-)"} {c_tax}
+                            </Table.Summary.Cell>
+                        </Table.Summary.Row>
+
                         <Table.Summary.Row>
                             <Table.Summary.Cell colSpan={2} />
                             <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
