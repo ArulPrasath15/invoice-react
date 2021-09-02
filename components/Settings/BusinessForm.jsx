@@ -82,8 +82,11 @@ function BusinessForm({countryData,redirect}){
                     </Form.Item>
                 </Col>
             </Row>
+            <Form.Item label={'Invoice Pretext (Optional)'} name="pretext" >
+                <Input allowClear />
+            </Form.Item>
             <Form.Item className="text-center">
-                <Button className="rounded-btn " shape="round" type="primary" htmlType='submit'>
+                <Button className="rounded-btn" type="primary" htmlType='submit'>
                     Create
                 </Button>
             </Form.Item>

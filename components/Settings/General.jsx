@@ -173,10 +173,15 @@ function General({countryData,default_business}){
                     </Row>
 
                     <Title level={5}  type={'secondary'}>CONTACT INFORMATION </Title>
-                    <Row justify="start" className='pt-2'>
-                        <Col span={12}>
+                    <Row justify={"space-between"}className='pt-2'>
+                        <Col span={11}>
                             <Form.Item label="Phone Number" initialValue={generalData.business.phone_number} name="phone_number" rules={[{ message: 'Please enter Phone Number ' }]}>
                                 <Input  />
+                            </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                            <Form.Item label={'Invoice Pretext (Optional)'} name="pretext" initialValue={generalData.business.pretext}>
+                                <Input allowClear />
                             </Form.Item>
                         </Col>
                     </Row>
