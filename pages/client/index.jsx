@@ -3,27 +3,16 @@ import Link from 'next/link'
 import Head from 'next/head'
 import ClientCard from "../../components/Client/ClientCard";
 import BreadCrumbs from '../../components/Utils/Breadcrumb'
-import {Layout, Button, Typography, Col, Row, Table, Card, Space, Empty} from 'antd';
-import {PlusOutlined , UserOutlined, MailOutlined , PhoneOutlined} from '@ant-design/icons';
+import {Button, Typography, Col, Row, Empty} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
+import useClients from "../../hooks/useClients";
 const { Title, Text } = Typography;
-import axios from 'axios';
-import {connect} from 'react-redux'
 
-function Client( {default_business}) {
-    const [clients,setClients] = useState([]);
-    useEffect(()=>{
-        (async ()=>{
-            try{
-                const res = await axios.get(`/client/${default_business._id}`);
-                if(res.status == 200){
-                    if(res.data.clients)
-                        setClients(res.data.clients);
-                }
-            }catch (err){
-                console.log(err);
-            }
-        })();
-    },[])
+
+function Client() {
+    // const [clients,setClients] = useState([]);
+    const {data: clients} = useClients();
+
     return (
         <>
             <Head>
@@ -37,7 +26,7 @@ function Client( {default_business}) {
                         <Text className={'mt-3'} type={'secondary'}>Add new clients and store all client related information in client profiles</Text>
                     </Col>
                     <Col span={3} offset={6}>
-                        <Link href='/client/new'>
+                        <Link href="/client/new">
                             <a>
                                 <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
                             </a>
@@ -57,7 +46,7 @@ function Client( {default_business}) {
                            description={<><Title level={4}>Send Invoices to Clients Seamlessly</Title><Text type="secondary">Add clients to your business.</Text></>}>
                         <Link href='/client/new'>
                             <a>
-                                <Button type="primary"    icon={<PlusOutlined />} > Add Client</Button>
+                                <Button type="primary" icon={<PlusOutlined />} > Add Client</Button>
                             </a>
                         </Link>
                     </Empty>
@@ -82,11 +71,6 @@ function Client( {default_business}) {
         </>
     )
 }
-const mapStateToProps = (state) => ({
-    default_business: state.businessStore.default_business,
-})
-
-const mapDispatchToProps = { }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Client);
+export default Client;
