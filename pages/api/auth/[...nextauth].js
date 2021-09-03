@@ -18,7 +18,7 @@ const providers = [
                 }
                 return Promise.reject('?authError=failed');
             }catch(err){
-
+                console.log(err)
                 return Promise.reject('?authError=Server Error! Please try again later');
 
             }
