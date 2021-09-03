@@ -14,6 +14,7 @@ const providers = [
             try{
                 const res = await axios.post(`${process.env.SERVER_URL}/auth/login`, req.query);
                 if (res.data!==null) {
+                    console.log("Auth successful")
                     return res.data;
                 }
                 return Promise.reject('?authError=failed');
