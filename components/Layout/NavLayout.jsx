@@ -15,31 +15,38 @@ import AuthRoute from '../../hoc/auth.hoc'
 //redux
 import {connect} from 'react-redux'
 import axios from 'axios';
-import {setDefaultBusiness} from '../../store/businessStore'
+import {setDefaultBusiness,setBusiness} from '../../store/businessStore'
 
-const userMenu = (
-    <Menu className='mx-5 mt-5'>
-      <Menu.Item key="0"  className='px-5 mt-2' icon={<UserOutlined />}>
-        <a href="https://www.antgroup.com">Edit Profile</a>
-      </Menu.Item>
-      <Menu.Item key="3"  className='px-5 mt-2' icon={<LogoutOutlined/>}>
-        <a href="https://www.aliyun.com">Logout</a>
-      </Menu.Item>
-      <Menu.Divider />
-    </Menu>
-  );
-  
-  
-  function NavLayout({children,pathname,business,default_business,setDefaultBusiness}){
+
+  function NavLayout({children,pathname,business,default_business,setDefaultBusiness,setBusiness}){
     const [session , loading] = useSession()
     const [menuSelected, setMenuSelected] = useState();
     const [collapsed, setCollapsed] = useState(false);
-    const [currentBusiness, setCurrentBusiness] = useState(default_business? default_business._id:'');
-
+    const [currentBusiness,setCurrentBusiness] = useState(null);
       const onCollapse = () => {
         setCollapsed(!collapsed);
     };
 
+      const userMenu = (
+          <Menu className='mx-5 mt-5'>
+              <Menu.Item key="0"  className='px-5 mt-2' icon={<UserOutlined />}>
+                  <Link href={'/settings'}>
+                      Edit Profile
+                  </Link>
+              </Menu.Item>
+              <Menu.Item key="3"  className='px-5 mt-2' icon={<LogoutOutlined/>}>
+                  <a onClick={()=>{logout()}}>Logout</a>
+              </Menu.Item>
+              <Menu.Divider />
+          </Menu>
+      );
+
+
+      const logout = async ()=>{
+          await setDefaultBusiness({default:null});
+          await setBusiness({business:null});
+          await signOut({ callbackUrl: 'http://localhost:3000/' })
+      }
     const updateBusiness = async (value)=>{
         if(value!='new'){
             setCurrentBusiness(value)
@@ -86,7 +93,7 @@ const userMenu = (
                         </Col>
                         <Col   md={{span:2,offset:1}} xs={{span:0}} >
                             <div>
-                                <Select style={{ width: "100%" }} value={currentBusiness}  onChange={updateBusiness}>
+                                <Select style={{ width: "100%" }} value={default_business? default_business.business_name : ''}  onChange={updateBusiness}>
                                     { business && business.map(bus=>{
                                        return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
                                     })}
@@ -130,7 +137,7 @@ const userMenu = (
                                  icon={<SettingOutlined style={{fontSize: '18px'}}/>}><Link
                           href='/settings'><a>Settings</a></Link></Menu.Item>
                       <Menu.Item key="6" icon={<LogoutOutlined style={{fontSize: '18px'}}/>}
-                                 onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}>Logout</Menu.Item>
+                                 onClick={() => logout()}>Logout</Menu.Item>
                   </Menu>}
               </Sider>
             <Layout className="site-layout">
@@ -151,7 +158,7 @@ const mapStateToProps = (state) => ({
     default_business: state.businessStore.default_business,
 })
 
-const mapDispatchToProps = {setDefaultBusiness }
+const mapDispatchToProps = {setDefaultBusiness,setBusiness }
 
 // export default AuthRoute(NavLayout);
 export default connect(mapStateToProps, mapDispatchToProps)(NavLayout);
