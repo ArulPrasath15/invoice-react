@@ -21,14 +21,14 @@ function Login({login,deviceInfo}) {
             email, password, browserMajorVersion, browserName, osName, osVersion
         }
         try{
-            const res=await signIn("email-pass",{ callbackUrl: `${process.env.CLIENT_URL}/dashboard` }, payload);
+            const res=await signIn("email-pass",{ callbackUrl: `http://localhost:3000/dashboard` }, payload);
             console.log("Result",res);
         }catch (e){
             console.log(e)
         }
     }
     const onGoogle = (values)=>{
-        const res=signIn("google",{ callbackUrl: `${process.env.CLIENT_URL}/dashboard` });
+        const res=signIn("google",{ callbackUrl: `http://localhost:3000/dashboard` });
         console.log("Result"+res);
 
     }
