@@ -10,12 +10,12 @@ import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
 const { Title, Text } = Typography;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const res = await fetch('https://restcountries.eu/rest/v2/all');
     let countries = await res.json();
     let data=[];
     await countries.forEach(country=>{
-        if(country.alpha3Code!=null && country.currencies[0].code!=null && country.currencies[0].symbol)
+        if(country.alpha3Code!=null && country.currencies?.[0]?.code!=null && country.currencies[0].symbol)
             data.push({
                 code: country.alpha3Code,
                 currency: country.currencies[0].code,
