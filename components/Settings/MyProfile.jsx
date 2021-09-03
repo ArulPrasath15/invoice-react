@@ -71,8 +71,8 @@ export function MyProfile() {
                 setImgUrl('')
             }
             else {
-                console.log(params)
-                console.log(res.data)
+                // console.log(params)
+                // console.log(res.data)
                 notify({type:'warning',msg:'Failed ',des:'General settings updation Failed'})
                 setEditing(false)
                 setImgUrl('')
@@ -86,7 +86,7 @@ export function MyProfile() {
     useEffect(()=>{
         getSession().then(async (session,loading) => {
             if (session ) {
-                console.log(session.user.user.id)
+                // console.log(session.user.user.id)
                 try{
                     const res = await axios.get('/auth/getUser/'+session.user.user.id );
                     if (res.status===200) {
@@ -101,7 +101,7 @@ export function MyProfile() {
     return (
         <>
             {!editing && userData &&
-            <div style={{paddingBottom:'18px'}}>
+            <div style={{paddingBottom:'18px'}} >
                 <Row justify={"space-between"} align={"middle"}>
                     <Col>
                         <Title level={5} type={'secondary'}>PROFILE </Title>

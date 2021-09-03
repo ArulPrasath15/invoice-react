@@ -1,169 +1,243 @@
-import {Row, Col, Button, Divider, Radio, Input, Form, Select} from 'antd';
-import { EditOutlined,SaveOutlined,CloseOutlined,ShopOutlined} from '@ant-design/icons';
+import {Row, Col, Button, Divider, Input, Form, Select, Empty} from 'antd';
+import { CloseOutlined, PlusOutlined, SaveOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
-const { TextArea } = Input;
-import Styles from '../../assets/css/General.module.css'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 const { Option } = Select;
 import notify from  '../../components/Utils/notify'
+import axios from "axios";
+import {Modal,Collapse } from "antd";
+import BankCard from "./BankCard";
+const { Panel } = Collapse;
+import {connect} from "react-redux";
+
+function Accounting({countryData,currentUser}) {
+    const [banks,setBanks] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedBankId, setSelectedBankId] = useState();
+    const [refresh, setRefresh] = useState();
+    const [modelType, setModelType] = useState();
+    const [form] = Form.useForm();
+
+    useEffect(()=>{
+        (async ()=>{
+            try{
+                const res = await axios.get('/bank');
+                if(res.status === 200){
+                    if(res.data)
+                        setBanks(res.data.bank);
+                }
+            }catch (err){
+                console.log(err);
+            }
+        })();
+    },[refresh])
+
+    //To open the modal for update bank
+    const showUpdateModal = (value) => {
+        setModelType("update")
+        setSelectedBankId(value._id)
+        form.setFieldsValue(value)
+        setIsModalVisible(true);
+    };
+
+    //To open the modal for add bank
+    const showNewModal = (value) => {
+        setModelType("new")
+        form.resetFields()
+        setIsModalVisible(true);
+    };
+
+    //To handle update bank submit
+    const handleUpdateOk = async () => {
+        const params={'bid':selectedBankId, 'updates':form.getFieldsValue()}
+        try{
+            const res = await axios.put('/bank', params);
+            if (res.status===200 ) {
+                setRefresh(params)
+                notify({type:'success',msg:'Updated successfully',des:''})
+            }
+            else {
+                notify({type:'warning',msg:'Failed ',des:'Failed to update the Bank Details'})
+            }
+        }catch(err){
+            notify({type:'warning',msg:'Failed ',des:'Try Again Later'})
+        }
+        setIsModalVisible(false);
+
+    };
+
+    //To handle add bank submit
+    const handleNewOk = async () => {
+        const params=form.getFieldsValue()
+        params.user_id = currentUser._id;
+        try{
+            const res = await axios.post('/bank', params);
+            if (res.status===200 ) {
+                setRefresh(params)
+                notify({type:'success',msg:'Bank Added successfully',des:''})
+            }
+            else {
+                notify({type:'warning',msg:'Failed ',des:'Failed to update the Bank Details'})
+            }
+        }catch(err){
+            notify({type:'warning',msg:'Failed ',des:'Try Again Later'})
+        }
+        setIsModalVisible(false);
+
+    };
 
 
-function Accounting({countryData}) {
+    const handleUpdateCancel = () => {
+        setIsModalVisible(false);
+    };
 
-    const tempdata={
-        accountHolder:"Penta",
-        bankName: "ABC",
-        countryofbank: "India",
-        accountNumber: "1234567890",
-        swift_bic: "Not Set",
-        ifsc: "ABC00001234",
-        state: "Tamil Nadu",
-        taxid: "12345 ",
-        vatid: "12345"
+    //To delete the bank
+    const deleteBank=async (id) =>{
+        try{
+            const res = await axios.delete('/bank/'+id);
+            if (res.status===200 ) {
+                setRefresh(res)
+                notify({type:'success',msg:'Deleted successfully',des:''})
+            }
+            else {
+                notify({type:'warning',msg:'Failed ',des:'Failed to delete the Bank Details'})
+            }
+        }catch(err){
+            notify({type:'warning',msg:'Failed ',des:'Try Again Later'})
+        }
+        setIsModalVisible(false);
     }
-    const [editing, setEditing] = useState(false);
-    const [acctype, setAcctype] = useState('Freelancer');
-    const [formdata, setFormdata] = useState(tempdata);
-
-    const onEdit = () => {
-        setEditing(!editing)
-        console.log(editing)
-    }
-    const onSubmit = (values)=>{
-        setFormdata(values)
-        notify({type:'success',msg:'Updated successfully',des:'General settings updated successfully'})
-        setEditing(!editing)
-    }
-
 
     return (
         <>
-            {!editing &&
-            <div>
-                <Row justify="end"><Button type="primary" icon={<EditOutlined/>} onClick={() => {
-                    onEdit()
-                }}>Edit</Button></Row>
-                <Divider className="mt-3 mb-2"/>
-                <div style={{paddingLeft:"20vw",paddingRight:"20vw"}}>
-                        <Row><Title level={5}>Bank Details </Title></Row>
-                        <hr className={Styles.hr}/>
-                        <Row justify="start">
-                            <Text>Account Holder : </Text>
-                            <Text className='px-2' strong>{formdata.accountHolder}</Text>
-                        </Row>
-                        <Row justify="start">
-                            <Text>Bank Name : </Text>
-                            <Text className='px-2' strong>{formdata.bankName}</Text>
-                        </Row>
-                        <Row justify="start">
-                            <Text>Country of Bank : </Text>
-                            <Text className='px-2' strong>{formdata.countryofbank}</Text>
-                        </Row>
-                        <Row justify="start">
-                            <Text>Account Number : </Text>
-                            <Text className='px-2' strong>{formdata.accountNumber}</Text>
-                        </Row>
-                        <Row justify="start">
-                            <Text>SWIFT/BIC : </Text>
-                            <Text className='px-2' strong>{formdata.swift_bic}</Text>
-                        </Row>
-                        <Row justify="start">
-                            <Text>IFSC : </Text>
-                            <Text className='px-2' strong>{formdata.ifsc}</Text>
-                        </Row>
-                        <Row className='pt-5'><Title level={5}>Taxes </Title></Row>
-                        <hr className={Styles.hr}/>
-                        <Row justify="start" className='pt-1'>
-                            <Text>Tax ID : </Text>
-                            <Text className='px-2' strong>{formdata.taxid}</Text>
-                        </Row>
-                        <Row justify="start" className='pt-1'>
-                            <Text>VAT ID : </Text>
-                            <Text className='px-2' strong>{formdata.vatid}</Text>
-                        </Row>
-                    </div>
+            <Row justify="end">
+                <Col>
+                    <Button type="primary" icon={<PlusOutlined/>} onClick={showNewModal}  >New</Button>
+                </Col>
+            </Row>
+            <Divider className="mt-3 mb-2"/>
 
-            </div>
+            {banks.length === 0 &&
+            <Row justify='center' align="middle"  style={{minHeight: '60vh'}}>
+                <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                       imageStyle={{height: 80}}
+                       description={<><Title level={4}>Add Business Bank Account</Title></>}>
+                </Empty>
+            </Row>
             }
 
-            {editing &&
-            <div>
-                <Form layout="vertical"
-                      name="basic"
-                      onFinish={onSubmit}>
-                <Row justify="space-between">
-                    <Col>
-                        <Text>Edit your accounting settings</Text>
-                    </Col>
-                   <Col>
-                       <Button type="primary" icon={<SaveOutlined />} htmlType="submit" >Save</Button>
-                       <Button className='mx-2' type="dashed" icon={<CloseOutlined />} onClick={() => {onEdit()}}>Cancel</Button>
-                   </Col>
-                </Row>
-                <Divider className="mt-3 mb-2"/>
-
-                    <div style={{paddingLeft:"20vw",paddingRight:"20vw"}}>
-                <Row className='pt-4'> <Title level={5}>BANK DETAILS </Title></Row>
-                <hr className={Styles.hr}  />
-                <Row justify={"space-between"}>
-                    <Col span={11}>
-                        <Form.Item label="Account Holder" name="accountHolder" rules={[{ required: true, message: 'Please enter Account Holder ' }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col span={11}>
-                        <Form.Item label="Bank Name" name="bankName" rules={[{ required: true, message: 'Please enter Bank Name ' }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Form.Item className='pt-3' label="Account Number" name="accountNumber" rules={[{ required: true, message: 'Please enter Account Holder ' }]}>
-                    <Input />
-                </Form.Item>
-                <Row justify={"space-between"}>
-                    <Col span={11}>
-                        <Form.Item label="IFSC" name="ifsc" rules={[{ required: true, message: 'Please enter IFSC Code ' }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col span={11}>
-                        <Form.Item label="SWIFT/BIC" name="swift_bic" rules={[{ required: false }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row justify={"space-between"}>
-                    <Col span={11}>
-                        <Form.Item name="country" label="Country" rules={[{ required: true }]}>
-                            <Select placeholder="Country" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
-                                {countryData.map(country => (
-                                    <Option value={country.countryName} key={country.countryName}>{country.countryName}</Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row><Title level={5}>TAXES </Title></Row>
-                <hr className={Styles.hr}/>
-                <Row justify="space-between" className='pt-2'>
-                <Col span={11}>
-                        <Form.Item label="Tax ID" name="taxid" rules={[{ required: true, message: 'Please enter Tax ID ' }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col span={11}>
-                        <Form.Item label="VAT ID" name="vatid" rules={[{ required: false }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                </div>
-               </Form>
-            </div>
+            {banks.length > 0 &&
+            <Row  justify='space-between' gutter={24}>
+                {banks.map(bank=>{
+                    return (
+                        <Col span={24} key={bank._id} className="mt-5">
+                            <Collapse bordered={false}>
+                                <Panel header={bank.bank_name +" - "+bank.acc_number} key={bank._id}>
+                                    <BankCard bank={bank} deleteBank={deleteBank}  showModal={showUpdateModal} />
+                                </Panel>
+                            </Collapse>
+                        </Col>
+                    )
+                })}
+            </Row>
             }
+
+            <Modal  style={{top: 20}} name="update" title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } visible={isModalVisible}  footer={null}>
+                <Form layout="vertical" name="basic" form={form}  onFinish={modelType==='update' ? handleUpdateOk : handleNewOk}>
+                    <Form.Item label={'Bank Name'}  name="bank_name" rules={[{required: true, message: 'Please enter your Bank Name '},]}>
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item className='pt-3'  label="Account Number" name="acc_number" rules={[{required: true, message: 'Please enter Account Number '}]}>
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item label={'Account Type'} name="acc_type" rules={[{required: true, message: "Choose your business type"}]}>
+                        <Select className='w-100'>
+                            <Option value="Personal">Personal</Option>
+                            <Option value="Saving">Saving</Option>
+                        </Select>
+                    </Form.Item>
+                    <Row justify={"space-between"}>
+                        <Col span={11}>
+                            <Form.Item label="IFSC Code" name="ifsc"  rules={[{required: true, message: 'Please enter Zip code '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                            <Form.Item label="Branch" name="branch" rules={[{required: true, message: 'Please enter City Name '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Form.Item className='pt-3' label="Address"  name="address" rules={[{required: true, message: 'Please enter Account Number '}]}>
+                        <Input/>
+                    </Form.Item>
+                    <Row justify={"space-between"}>
+                        <Col span={11}>
+                            <Form.Item label="City" name="city" rules={[{required: true, message: 'Please enter City Name '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                            <Form.Item label="Pincode" name="pincode"  rules={[{required: true, message: 'Please enter Zip code '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row justify={"space-between"}>
+                        <Col span={11}>
+                            <Form.Item label="State" name="state"  rules={[{required: true, message: 'Please enter State Name '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                            <Form.Item name="country"  label="Country" rules={[{required: true}]}>
+                                <Select placeholder="Country" allowClear showSearch
+                                        filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                    {countryData.map(country => (
+                                        <Option value={country.countryName}
+                                                key={country.countryName}>{country.countryName}</Option>
+                                    ))}
+                                    <Option value={'India'}>India</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row justify={"space-between"}>
+                        <Col span={11}>
+                            <Form.Item label="Mirc"  name="mirc" rules={[{ message: 'Please enter City Name '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                            <Form.Item label="Swift" name="swift" rules={[{ message: 'Please enter Zip code '}]}>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    {/*<Form.Item label={'Category'} initialValue={modalData.category} name="category" rules={[{ required: true , message:"Choose your category" }]}>*/}
+                    {/*    <Select className='w-100'>*/}
+                    {/*        <Option value="Personal">Client</Option>*/}
+                    {/*    </Select>*/}
+                    {/*</Form.Item>*/}
+
+                    <Row className='mt-5' justify={"space-between"}>
+                        <Col>
+                            <Button type="primary" icon={<SaveOutlined/>} htmlType="submit" >Save</Button>
+                        </Col>
+                        <Col>
+                            <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>handleUpdateCancel()} >Cancel</Button>
+                        </Col>
+                    </Row>
+
+                </Form>
+            </Modal>
         </>
     )
 }
 
-export default Accounting;
+const mapStateToProps = (state) => ({
+    currentUser: state.userStore.user,
+})
+const mapDispatchToProps = { }
+export default connect(mapStateToProps, mapDispatchToProps)(Accounting);
