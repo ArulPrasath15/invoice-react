@@ -161,4 +161,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {setDefaultBusiness,setBusiness }
 
 // export default AuthRoute(NavLayout);
-export default connect(mapStateToProps, mapDispatchToProps)(NavLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthRoute(NavLayout));

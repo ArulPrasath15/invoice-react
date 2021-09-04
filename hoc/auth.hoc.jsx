@@ -6,11 +6,11 @@ const withAuth = (WrappedComponent) => {
     return (props) => {
         const Router = useRouter();
         const [auth, setAuth] = useState(false);
-
         useEffect(async () => {
                 const session = await getSession();
                 if (session) {
-                    if(!session.user.user.hasBusiness && Router.pathname !== '/new'){
+                    console.log("session",session.user);
+                    if(!session?.user.user.hasBusiness && Router.pathname !== '/new'){
                         Router.replace("/new")
                     }else{
                         setAuth(true);

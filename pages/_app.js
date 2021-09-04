@@ -35,6 +35,7 @@ function _App({ Component, pageProps, reduxStore }) {
                 setAuthToken(session.user.token);
                 setLoader(false);
                 console.log("Index Session",session)
+                // Router.push('/dashboard')
             } else {
                 // if(!Router.query.autherror) {Router.push('/auth')}
                 setLoader(false);
