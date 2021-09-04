@@ -12,7 +12,7 @@ const providers = [
         async authorize(credentials, req) {
 
             try{
-                const res = await axios.post(`${process.env.SERVER_URL}/auth/login`, req.query);
+                const res = await axios.post(`http://localhost:8800/auth/login`, req.query);
                 if (res.data!==null) {
                     console.log("Auth successful")
                     return res.data;

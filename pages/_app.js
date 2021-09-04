@@ -22,7 +22,7 @@ NProgress.configure({ showSpinner: false, trickleRate: 0.1, trickleSpeed: 300 })
 function _App({ Component, pageProps, reduxStore }) {
     const [authToken, setAuthToken] = useState('');
     const [loader , setLoader] = useState(true);
-    axios.defaults.baseURL = `${process.env.SERVER_URL}`;
+    axios.defaults.baseURL = 'http://localhost:8800';
     axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
 
