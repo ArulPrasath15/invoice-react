@@ -5,6 +5,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import Head from "next/head";
 import {useRouter} from "next/router";
 import TimesheetList from "../../../components/Timesheet/TimesheetList";
+import Breadcrumbs from "../../../components/Utils/Breadcrumb";
 const { Title, Text } = Typography;
 
 function Timesheet() {
@@ -25,6 +26,9 @@ function Timesheet() {
                 <Button type="primary" icon={<PlusOutlined />} onClick={()=>router.push('/timesheet/new')}>Add Timesheet</Button>
                 </Col>
            </Row>
+            <Row className='bg-white px-5 py-2 br-5'>
+                <Breadcrumbs/>
+            </Row>
         </div>
         {
             isEmpty && <div className='mt-5 mx-5'>

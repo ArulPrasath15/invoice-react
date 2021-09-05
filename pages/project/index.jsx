@@ -10,6 +10,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import Head from "next/head";
 import {useRouter} from "next/router";
 import ProjectList from "../../components/Timesheet/ProjectList";
+import Breadcrumbs from "../../components/Utils/Breadcrumb";
 const { Title, Text } = Typography;
 
 function Timesheet() {
@@ -29,6 +30,9 @@ function Timesheet() {
                     <Col span={4} offset={11}>
                         <Button type="primary" icon={<PlusOutlined />} onClick={()=>router.push('/project/new')}>Add Project</Button>
                     </Col>
+                </Row>
+                <Row className='bg-white px-5 py-2 br-5'>
+                    <Breadcrumbs/>
                 </Row>
             </div>
             {
