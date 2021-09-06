@@ -65,7 +65,8 @@ const options = {
     providers,
     callbacks,
     pages:{
-        signIn:'/auth'
+        signIn:'/auth',
+        signOut: '/auth/signout',
     },
     session: {
         jwt: true,
