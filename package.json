@@ -31,5 +31,6 @@
   },
   "browser": {
     "child_process": false
-  }
+  },
+  "proxy": "http://localhost:8800"
 }
