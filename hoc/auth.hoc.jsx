@@ -4,22 +4,23 @@ import { useEffect, useState } from "react";
 
 const withAuth = (WrappedComponent) => {
     return (props) => {
-        const Router = useRouter();
+        const router = useRouter();
         const [auth, setAuth] = useState(false);
-        useEffect(async () => {
+        useEffect( () => {
+            (async ()=>{
                 const session = await getSession();
                 if (session) {
                     console.log("session",session.user);
-                    if(!session?.user.user.hasBusiness && Router.pathname !== '/new'){
-                        Router.replace("/new")
+                    if(!session?.user.user?.hasBusiness && Router.pathname !== '/new'){
+                        router.replace("/new")
                     }else{
                         setAuth(true);
                     }
                 } else {
-                    Router.replace("/");
+                    router.replace("/");
                 }
-
-        }, []);
+            })();
+        }, [router]);
 
         if (auth) {
             return <WrappedComponent {...props} />;
