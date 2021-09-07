@@ -3,35 +3,49 @@
 * @author: Abi
 * @description: ----------------
 */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Table, Col, Row, Space} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
-
-
+import axios from "axios";
 
 const TimesheetList = () => {
     const router = useRouter();
+    const pid=router.query['pid'];
+    const [data, setData] = useState([]);
+    useEffect(()=>{
+        (async ()=>{
+            try{
+                const res = await axios.get(`/timesheet/${pid}`);
+                if(res.status == 200){
+                    if(res.data.timesheets)
+                        setData(res.data.timesheets);
+                }
+            }catch (err){
+                console.log(err);
+            }
+        })();
+    },[pid, router.query]);
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'name',
+            title: 'Title',
+            dataIndex: 'title',
             onFilter: (value, record) => record.name.indexOf(value) === 0,
             sorter: (a, b) => a.name.length - b.name.length,
         },
         {
-            title: 'Client',
-            dataIndex: 'client',
+            title: 'Description',
+            dataIndex: 'desc',
             sorter: (a, b) => a.client.length - b.client.length,
         },
         {
-            title: 'Value',
-            dataIndex: 'value',
+            title: 'Currency',
+            dataIndex: 'currency',
             sorter: (a, b) => a.value - b.value,
         },
         {
-            title: 'Un Billed',
-            dataIndex: 'ub',
+            title: 'Budget',
+            dataIndex: 'budget',
             sorter: (a, b) => a.ub - b.ub,
         },
         {
@@ -48,36 +62,6 @@ const TimesheetList = () => {
         },
     ];
 
-    const data = [
-        {
-            key: '1',
-            name: 'Brown',
-            client: "PKS Solutions",
-            value: 12000,
-            ub: 0
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            client: "KR Consultancy",
-            value: 4200,
-            ub: 120
-        },
-        {
-            key: '3',
-            name: 'Black',
-            client: "MR Constructions",
-            value: 120000,
-            ub: 1000
-        },{
-            key: '4',
-            name: 'Yellow',
-            client: "CTS",
-            value: 100000,
-            ub: 0
-        },
-    ];
-
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
@@ -87,7 +71,7 @@ const TimesheetList = () => {
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer'  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('/timesheet/'+record.key);},};
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={timesheet=>timesheet._id}  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('project//timesheet/'+record.key);},};
                         }}/>
                     </Col>
                 </Row>
@@ -96,4 +80,6 @@ const TimesheetList = () => {
     );
 };
 
+
 export default TimesheetList;
+

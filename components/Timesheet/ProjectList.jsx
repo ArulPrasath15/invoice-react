@@ -17,22 +17,9 @@ const ProjectList = ({default_business}) => {
         (async ()=>{
             try{
                 const res = await axios.get(`/project/${default_business._id}`);
-                let tdata=[];
                 if(res.status == 200){
                     if(res.data.projects)
-                    {
-                        res.data.projects.forEach((project,index) => {
-                            tdata.push(
-                                {
-                                    key: index,
-                                    id: project._id,
-                                    name: project.name,
-                                    client: project.client_id.business_name,
-                                    description: project.desc
-                                 })
-                        })
-                        setData(tdata);
-                    }
+                        setData(res.data.projects);
                 }
             }catch (err){
                 console.log(err);
@@ -79,7 +66,7 @@ const ProjectList = ({default_business}) => {
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer'  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('/project/'+record.id);}};}}/>
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={project=>project._id}  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('/project/'+record.id);}};}}/>
                     </Col>
                 </Row>
             </div>
