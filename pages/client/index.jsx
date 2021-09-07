@@ -7,6 +7,7 @@ import {Button, Typography, Col, Row, Empty} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import useClients from "../../hooks/useClients";
 import {TitleStrip} from "../../components/Utils/TitleStrip";
+import EmptyContainer from "../../components/Utils/EmptyContainer";
 const { Title, Text } = Typography;
 
 
@@ -29,15 +30,7 @@ function Client() {
             <div className='mx-5 mt-5 mb-5'>
                 {clients.length === 0 &&
                 <Row justify='center' align="middle"  style={{minHeight: '60vh'}}>
-                    <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                           imageStyle={{height: 80,}}
-                           description={<><Title level={4}>Send Invoices to Clients Seamlessly</Title><Text type="secondary">Add clients to your business.</Text></>}>
-                        <Link href='/client/new'>
-                            <a>
-                                <Button type="primary" icon={<PlusOutlined />} > Add Client</Button>
-                            </a>
-                        </Link>
-                    </Empty>
+                    <EmptyContainer/>
                 </Row>
                 }
                 {clients.length > 0 &&

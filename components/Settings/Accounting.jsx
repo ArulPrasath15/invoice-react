@@ -10,6 +10,7 @@ import {Modal,Collapse } from "antd";
 import BankCard from "./BankCard";
 const { Panel } = Collapse;
 import {connect} from "react-redux";
+import EmptyContainer from "../Utils/EmptyContainer";
 
 function Accounting({countryData,currentUser}) {
     const [banks,setBanks] = useState([]);
@@ -119,12 +120,7 @@ function Accounting({countryData,currentUser}) {
             <Divider className="mt-3 mb-2"/>
 
             {banks.length === 0 &&
-            <Row justify='center' align="middle"  style={{minHeight: '60vh'}}>
-                <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                       imageStyle={{height: 80}}
-                       description={<><Title level={4}>Add Business Bank Account</Title></>}>
-                </Empty>
-            </Row>
+                <EmptyContainer/>
             }
 
             {banks.length > 0 &&

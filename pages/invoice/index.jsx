@@ -30,16 +30,13 @@ function Invoice({default_business}) {
                         if(res1.status === 200){
                             setInvoiceNo((new Date().toISOString().slice(0, 10))+'-'+default_business.pretext+'-'+(zeroPad(res1.data.len+1, 4)));
                         }
-
-
                     }
-
                 }
             }catch (err){
                 console.log(err);
             }
         })();
-    },[]);
+    },[default_business._id, default_business.pretext]);
 
     const columns = [
         {
@@ -78,16 +75,9 @@ function Invoice({default_business}) {
                 <title>Invoice | Penta Invoice</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            <TitleStrip head={{
-                title: "My Invoices",
-                desc: "Add new invoices and store all invoice related information",
-                action:"Add Invoice",
-                action_link:`/invoice/${invoiceNo}`
-            }}/>
+            <TitleStrip head={{title: "My Invoices", desc: "Add new invoices and store all invoice related information", action:"Add Invoice", action_link:`/invoice/${invoiceNo}`}}/>
         <div className="mx-5 mt-5">
-
-
-            <div className='mt-5'>
+           <div className='mt-5'>
                 <Row justify="space-around" align="middle">
                     <Col span={7} offset={17}>
                         <Search size="large" placeholder="Search Invoice" enterButton/>

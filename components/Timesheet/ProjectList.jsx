@@ -18,6 +18,7 @@ const ProjectList = ({default_business}) => {
             try{
                 const res = await axios.get(`/project/${default_business._id}`);
                 if(res.status == 200){
+                    console.log(res.data.projects)
                     if(res.data.projects)
                         setData(res.data.projects);
                 }
@@ -35,12 +36,12 @@ const ProjectList = ({default_business}) => {
         },
         {
             title: 'Client',
-            dataIndex: 'client',
+            dataIndex: ['client_id','business_name'],
             sorter: (a, b) => a.client.length - b.client.length,
         },
         {
             title: 'Description',
-            dataIndex: 'description',
+            dataIndex: 'desc',
             sorter: (a, b) => a.value - b.value,
         },
         {
@@ -66,7 +67,7 @@ const ProjectList = ({default_business}) => {
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={project=>project._id}  onRow={(record) => {return {onClick: () => {console.log(record.key);router.push('/project/'+record.id);}};}}/>
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={project=>project._id}  onRow={(record) => {return {onClick: () => {router.push('/project/'+record._id);}};}}/>
                     </Col>
                 </Row>
             </div>
