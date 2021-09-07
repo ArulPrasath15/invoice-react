@@ -13,40 +13,23 @@ import axios from "axios";
 import { Typography, Space } from 'antd';
 import {useRouter} from "next/router";
 import Image from 'next/image'
+import {resetInvoice, setIGST, setSGST, setCGST,setITax,setSTax,setCTax} from "../../store/invoiceStore";
+import useClients from "../../hooks/useClients";
 
 
 
 const { Text, Link } = Typography;
 
 
-// const TAX_RATE = 0.07;
-//
-//
-// function ccyFormat(num) {
-//     return `${num.toFixed(2)}`;
-// }
-//
-// function priceRow(qty, unit) {
-//     return qty * unit;
-// }
-
-// function subtotal(items) {
-//     return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-// }
-
-// const invoiceSubtotal = subtotal(rows);
-// const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-// const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
-
-function Template1({default_business}) {
+function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setITax,setSTax,setCTax,iTax,sTax,cTax,resetInvoice}) {
     const router = useRouter();
+    const {data: allClients} = useClients();
+    const [client,setClient] = useState({});
 
-    const [tableData, setTableData] = useState(dataSource);
+    const [tableData, setTableData] = useState([]);
+    const [subTotal, setSubTotal] = useState("");
     const [total, setTotalAmount] = useState("");
 
-    const [allClients,setAllClients] = useState([]);
-    const [client,setClient] = useState({});
 
     const [invoiceNo,setInvoiceNo] = useState('');
     const [invoiceDate,setInvoiceDate] = useState('');
@@ -55,33 +38,35 @@ function Template1({default_business}) {
     const [allBanks,setAllBanks] = useState([]);
     const [bank,setBank] = useState({});
 
-    const [IGST,setIGST] = useState("0");
-    const [SGST,setSGST] = useState("0");
-    const [CGST,setCGST] = useState("0");
-
-
-
 
     useEffect(()=>{
         (async ()=>{
-            try{
-                const res = await axios.get(`/client/${default_business._id}`);
-                if(res.status === 200){
-                    if(res.data.clients)
-                    {
 
-                        await setAllClients(res.data.clients);
-                        console.log(res.data.clients);
-                        setAllBanks([{bank_name:"Indian Overseas Bank",acc_name:"Mr.K.Karthick",acc_no:"1247019029109000",branch:"Chennai",ifsc:"IOBS00120",_id:"1"}])
-                        setInvoiceNo(router.query.id)
+                await resetInvoice({reset:true});
+                try{
+                    const res = await axios.get('/bank');
+                    if(res.status === 200){
+                        if(res.data.bank)
+                        {
+                            console.log(res.data.bank);
+                            await setAllBanks(res.data.bank);
+                        }
                     }
-
                 }
-            }catch (err){
-                console.log(err);
-            }
+                catch (e) {
+                    console.error(e);
+                }
+                setInvoiceNo(router.query.id);
+
+                const newData = [...tableData];
+                for (let index = 0; index < tableData.length; index++) {
+                    setTotal(newData, index);
+                }
+                setTableData(newData);
+
+
         })();
-    },[default_business]);
+    },[]);
 
     function handleClientSelect(e) {
         if(e.key!=="Add_Client"){
@@ -108,7 +93,7 @@ function Template1({default_business}) {
         }
         else {
             //Todo: Redirect to new Bank
-            router.push("../client/new");
+            router.push("../settings");
         }
     }
     const bankMenu = (
@@ -162,127 +147,6 @@ function Template1({default_business}) {
             <Menu.Item key="3"><Button type="primary" block>Create & Download</Button></Menu.Item>
         </Menu>
     );
-
-    return (
-
-        <div id="example" style={{margin: "3%"}} className={styles.template}>
-
-            <Dropdown.Button onClick={()=>{handleSave(0)}} type="primary" overlay={saveMenu} style={{float: "right"}}>Create & Save</Dropdown.Button>
-            <div  className="page-container hidden-on-narrow">
-                <div className={styles.pdfPage+' '+styles.sizeA4}>
-
-                    <div className={styles.pdfHeader}>
-                            <span className={styles.companyLogo}>
-                                 {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
-                                {/*<Image src={"https://us.123rf.com/450wm/zhanna26/zhanna261709/zhanna26170900035/85712562-black-silhouette-of-cat-vector-illustration-.jpg?ver=6"} width={144} height={144} alt="avatar" style={{width: '100%'}}/>*/}
-                                {default_business.business_name}
-                            </span>
-                        <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
-                    </div>
-
-                    <div className={styles.for}>
-                        {Object.keys(client).length===0 &&
-                        <Dropdown overlay={clientMenu}  placement="bottomLeft" arrow>
-                            <Button>
-                                <PlusOutlined />Add Client
-                            </Button>
-                        </Dropdown>
-                        }
-                        {Object.keys(client).length!==0 &&
-                        <>
-                            <h2>Invoice For </h2>
-
-                            <p>{client.business_name}<br/>
-                                {client.city} {client.pincode} .<br/>
-                                <span style={{color:"black",marginTop:"30px"}}>
-                                    <Text strong>GSTIN : {client.gstin}</Text><br/>
-                                    <Text strong>Place of Supply - {client.state}</Text>
-                                </span>
-                            </p>
-                        </>}
-                    </div>
-
-
-                    <div className={styles.from}>
-                        <h2>From</h2>
-                        <p style={{paddingBottom: "20px", borderBottom: "1px solid #e5e5e5"}}>
-                            {default_business.business_name} <br/>
-                            {default_business.address},<br/>
-                            {default_business.city},  {default_business.state},  {default_business.pincode}.<br/>
-                            {/*Mob :  {default_business.phone_number}*/}
-                            {/*Email :  {default_business.email}*/}
-                            {/*Pan :  {default_business.pan}*/}
-
-                        </p>
-                        <div style={{paddingTop: "20px"}}>
-                            <span>Invoice ID: {invoiceNo}</span><br/>
-                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false} /><br/>
-                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(invoiceDate)} bordered={false}/>
-                        </div>
-                    </div>
-
-                    <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
-                        <InvoiceTable1 prop={[tableData,setTableData,total,setTotalAmount,IGST,setIGST,SGST,setSGST,CGST,setCGST]}/>
-                    </div>
-
-                    <div className={styles.pdfBank}>
-                        {Object.keys(bank).length===0 &&
-                        <Dropdown overlay={bankMenu}  placement="bottomLeft" arrow>
-                            <Button>
-                                <PlusOutlined />Add Bank Details
-                            </Button>
-                        </Dropdown>
-                        }
-                        {Object.keys(bank).length!==0  &&
-                        <>
-                            <b>Bank details for NEFT/IMPS</b><br/>
-                            Accounts Details:<br/>
-                            Bank Name: {bank.bank_name}<br/>
-                            Branch: {bank.branch}<br/>
-                            Account Name: {bank.acc_name}<br/>
-                            Account No: {bank.acc_no}<br/>
-                            IFSC Code: {bank.ifsc}<br/>
-                        </>}
-
-                    </div>
-                    <div className={styles.pdfFooter}>
-                        <p>  {default_business.business_name} <br/>
-                            {default_business.address},<br/>
-                            {default_business.city},  {default_business.state},  {default_business.pincode}.<br/>
-                        </p>
-                    </div>
-
-
-                </div>
-
-            </div>
-
-        </div>
-    );
-}
-
-
-const dataSource=[];
-
-const InvoiceTable1= ({prop}) => {
-    const [tableData,setTableData,total,setTotalAmount,IGST,setIGST,SGST,setSGST,CGST,setCGST] = prop;
-    const [subTotal, setSubTotal] = useState("");
-
-    const [i_tax, setITax] = useState("");
-    const [s_tax, setSTax] = useState("");
-    const [c_tax, setCTax] = useState("");
-
-    useEffect(() => {
-        // Set totals on initial render
-
-        const newData = [...tableData];
-        for (let index = 0; index < tableData.length; index++) {
-            setTotal(newData, index);
-        }
-        setTableData(newData);
-    }, [IGST, SGST, CGST]);
-
-
     const onInputChange = (key, index) => (e) => {
         const newData = [...tableData];
         if (key === "desc") {
@@ -294,7 +158,7 @@ const InvoiceTable1= ({prop}) => {
         setTableData(newData);
     };
 
-    const setTotal = (data, index) => {
+    const setTotal = async (data, index) => {
         // Set total
         data[index]["amt"] = Number(data[index]["qty"] * data[index]["price"]);
         var sum=0,amt;
@@ -302,18 +166,17 @@ const InvoiceTable1= ({prop}) => {
             amt=(tableData[index]["amt"]==="")?0:tableData[index]["amt"];
             sum+=Number(amt);
         }
-        setSubTotal(sum);
+        setSubTotal(Number(sum.toFixed(2)));
+        sum=Number(sum);
 
-        setITax((sum*(Number(IGST)/100)).toFixed(2));
-        setSTax((sum*(Number(SGST)/100)).toFixed(2));
-        setCTax((sum*(Number(CGST)/100)).toFixed(2));
-        setTotalAmount(sum+i_tax+c_tax+s_tax);
+        await setITax({t:(sum*(Number(IGST)/100)).toFixed(2)});
+        await setSTax({t:(sum*(Number(SGST)/100)).toFixed(2)});
+        await setCTax({t:(sum*(Number(CGST)/100)).toFixed(2)});
+
+        await setTotalAmount((Number(sum)+Number(iTax)+Number(cTax)+Number(sTax)).toFixed(2))
+
     };
 
-    const onConfirm = () => {
-        handleAdd();
-        console.log(tableData);
-    };
 
     const columns = [
         {
@@ -381,139 +244,241 @@ const InvoiceTable1= ({prop}) => {
     };
 
     const { Option } = Select;
+
     return (
-        <div >
 
-            <div className="action-btn">
-                <Tooltip title="Add Invoice Data">
-                    <Button shape="circle" type="primary" icon={<PlusOutlined />} onClick={onConfirm} size={"small"} style={{float: 'right'}} />
-                </Tooltip>
+        <div id="example" style={{margin: "3%"}} className={styles.template}>
+
+            <Dropdown.Button onClick={()=>{handleSave(0)}} type="primary" overlay={saveMenu} style={{float: "right"}}>Create & Save</Dropdown.Button>
+            <div  className="page-container hidden-on-narrow">
+                <div className={styles.pdfPage+' '+styles.sizeA4}>
+
+                    <div className={styles.pdfHeader}>
+                            <span className={styles.companyLogo}>
+                                 {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
+                                {/*<Image src={"https://us.123rf.com/450wm/zhanna26/zhanna261709/zhanna26170900035/85712562-black-silhouette-of-cat-vector-illustration-.jpg?ver=6"} width={144} height={144} alt="avatar" style={{width: '100%'}}/>*/}
+                                {default_business.business_name}
+                            </span>
+                        <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
+                    </div>
+
+                    <div className={styles.for}>
+                        {Object.keys(client).length===0 &&
+                        <Dropdown overlay={clientMenu}  placement="bottomLeft" arrow>
+                            <Button>
+                                <PlusOutlined />Add Client
+                            </Button>
+                        </Dropdown>
+                        }
+                        {Object.keys(client).length!==0 &&
+                        <>
+                            <h2>Invoice For </h2>
+
+                            <p>{client.business_name}<br/>
+                                {client.city} {client.pincode} .<br/>
+                                <span style={{color:"black",marginTop:"30px"}}>
+                                    <Text strong>GSTIN : {client.gstin}</Text><br/>
+                                    <Text strong>Place of Supply - {client.state}</Text>
+                                </span>
+                            </p>
+                        </>}
+                    </div>
+
+
+                    <div className={styles.from}>
+                        <h2>From</h2>
+                        <p style={{paddingBottom: "20px", borderBottom: "1px solid #e5e5e5"}}>
+                            {default_business.business_name} <br/>
+                            {default_business.address},<br/>
+                            {default_business.city},  {default_business.state},  {default_business.pincode}.<br/>
+                            {/*Mob :  {default_business.phone_number}*/}
+                            {/*Email :  {default_business.email}*/}
+                            {/*Pan :  {default_business.pan}*/}
+
+                        </p>
+                        <div style={{paddingTop: "20px"}}>
+                            <span>Invoice ID: {invoiceNo}</span><br/>
+                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false} /><br/>
+                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(invoiceDate)} bordered={false}/>
+                        </div>
+                    </div>
+
+                    <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
+                        <div className="action-btn">
+                            <Tooltip title="Add Invoice Data">
+                                <Button shape="circle" type="primary" icon={<PlusOutlined />} onClick={()=>{handleAdd()}} size={"small"} style={{float: 'right'}} />
+                            </Tooltip>
+                        </div>
+                        <br />
+
+                        <Table
+                            rowKey="sr"
+                            columns={columns}
+                            dataSource={tableData}
+                            pagination={false}
+                            size="small"
+                            tableLayout="unset"
+                            summary={()=> (
+                                <Table.Summary fixed >
+                                    <Table.Summary.Row >
+                                        <Table.Summary.Cell colSpan={2} />
+                                        <Table.Summary.Cell colSpan={2} >
+                                            <b>Sub Total</b>
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {subTotal}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row >
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+
+                                        <Table.Summary.Cell  style={{color:"grey"}}>IGST </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <Select defaultValue={IGST}  onChange={async (vat) => {
+                                                await setIGST({igst:vat});
+
+                                                if (subTotal !== '') {
+
+                                                    let t=(Number(subTotal) * (Number(vat) / 100)).toFixed(2);
+                                                    await setITax({t});
+                                                    await setTotalAmount((Number(subTotal)+Number(t)+Number(cTax)+Number(sTax)).toFixed(2))
+                                                }
+
+                                            }} style={{ width: 100}} bordered={false}>
+                                                <Option value="0">0%</Option>
+                                                <Option value="5">5%</Option>
+                                                <Option value="12">12%</Option>
+                                                <Option value="18">18%</Option>
+                                                <Option value="28">28%</Option>
+                                            </Select>
+
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {iTax}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+
+                                        <Table.Summary.Cell  style={{color:"grey"}}>SGST</Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <Select defaultValue={SGST}  onChange={async (vat)=>{
+                                              await  setSGST({sgst:vat});
+                                                if(subTotal!==''){
+                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
+                                                    await setSTax({t});
+
+                                                    await setTotalAmount((Number(subTotal)+Number(iTax)+Number(cTax)+Number(t)).toFixed(2))
+                                                }
+
+                                            }} style={{ width: 100}} bordered={false}>
+                                                <Option value="0">0%</Option>
+                                                <Option value="5">5%</Option>
+                                                <Option value="12">12%</Option>
+                                                <Option value="18">18%</Option>
+                                                <Option value="28">28%</Option>
+                                            </Select>
+
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {sTax}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+
+                                        <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <Select defaultValue={CGST}  onChange={async (vat)=>{
+                                                await setCGST({cgst:vat});
+                                                if(subTotal!==''){
+                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
+                                                    setCTax({t});
+                                                    setTotalAmount((Number(subTotal)+Number(iTax)+Number(t)+Number(sTax)).toFixed(2))
+                                                }
+
+                                            }} style={{ width: 100}} bordered={false}>
+                                                <Option value="0">0%</Option>
+                                                <Option value="5">5%</Option>
+                                                <Option value="12">12%</Option>
+                                                <Option value="18">18%</Option>
+                                                <Option value="28">28%</Option>
+                                            </Select>
+
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {cTax}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+                                        <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {total}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+                                </Table.Summary>
+                            )}
+                        />
+                    </div>
+
+                    <div className={styles.pdfBank}>
+                        {Object.keys(bank).length===0 &&
+                        <Dropdown overlay={bankMenu}  placement="bottomLeft" arrow>
+                            <Button>
+                                <PlusOutlined />Add Bank Details
+                            </Button>
+                        </Dropdown>
+                        }
+                        {Object.keys(bank).length!==0  &&
+                        <>
+                            <b>Bank details for NEFT/IMPS</b><br/>
+                            Accounts Details:<br/>
+                            Bank Name: {bank.bank_name}<br/>
+                            Branch: {bank.branch}<br/>
+                            Account No: {bank.acc_number}<br/>
+                            IFSC Code: {bank.ifsc}<br/>
+                            Account Type: {bank.acc_type}<br/>
+                        </>}
+
+                    </div>
+                    <div className={styles.pdfFooter}>
+                        <p>  {default_business.business_name} <br/>
+                            {default_business.address},<br/>
+                            {default_business.city},  {default_business.state},  {default_business.pincode}.<br/>
+                        </p>
+                    </div>
+
+
+                </div>
+
             </div>
-            <br />
-
-            <Table
-                rowKey="sr"
-                columns={columns}
-                dataSource={tableData}
-                pagination={false}
-                size="small"
-                tableLayout="unset"
-                summary={()=> (
-                    <Table.Summary fixed >
-                        <Table.Summary.Row >
-                            <Table.Summary.Cell colSpan={2} />
-                            <Table.Summary.Cell colSpan={2} >
-                                <b>Sub Total</b>
-                            </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                {subTotal}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row >
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell colSpan={2} />
-
-                            <Table.Summary.Cell  style={{color:"grey"}}>IGST </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                <Select defaultValue={IGST}  onChange={async (vat) => {
-                                    setIGST(vat);
-
-                                    if (subTotal !== '') {
-                                        setITax((subTotal * (Number(IGST) / 100)).toFixed(2));
-                                        setSTax((subTotal * (Number(SGST) / 100)).toFixed(2));
-                                        setCTax((subTotal * (Number(CGST) / 100)).toFixed(2));
-                                        setTotalAmount(subTotal + i_tax + c_tax + s_tax);
-                                    }
-
-                                }} style={{ width: 100}} bordered={false}>
-                                    <Option value="0">0%</Option>
-                                    <Option value="5">5%</Option>
-                                    <Option value="12">12%</Option>
-                                    <Option value="18">18%</Option>
-                                    <Option value="28">28%</Option>
-                                </Select>
-
-                            </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                {i_tax!=='' && "(-)"} {i_tax}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row>
-
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell colSpan={2} />
-
-                            <Table.Summary.Cell  style={{color:"grey"}}>SGST</Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                <Select defaultValue={SGST}  onChange={(vat)=>{
-                                    setSGST(vat);
-                                    if(subTotal!==''){
-                                        setITax((subTotal*(Number(IGST)/100)).toFixed(2));
-                                        setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
-                                        setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
-                                        setTotalAmount(subTotal+i_tax+c_tax+s_tax);
-                                    }
-
-                                }} style={{ width: 100}} bordered={false}>
-                                    <Option value="0">0%</Option>
-                                    <Option value="5">5%</Option>
-                                    <Option value="12">12%</Option>
-                                    <Option value="18">18%</Option>
-                                    <Option value="28">28%</Option>
-                                </Select>
-
-                            </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                {s_tax!=='' && "(-)"} {s_tax}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row>
-
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell colSpan={2} />
-
-                            <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                <Select defaultValue={CGST}  onChange={(vat)=>{
-                                    setCGST(vat);
-                                    if(subTotal!==''){
-                                        setITax((subTotal*(Number(IGST)/100)).toFixed(2));
-                                        setSTax((subTotal*(Number(SGST)/100)).toFixed(2));
-                                        setCTax((subTotal*(Number(CGST)/100)).toFixed(2));
-                                        setTotalAmount(subTotal+i_tax+c_tax+s_tax);
-                                    }
-
-                                }} style={{ width: 100}} bordered={false}>
-                                    <Option value="0">0%</Option>
-                                    <Option value="5">5%</Option>
-                                    <Option value="12">12%</Option>
-                                    <Option value="18">18%</Option>
-                                    <Option value="28">28%</Option>
-                                </Select>
-
-                            </Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                {c_tax!=='' && "(-)"} {c_tax}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row>
-
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell colSpan={2} />
-                            <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
-                            <Table.Summary.Cell>
-                                {total}
-                            </Table.Summary.Cell>
-                        </Table.Summary.Row>
-                    </Table.Summary>
-                )}
-            />
 
         </div>
     );
-};
+}
+
+
+
+
 
 const mapStateToProps = (state) => ({
     default_business: state.businessStore.default_business,
+    IGST:state.invoiceStore.igst,
+    SGST:state.invoiceStore.sgst,
+    CGST:state.invoiceStore.cgst,
+    iTax:state.invoiceStore.itax,
+    sTax:state.invoiceStore.stax,
+    cTax:state.invoiceStore.ctax,
+    total:state.invoiceStore.total,
+    tableData:state.invoiceStore.tableData,
 })
 
-const mapDispatchToProps = { }
+const mapDispatchToProps ={setIGST,setSGST,setCGST,setITax,setSTax,setCTax,resetInvoice }
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Template1);
+

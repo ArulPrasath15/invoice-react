@@ -259,3 +259,16 @@ h4.ant-typography, .ant-typography h4 , h3.ant-typography, .ant-typography h3{
 /*::-webkit-scrollbar-thumb {*/
 /*  background: #FF0000;*/
 /*}*/
+
+/*Input type Number Hide scroll*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
