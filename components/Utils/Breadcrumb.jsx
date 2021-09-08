@@ -19,15 +19,11 @@ const Breadcrumbs = () => {
         {
             i=i.slice(1);
             i=i.slice(0, i.length - 1);
-            console.log(i)
             arr[index]=router.query[i];
         }
         str=str+arr[index]+'/';
         hlinks.push(str);
     });
-    console.log(hlinks);
-    console.log(routes);
-    console.log(router.query.id)
     return (
        <>
            <Breadcrumb separator=">">

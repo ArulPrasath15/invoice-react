@@ -3,17 +3,22 @@
 * @author: Abi
 * @description: ----------------
 */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Row, Col, Card, Form, Button, Select, Input} from "antd";
 import Link from 'next/link';
 import {PlusOutlined} from "@ant-design/icons";
+import axios from "axios";
+import {connect} from "react-redux";
+import useClients from "../../hooks/useClients";
 
 const { Option } = Select;
 
-const TimesheetForm = ({data}) => {
-
+const TimesheetForm = ({data,default_business}) => {
     const [form] = Form.useForm();
-
+    const {data: clients} = useClients();
+    const onSubmit = async (values)=>{
+        console.log(values)
+    }
     return (
         <>
             <div className='mt-5 mx-5'>
@@ -22,12 +27,17 @@ const TimesheetForm = ({data}) => {
                         <Form
                             form={form}
                             layout="vertical"
+                            onFinish={onSubmit}
                         >
-                            <Form.Item label="Client" required>
+                            <Form.Item label="Client" name="client_id" required>
                                 <Select placeholder="Select a Client" allowClear>
-                                    <Option value="male">Client 1</Option>
-                                    <Option value="female">Client 2</Option>
-                                    <Option value="other"><Link href="#">Add Client</Link></Option>
+                                    {
+                                        clients.map((client)=>{
+                                            return (
+                                                <option key={client._id} value={client._id}>{client.business_name}</option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                             </Form.Item>
                             <Form.Item label="Title" required>
@@ -63,4 +73,11 @@ const TimesheetForm = ({data}) => {
     );
 };
 
-export default TimesheetForm;
+const mapStateToProps = (state) => ({
+    default_business: state.businessStore.default_business,
+})
+
+const mapDispatchToProps = { }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TimesheetForm);
