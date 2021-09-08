@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.2.11",
     "@ant-design/icons": "^4.6.2",
     "@netlify/plugin-nextjs": "^3.8.0",
     "@reduxjs/toolkit": "^1.6.1",

@@ -6,7 +6,7 @@ import {setUser} from '../store/userStore'
 import {setBusiness,setDefaultBusiness} from '../store/businessStore'
 import Head from "next/head";
 import axios from "axios";
-
+import DashboardComponent from '../components/Dashboard/Dashboard'
 // ToDo: Get Business details and settings and store them in store
  function Dashboard({ setUser, setBusiness,setDefaultBusiness,default_business}) {
      const router = useRouter()
@@ -34,14 +34,13 @@ import axios from "axios";
      }, []);
 
      return (
-        <div>
+        <>
             <Head>
                 <title>Pentafox | Dashboard</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-                <h1 align={"center"} style={{paddingTop:'40vh'}}>Hello {username} !!</h1>
-                <h1 align={"center"} >Dashboard</h1>
-        </div>
+            <DashboardComponent />
+        </>
     );
 }
 
