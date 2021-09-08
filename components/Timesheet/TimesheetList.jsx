@@ -71,7 +71,7 @@ const TimesheetList = () => {
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                     <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={timesheet=>timesheet._id}  onRow={(record) => {return {onClick: () => {router.push(`/project/${pid}/timesheet/${record._id}`);},};
+                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={timesheet=>timesheet._id}  onRow={(record) => {return {onClick: () => {router.push(`${router.asPath}/timesheet/${record._id}`);},};
                         }}/>
                     </Col>
                 </Row>

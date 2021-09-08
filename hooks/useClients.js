@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 const useClients = () => {
     const [data, setData] = useState([]);
     const default_business = useSelector(state => state.businessStore.default_business);
+
     useEffect(() => {
         (async () => {
             try {

@@ -6,12 +6,10 @@ import {PlusOutlined} from "@ant-design/icons";
 import BreadCrumbs from "./Breadcrumb";
 const { Title, Text } = Typography;
 
-
-
 export function TitleStrip({head}) {
 
     return (
-        <div>
+        <>
             <div className='mt-5 mx-5'>
                 <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
                     <Col span={13}>
@@ -29,8 +27,7 @@ export function TitleStrip({head}) {
                         <BreadCrumbs />
                     </Col>
                 </Row>
-
             </div>
-        </div>
+        </>
     );
-};
+}

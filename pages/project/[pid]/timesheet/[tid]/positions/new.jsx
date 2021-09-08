@@ -4,12 +4,12 @@
 * @description: ----------------
 */
 import React from 'react';
-import NewPositionForm from "../../../../../../components/Timesheet/NewPositionForm";
+import PositionForm from "../../../../../../components/Timesheet/PositionForm";
 
 const NewPosition = () => {
     return (
         <div>
-            <NewPositionForm/>
+            <PositionForm/>
         </div>
     );
 };
