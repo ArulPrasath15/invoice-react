@@ -54,7 +54,7 @@ const ProjectForm = ({default_business}) => {
                                 <Input />
                             </Form.Item>
                             <Form.Item>
-                                <Button type="primary" icon={<PlusOutlined />}>Add Project</Button>
+                                <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>Add Project</Button>
                             </Form.Item>
                         </Form>
 

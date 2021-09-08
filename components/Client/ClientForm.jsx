@@ -55,30 +55,16 @@ function ClientForm(props) {
     }
     return (
 
-        <Form
-            // labelCol={{ span: 4 }}
-            // wrapperCol={{ span: 14 }}
-            layout="vertical"
-            name="basic"
-            onFinish={onSubmit}
-        >
+        <Form>
             <div className="mt-3">
                 <Title type='secondary' level={5}>CLIENT DETAILS</Title>
                 <Divider />
             </div>
-            <Form.Item
-                label="Client Business Name"
-                name="business_name"
-                rules={[{ required: true, message: 'Please enter Client Name ' }]}
-            >
+            <Form.Item label="Client Business Name" name="business_name" rules={[{ required: true, message: 'Please enter Client Name ' }]}>
                 <Input />
             </Form.Item>
 
-            <Form.Item
-                label="GSTIN"
-                name="gstin"
-                rules={[{ required: true, message: 'Please enter GSTIN ' }]}
-            >
+            <Form.Item label="GSTIN" name="gstin" rules={[{ required: true, message: 'Please enter GSTIN ' }]}>
                 <Input />
             </Form.Item>
 
@@ -88,38 +74,21 @@ function ClientForm(props) {
             </div>
             <Row justify={"space-between"}>
                 <Col span={11}>
-                    <Form.Item
-                        label="First Name"
-                        name="first_name"
-                        rules={[{ required: true, message: 'Please enter First Name ' }]}
-                    >
+                    <Form.Item label="First Name" name="first_name" rules={[{ required: true, message: 'Please enter First Name ' }]}>
                         <Input />
                     </Form.Item>
                 </Col>
                 <Col span={11}>
-                    <Form.Item
-                        label="Last Name"
-                        name="last_name"
-                        rules={[{ required: true, message: 'Please enter Last Name ' }]}
-                    >
+                    <Form.Item label="Last Name" name="last_name" rules={[{ required: true, message: 'Please enter Last Name ' }]}>
                         <Input />
                     </Form.Item>
                 </Col>
             </Row>
-            <Form.Item
-                name='email'
-                label="Email"
-                rules={[
-                    { type: 'email' , message:"Please enter valid email"},
-                    { required:true , message:"Please enter Email"}
-                ]}>
+            <Form.Item name='email' label="Email" rules={[{ type: 'email' , message:"Please enter valid email"}, { required:true , message:"Please enter Email"}]}>
                 <Input />
             </Form.Item>
             <small className={'text-secondary'}>Invoices will be sent to this Email</small>
-            <Form.Item
-                name="phone"
-                label="Phone Number"
-            >
+            <Form.Item name="phone" label="Phone Number">
                 <Input addonBefore={countryCode} style={{ width: '100%' }} />
             </Form.Item>
 
@@ -127,52 +96,30 @@ function ClientForm(props) {
                 <Title type='secondary' level={5}>BILLING ADDRESS</Title>
                 <Divider />
             </div>
-
-            <Form.Item
-                label="Address"
-                name="address"
-                rules={[{ required: true, message: 'Please enter Street Name  ' }]}
-            >
+            <Form.Item label="Address" name="address" rules={[{ required: true, message: 'Please enter Street Name  ' }]}>
                 <Input />
             </Form.Item>
             <Row justify={"space-between"}>
                 <Col span={11}>
-                    <Form.Item
-                        label="Pincode"
-                        name="pincode"
-                        rules={[{ required: true, message: 'Please enter Pincode ' }]}
-                    >
+                    <Form.Item label="Pincode" name="pincode" rules={[{ required: true, message: 'Please enter Pincode ' }]}>
                         <Input />
                     </Form.Item>
                 </Col>
                 <Col span={11}>
-                    <Form.Item
-                        label="City"
-                        name="city"
-                        rules={[{ required: true, message: 'Please enter City Name ' }]}
-                    >
+                    <Form.Item label="City" name="city" rules={[{ required: true, message: 'Please enter City Name ' }]}>
                         <Input />
                     </Form.Item>
                 </Col>
             </Row>
             <Row justify={"space-between"}>
                 <Col span={11}>
-                    <Form.Item
-                        label="State"
-                        name="state"
-                        rules={[{ required: true, message: 'Please enter State Name ' }]}
-                    >
+                    <Form.Item label="State" name="state" rules={[{ required: true, message: 'Please enter State Name ' }]}>
                         <Input />
                     </Form.Item>
                 </Col>
                 <Col span={11}>
                     <Form.Item name="country" label="Country" rules={[{ required: true }]} >
-                        <Select
-                            placeholder="Country"
-                            allowClear
-                            showSearch
-                            filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
+                        <Select placeholder="Country" allowClear showSearch filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                             {data.length > 0 &&
                             data.map(country => {
                                 return (
@@ -190,18 +137,12 @@ function ClientForm(props) {
             </div>
             <Row justify='space-between'>
                 <Col span='11'>
-                    <Form.Item
-                        name='website'
-                        label="Website"
-                    >
+                    <Form.Item name='website' label="Website">
                         <Input />
                     </Form.Item>
                 </Col>
                 <Col span='11'>
-                    <Form.Item
-                        name="vatid"
-                        label="VAT ID"
-                    >
+                    <Form.Item name="vatid" label="VAT ID">
                         <Input />
                     </Form.Item>
                 </Col>
