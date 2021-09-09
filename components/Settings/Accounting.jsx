@@ -128,7 +128,7 @@ function Accounting({countryData,currentUser}) {
                 {banks.map(bank=>{
                     return (
                         <Col span={24} key={bank._id} className="mt-5">
-                            <Collapse bordered={false}>
+                            <Collapse  bordered={true}  expandIconPosition="right" >
                                 <Panel header={bank.bank_name +" - "+bank.acc_number} key={bank._id}>
                                     <BankCard bank={bank} deleteBank={deleteBank}  showModal={showUpdateModal} />
                                 </Panel>
@@ -139,7 +139,7 @@ function Accounting({countryData,currentUser}) {
             </Row>
             }
 
-            <Modal  style={{top: 20}} name="update" title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } visible={isModalVisible}  footer={null}>
+            <Modal  style={{top: 20}} name="update" title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } onCancel={handleUpdateCancel} visible={isModalVisible}  footer={null}>
                 <Form layout="vertical" name="basic" form={form}  onFinish={modelType==='update' ? handleUpdateOk : handleNewOk}>
                     <Form.Item label={'Bank Name'}  name="bank_name" rules={[{required: true, message: 'Please enter your Bank Name '},]}>
                         <Input/>
