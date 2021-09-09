@@ -7,15 +7,18 @@
 import  styles from  '../../assets/css/template.module.css'
 import React, {useEffect, useState} from 'react';
 import {Button, DatePicker, Input, Table, Tooltip,Select,Menu,Dropdown} from 'antd';
-import {PlusOutlined,UserOutlined} from "@ant-design/icons";
+import {BankOutlined, BankTwoTone, FileTextTwoTone, PlusOutlined, UserOutlined} from "@ant-design/icons";
 import {connect} from "react-redux";
 import axios from "axios";
-import { Typography, Space } from 'antd';
+import { Typography, Card } from 'antd';
 import {useRouter} from "next/router";
 import Image from 'next/image'
 import {resetInvoice, setIGST, setSGST, setCGST,setITax,setSTax,setCTax} from "../../store/invoiceStore";
 import useClients from "../../hooks/useClients";
-
+import { Steps } from 'antd';
+import moment from 'moment';
+import notify from "../Utils/notify";
+const { Step } = Steps;
 
 
 const { Text, Link } = Typography;
@@ -26,7 +29,13 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     const {data: allClients} = useClients();
     const [client,setClient] = useState({});
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useState([{
+        sr:1,
+        desc: "",
+        qty: "",
+        price: "",
+        amt: ""
+    }]);
     const [subTotal, setSubTotal] = useState("");
     const [total, setTotalAmount] = useState("");
 
@@ -37,6 +46,14 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
     const [allBanks,setAllBanks] = useState([]);
     const [bank,setBank] = useState({});
+    const [status,setStatus] = useState({
+        drafted:"",
+        created:"",
+        sent:"",
+        completed:"",
+        stage:-1
+    });
+    const [disable,setDisable] = useState(false);
 
 
     useEffect(()=>{
@@ -48,7 +65,6 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                     if(res.status === 200){
                         if(res.data.bank)
                         {
-                            console.log(res.data.bank);
                             await setAllBanks(res.data.bank);
                         }
                     }
@@ -92,20 +108,34 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             setBank(allBanks.reduce(Bank=>bank._id===e.key))
         }
         else {
-            //Todo: Redirect to new Bank
             router.push("../settings");
         }
     }
     const bankMenu = (
         <Menu onClick={handleBankSelect}>
             {
-                allBanks.length !== 0 && allBanks.map(bank=> <Menu.Item key={bank._id} icon={<UserOutlined />}>{ bank.bank_name}</Menu.Item>)
+                allBanks.length !== 0 && allBanks.map(bank=> <Menu.Item key={bank._id} icon={<BankTwoTone />}>{ bank.bank_name}</Menu.Item>)
             }
             <Menu.Divider />
             <Menu.Item key="Add_Bank" style={{color:"#3aabf0"}}><PlusOutlined /> &nbsp;Add New Bank</Menu.Item>
         </Menu>
     );
     const handleSave=(option)=>{
+        var dt=new Date();
+        let today=String(dt.getDate()).padStart(2, '0') +"-"+String(dt.getMonth()).padStart(2, '0')+"-"+dt.getFullYear()+" "+String(dt.getHours()).padStart(2, '0')+":"+String(dt.getMinutes()).padStart(2, '0');
+        let stat={
+            drafted:today,
+            created:"",
+            sent:"",
+            completed:"",
+            stage:option
+        }
+        switch(option){
+            case 1: stat.created=today;break;
+            case 2: stat.sent=today; stat.created=today;break;
+
+        }
+
         const payload = {
             invoice_no: invoiceNo,
             business_id: default_business._id,
@@ -121,7 +151,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             invoice_date: invoiceDate,
             credit_period: invoiceDueDate,
             row_items: tableData,
-            status: option === 0 ? "created" : option === 1 ? "drafted" : option === 2 ? "sent" : "completed",
+            status: stat,
             notes: "",
             addl_fields: {},
         };
@@ -131,7 +161,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                 if(res.status === 200){
                     if(res)
                     {
-                        console.log(res.msg);
+                        notify({type:'success',msg:res.data.msg,des:''})
                     }
 
                 }
@@ -142,7 +172,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     }
     const saveMenu = (
         <Menu style={{backgroundColor: "whitesmoke"}}>
-            <Menu.Item key="1"><Button type="primary" block>Draft</Button></Menu.Item>
+            <Menu.Item key="0"><Button type="primary" block>Draft</Button></Menu.Item>
             <Menu.Item key="2"><Button type="primary" block>Create & Send</Button></Menu.Item>
             <Menu.Item key="3"><Button type="primary" block>Create & Download</Button></Menu.Item>
         </Menu>
@@ -166,7 +196,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             amt=(tableData[index]["amt"]==="")?0:tableData[index]["amt"];
             sum+=Number(amt);
         }
-        setSubTotal(Number(sum.toFixed(2)));
+        setSubTotal(sum.toFixed(2));
         sum=Number(sum);
 
         await setITax({t:(sum*(Number(IGST)/100)).toFixed(2)});
@@ -247,10 +277,18 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
     return (
 
-        <div id="example" style={{margin: "3%"}} className={styles.template}>
+        <div id="example" style={{margin: "3%"}} className={styles.template} >
+            <Card title={<><FileTextTwoTone  style={{ fontSize: '22px'}}/>&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> } extra={<Dropdown.Button onClick={()=>{handleSave(1)}} type="primary" overlay={saveMenu} style={{float: "right"}}>Create & Save</Dropdown.Button>} style={{marginBottom:"3%"}} >
 
-            <Dropdown.Button onClick={()=>{handleSave(0)}} type="primary" overlay={saveMenu} style={{float: "right"}}>Create & Save</Dropdown.Button>
-            <div  className="page-container hidden-on-narrow">
+            <Steps current={status.stage} percent={99}>
+                <Step title="Draft" description={status.drafted} />
+                <Step title="Created"  description={status.created} />
+                <Step title="Sent" description={status.sent}/>
+                <Step title="Completed" description={status.completed} />
+            </Steps>
+            </Card>
+
+            <div  className="page-container hidden-on-narrow" style={disable ? {pointerEvents: "none"} : {}}>
                 <div className={styles.pdfPage+' '+styles.sizeA4}>
 
                     <div className={styles.pdfHeader}>
@@ -266,7 +304,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         {Object.keys(client).length===0 &&
                         <Dropdown overlay={clientMenu}  placement="bottomLeft" arrow>
                             <Button>
-                                <PlusOutlined />Add Client
+                                <PlusOutlined />Select Client
                             </Button>
                         </Dropdown>
                         }
@@ -297,9 +335,9 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                         </p>
                         <div style={{paddingTop: "20px"}}>
-                            <span>Invoice ID: {invoiceNo}</span><br/>
-                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false} /><br/>
-                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(invoiceDate)} bordered={false}/>
+                            <span >Invoice ID: {invoiceNo}</span><br/>
+                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))} format={"DD/MM/YYYY"}/><br/>
+                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('/')).reverse()).join("-"))} format={"DD/MM/YYYY"} bordered={false}/>
                         </div>
                     </div>
 
@@ -429,7 +467,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         {Object.keys(bank).length===0 &&
                         <Dropdown overlay={bankMenu}  placement="bottomLeft" arrow>
                             <Button>
-                                <PlusOutlined />Add Bank Details
+                                <PlusOutlined />Select Bank Details
                             </Button>
                         </Dropdown>
                         }
