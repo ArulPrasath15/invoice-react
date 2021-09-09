@@ -17,7 +17,7 @@ function Dashboard(props) {
     return (
         <div className={'px-5 py-4'}>
             <Row justify={'space-between'}>
-                <Col span={15}>
+                <Col xs={{span:24}} lg={{span:15}} className={'mt-2'}>
                     <Row justify={'space-between'}>
                         <Col span={5}>
                             <Card className={' text-center br-5 shadow'}>
@@ -61,7 +61,7 @@ function Dashboard(props) {
                         </Col>
                     </Row>
                 </Col>
-                <Col span={8}>
+                <Col xs={{span:24}} lg={{span:8}} className={'mt-2'}>
                     <Row>
                         <Col span={24}>
                             <Card className={'br-10 shadow'}>

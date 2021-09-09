@@ -81,45 +81,89 @@ import {setDefaultBusiness,setBusiness} from '../../store/businessStore'
             <BackTop/>
         <Layout style={{ minHeight: '100vh' }} >
                 <Header className="header" style={{ maxHeight:'55px',backgroundColor:'white',boxShadow:'inset rgb(0 0 0 / 0%) 0px -5px 8px 0px',paddingLeft:'2vh'}}   >
-                    <Row>
-                        <Col lg={{span:1}} md={{span:2}} xs={{span:2}}  style={{paddingTop:'10px'}} >
-                                    <Image width={35} height={35} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>
-                        </Col>
-                        <Col md={{span:6,offset:0}} xs={{span:16,offset:1}} style={{paddingTop:'14px'}}>
-                                    <Title style={{color:'#ff0202'}} level={4} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>
-                        </Col>
-                        <Col lg={{span:5 , offset:5}} md={{span:5 , offset:2}} xs={{span:0}} >
-                                    <div><Search placeholder="Search..." allowClear style={{ width: "100%", marginTop:'16px' }} /></div>
-                        </Col>
-                        <Col   md={{span:2,offset:1}} xs={{span:0}} >
-                            <div>
-                                <Select style={{ width: "100%" }} value={default_business? default_business.business_name : ''}  onChange={updateBusiness}>
-                                    { business && business.map(bus=>{
-                                       return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
-                                    })}
-                                    <Option style={{color:"#1890ff"}} c value={'new'}>Add Business</Option>
-                                </Select>
-                            </div>
-                        </Col>
-                        <Col lg={{span:1,offset:1}} md={{span:1,offset:1}}  xs={{span:0}} >
-                            <Button type="dashed"  shape="circle" icon={<BellOutlined />} size={"large"} />
-                        </Col>
-                        <Col lg={{span:1,offset:0}} md={{span:1,offset:1 }} xs={{span:0}} >
-                            <Button type="dashed"  shape="circle" icon={<SettingOutlined />} size={"large"} onClick={()=>{Router.push('/settings')}} />
-                        </Col>
-                        <Col lg={{span:1,offset:0}} md={{span:1,offset:1}} xs={{span:1,offset:4}}  >
-                            <Dropdown  overlay={userMenu} trigger={['click']} placement='bottomRight'>
-                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                    {/*<Row>*/}
+                    {/*    <Col lg={{span:1}} md={{span:2}} xs={{span:2}}  style={{paddingTop:'10px'}} >*/}
+                    {/*                <Image width={35} height={35} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>*/}
+                    {/*    </Col>*/}
+                    {/*    <Col md={{span:6,offset:0}} xs={{span:16,offset:1}} style={{paddingTop:'14px'}}>*/}
+                    {/*                <Title style={{color:'#ff0202'}} level={4} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>*/}
+                    {/*    </Col>*/}
+                    {/*    <Col lg={{span:4 , offset:4}} md={{span:4 , offset:2}} xs={{span:0}} >*/}
+                    {/*                <div><Search placeholder="Search..." allowClear style={{ width: "100%", marginTop:'16px' }} /></div>*/}
+                    {/*    </Col>*/}
+                    {/*    <Col   md={{span:3,offset:1}} xs={{span:0}} >*/}
+                    {/*        <div>*/}
+                    {/*            <Select style={{ width: "100%" }} value={default_business? default_business.business_name : ''}  onChange={updateBusiness}>*/}
+                    {/*                { business && business.map(bus=>{*/}
+                    {/*                   return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>*/}
+                    {/*                })}*/}
+                    {/*                <Option style={{color:"#1890ff"}} c value={'new'}>Add Business</Option>*/}
+                    {/*            </Select>*/}
+                    {/*        </div>*/}
+                    {/*    </Col>*/}
+                    {/*    <Col lg={{span:1,offset:1}} md={{span:1,offset:1}}  xs={{span:0}} >*/}
+                    {/*        <Button type="dashed"  shape="circle" icon={<BellOutlined />} size={"large"} />*/}
+                    {/*    </Col>*/}
+                    {/*    <Col lg={{span:1,offset:0}} md={{span:1,offset:1 }} xs={{span:0}} >*/}
+                    {/*        <Button type="dashed"  shape="circle" icon={<SettingOutlined />} size={"large"} onClick={()=>{Router.push('/settings')}} />*/}
+                    {/*    </Col>*/}
+                    {/*    <Col lg={{span:1,offset:0}} md={{span:1,offset:1}} xs={{span:1,offset:4}}  >*/}
+                    {/*        <Dropdown  overlay={userMenu} trigger={['click']} placement='bottomRight'>*/}
+                    {/*            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>*/}
 
-                                    {session && <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />}
-                                    {/*{session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.user.fname[0]}</Button>}*/}
-                                </a>
-                            </Dropdown>
+                    {/*                {session && <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />}*/}
+                    {/*                /!*{session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.user.fname[0]}</Button>}*!/*/}
+                    {/*            </a>*/}
+                    {/*        </Dropdown>*/}
+                    {/*    </Col>*/}
+                    {/*</Row>*/}
+                    <Row justify={'space-between'}>
+                        <Col span={12}>
+                            <Row>
+                                <Col   style={{paddingTop:'10px',paddingLeft:'5px'}} >
+                                    <Image width={35} height={35} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>
+                                </Col>
+                                <Col  style={{paddingTop:'14px',paddingLeft:'10px'}}>
+                                    <Title style={{color:'#ff0202'}} level={4} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={12}>
+                            <Row justify={'space-between'} >
+                                <Col  xs={{span:0}} md={{span:6}} lg={{span:8}}>
+                                    <div><Search placeholder="Search..." allowClear style={{ width: "100%", marginTop:'16px' }} /></div>
+                                </Col>
+                                <Col  md={{span:6}} lg={{span:8}}>
+                                    <div>
+                                        <Select style={{ width: "100%" }} value={default_business? default_business.business_name : ''}  onChange={updateBusiness}>
+                                            { business && business.map(bus=>{
+                                                return <Option value={bus._id} key={bus._id}>{bus.business_name}</Option>
+                                            })}
+                                            <Option style={{color:"#1890ff"}} c value={'new'}>Add Business</Option>
+                                        </Select>
+                                    </div>
+                                </Col>
+                                <Col  xs={{span:0}} md={{span:1,offset:1}}>
+                                    <Button type="dashed"  shape="circle" icon={<BellOutlined />} size={"large"} />
+                                </Col>
+                                <Col  xs={{span:0}} md={{span:1,offset:1}}>
+                                    <Button type="dashed"  shape="circle" icon={<SettingOutlined />} size={"large"} onClick={()=>{Router.push('/settings')}} />
+                                </Col>
+                                <Col xs={{offset:1}}>
+                                    <Dropdown  overlay={userMenu} trigger={['click']} placement='bottomRight'>
+                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+
+                                            {session && <Button  type="danger"  shape="circle" icon={<UserOutlined />} size={"large"} />}
+                                            {/*{session && <Button  type="danger"  shape="circle"  size={"large"}>{session.user.user.fname[0]}</Button>}*/}
+                                        </a>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                 </Header>
             <Layout>
-              <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}  width={200} className="site-layout-background">
+              <Sider breakpoint="lg" collapsible collapsed={collapsed} onCollapse={onCollapse}  width={200} className="site-layout-background">
                   {!loading && <Menu theme='dark' key="sub1" style={{fontSize: '16px', height: '100%', borderRight: 0}}
                          defaultSelectedKeys={['1']}
                          defaultOpenKeys={['sub1']} mode="inline" selectedKeys={menuSelected} onSelect={(e) => {
