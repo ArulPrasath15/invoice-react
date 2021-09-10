@@ -61,11 +61,11 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                 await resetInvoice({reset:true});
                 try{
-                    const res1=await axios.get("invoice/generateInvoice/61286a21426c224ed454e0a9");
-                    const blobPDF = base64toBlob(res1.data.pdf, 'application/pdf');
-
-                    FileSaver.saveAs(blobPDF, "Invoice.pdf");
-                    console.log(res1.data.pdf);
+                    // const res1=await axios.get("invoice/generateInvoice/61286a21426c224ed454e0a9");
+                    // const blobPDF = base64toBlob(res1.data.pdf, 'application/pdf');
+                    //
+                    // FileSaver.saveAs(blobPDF, "Invoice.pdf");
+                    // console.log(res1.data.pdf);
                     const res = await axios.get('/bank');
                     if(res.status === 200){
                         if(res.data.bank)
