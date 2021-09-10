@@ -11,7 +11,7 @@ import {useRouter} from "next/router";
 const { Title, Text } = Typography;
 
 
-const NewTimeSheet = ({data}) => {
+const NewTimeSheet = () => {
     const router = useRouter();
     const closeForm = ()=>{
         router.push('/timesheet')
@@ -28,12 +28,7 @@ const NewTimeSheet = ({data}) => {
                         <Title level={4}  >Create New Project</Title>
                     </Col>
                     <Col span={2} offset={12}>
-                        <Popconfirm
-                            title="Your changes will not be saved ?"
-                            onConfirm={closeForm}
-                            okText="Close Any"
-                            cancelText="No"
-                        >
+                        <Popconfirm title="Your changes will not be saved ?" onConfirm={closeForm} okText="Close Any" cancelText="No">
                             <Button type='danger'>Cancel</Button>
                         </Popconfirm>
                     </Col>
@@ -41,7 +36,7 @@ const NewTimeSheet = ({data}) => {
                 <div className="form">
                     <Row >
                         <Col span={24} className='bg-white mt-5 mb-5 py-5 px-5 br-5'>
-                            <ProjectForm data={data}/>
+                            <ProjectForm/>
                         </Col>
                     </Row>
                 </div>

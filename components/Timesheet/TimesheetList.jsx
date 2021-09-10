@@ -11,8 +11,13 @@ import axios from "axios";
 
 const TimesheetList = () => {
     const router = useRouter();
-    const pid=router.query['pid'];
     const [data, setData] = useState([]);
+    const [timesheet, setTimesheet]  = useState({});
+    const [refresh, setRefresh] = useState(false);
+    const [drawer, setDrawer] = useState(false);
+    const [pop, setPop] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
+    const {pid} = router.query;
     useEffect(()=>{
         (async ()=>{
             try{
