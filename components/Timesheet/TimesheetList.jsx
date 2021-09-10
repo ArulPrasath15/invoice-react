@@ -4,18 +4,21 @@
 * @description: ----------------
 */
 import React, {useEffect, useState} from 'react';
-import {Table, Col, Row, Space} from "antd";
+import {Table, Col, Row, Space, message, Tooltip, Button, Popconfirm, Drawer} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
+import Link from "next/link";
+import EmptyContainer from "../Utils/EmptyContainer";
+import ProjectForm from "./ProjectForm";
+import TimesheetForm from "./TimesheetForm";
 
-const TimesheetList = () => {
+const TimesheetList = ({data: currency}) => {
     const router = useRouter();
     const [data, setData] = useState([]);
     const [timesheet, setTimesheet]  = useState({});
     const [refresh, setRefresh] = useState(false);
     const [drawer, setDrawer] = useState(false);
-    const [pop, setPop] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
     const {pid} = router.query;
     useEffect(()=>{
@@ -24,19 +27,65 @@ const TimesheetList = () => {
                 const res = await axios.get(`/timesheet/${pid}`);
                 if(res.status == 200){
                     if(res.data.timesheets)
-                        setData(res.data.timesheets);
+                    {
+                        if(res.data.timesheets.length > 0)
+                            setData(res.data.timesheets);
+                        else
+                            setIsEmpty(true);
+                    }
                 }
             }catch (err){
                 console.log(err);
             }
         })();
-    },[pid, router.query]);
+    },[pid, router.query, refresh]);
+
+    async function deleteProject(pid) {
+        const hide=message.loading('Please wait...',0);
+        try{
+            const res = await axios.delete(`/timesheet/${pid}`);
+            if(res.status == 200){
+                hide();
+                message.success('Deleted Timesheet',2)
+                setRefresh(true);
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error');
+            } else {
+                message.error(err.message)
+            }
+        }
+        setRefresh(false);
+    }
+    function closeDrawer(ref)
+    {
+        setDrawer(false);
+        if(ref)
+            setRefresh(true);
+        setRefresh(false);
+    }
+    function openDrawer(values)
+    {
+        setTimesheet(values)
+        setDrawer(true);
+    }
+
     const columns = [
         {
             title: 'Title',
             dataIndex: 'title',
             onFilter: (value, record) => record.name.indexOf(value) === 0,
             sorter: (a, b) => a.name.length - b.name.length,
+            // eslint-disable-next-line react/display-name
+            render: (text,record) => {
+                let hf=router.asPath+"/timesheet/"+record._id;
+                return (
+                    <Link href={hf}><a>{record.title}</a></Link>
+                )
+            },
         },
         {
             title: 'Description',
@@ -58,10 +107,15 @@ const TimesheetList = () => {
             key: 'action',
             // eslint-disable-next-line react/display-name
             render: (record) => (
-                // record.id
                 <Space size="middle">
-                    <EditOutlined style={{color:"#D3C17A"}}/>
-                    <DeleteOutlined style={{color:"red"}}/>
+                    <Tooltip title="Edit" >
+                        <Button style={{backgroundColor:"#D3C17A"}}  shape="circle" icon={<EditOutlined style={{color:"white"}} />} onClick={()=>{openDrawer(record)}}/>
+                    </Tooltip>
+                    <Popconfirm title="Are you sure?" okText="Yes! Delete" okType="danger" cancelText="Cancel" onConfirm={()=>deleteProject(record._id)}>
+                        <Tooltip title="Delete" >
+                            <Button style={{backgroundColor:"red"}} shape="circle" icon={ <DeleteOutlined style={{color:"white"}}  />}/>
+                        </Tooltip>
+                    </Popconfirm>
                 </Space>
             ),
         },
@@ -72,16 +126,27 @@ const TimesheetList = () => {
     }
 
     return (
-        <div>
-            <div className='mt-5 mx-5'>
-                <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
-                    <Col span={24}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={timesheet=>timesheet._id}  onRow={(record) => {return {onClick: () => {router.push(`${router.asPath}/timesheet/${record._id}`);},};
-                        }}/>
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <>
+            {
+                isEmpty && <div className='mt-5 mx-5'>
+                    <EmptyContainer/>
+                </div>
+            }
+            {
+                !isEmpty && <>
+                    <div className='mt-5 mx-5'>
+                        <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
+                            <Col span={24}>
+                                <Table columns={columns} dataSource={data} onChange={onChange} rowClassName='cursor-pointer' rowKey={timesheet=>timesheet._id} />
+                            </Col>
+                        </Row>
+                    </div>
+                    <Drawer title="Edit Project" width={720} visible={drawer} closable={true} onClose={()=>closeDrawer(false)} bodyStyle={{ paddingBottom: 20 }} >
+                        <TimesheetForm timesheet={timesheet} closeDrawer={closeDrawer} data={currency}/>
+                    </Drawer>
+                </>
+            }
+        </>
     );
 };
 

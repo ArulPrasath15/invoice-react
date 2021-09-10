@@ -19,19 +19,16 @@ const ProjectList = ({default_business}) => {
     const [project, setProject] = useState({});
     const [refresh, setRefresh] = useState(false);
     const [drawer, setDrawer] = useState(false);
-    const [pop, setPop] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
     useEffect(()=>{
         (async ()=>{
             try{
                 const res = await axios.get(`/project/${default_business._id}`);
                 if(res.status == 200){
-                    console.log(res.data.projects)
                     if(res.data.projects)
                     {
-                        if(res.data.projects.length > 0){
+                        if(res.data.projects.length > 0)
 	                        setData(res.data.projects);
-                        }
                         else
                             setIsEmpty(true);
                     }
@@ -42,7 +39,6 @@ const ProjectList = ({default_business}) => {
         })();
     },[default_business._id, refresh]);
     async function deleteProject(pid) {
-        setPop(false);
         const hide=message.loading('Please wait...',0);
         try{
             const res = await axios.delete(`/project/${pid}`);
@@ -107,18 +103,15 @@ const ProjectList = ({default_business}) => {
             key: 'action',
             // eslint-disable-next-line react/display-name
             render: (record) => (
-                // record.id
                 <Space size="middle">
-                    {/*<EditOutlined style={{color:"#D3C17A"}} onClick={()=>router.push(`${router.asPath}/${record._id}/edit`)}/>*/}
                     <Tooltip title="Edit" >
                         <Button style={{backgroundColor:"#D3C17A"}}  shape="circle" icon={<EditOutlined style={{color:"white"}} />} onClick={()=>{openDrawer(record)}}/>
                     </Tooltip>
-                    <Popconfirm title="Are you sure?" okText="Yes! Delete" okType="danger" cancelText="No" onConfirm={()=>deleteProject(record._id)} onCancel={()=>setPop(false)}>
+                    <Popconfirm title="Are you sure?" okText="Yes! Delete" okType="danger" cancelText="Cancel" onConfirm={()=>deleteProject(record._id)}>
                     <Tooltip title="Delete" >
-                        <Button style={{backgroundColor:"red"}} shape="circle" icon={ <DeleteOutlined style={{color:"white"}} onClick={()=>setPop(true)} />}/>
+                        <Button style={{backgroundColor:"red"}} shape="circle" icon={ <DeleteOutlined style={{color:"white"}}  />}/>
                     </Tooltip>
                     </Popconfirm>
-
                 </Space>
             ),
         },
