@@ -22,7 +22,7 @@ const { Step } = Steps;
 
 
 const { Text, Link } = Typography;
-
+var FileSaver = require('file-saver');
 
 function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setITax,setSTax,setCTax,iTax,sTax,cTax,resetInvoice}) {
     const router = useRouter();
@@ -61,6 +61,11 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                 await resetInvoice({reset:true});
                 try{
+                    const res1=await axios.get("invoice/generateInvoice/61286a21426c224ed454e0a9");
+                    const blobPDF = base64toBlob(res1.data.pdf, 'application/pdf');
+
+                    FileSaver.saveAs(blobPDF, "Invoice.pdf");
+                    console.log(res1.data.pdf);
                     const res = await axios.get('/bank');
                     if(res.status === 200){
                         if(res.data.bank)
@@ -83,7 +88,27 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
         })();
     },[]);
+    function base64toBlob(base64Data, contentType = '') {
+        const sliceSize = 1024;
+        const byteCharacters = atob(base64Data);
+        const bytesLength = byteCharacters.length;
+        const slicesCount = Math.ceil(bytesLength / sliceSize);
+        const byteArrays = new Array(slicesCount);
 
+        for (let sliceIndex = 0; sliceIndex < slicesCount; sliceIndex += 1) {
+            const begin = sliceIndex * sliceSize;
+            const end = Math.min(begin + sliceSize, bytesLength);
+
+            const bytes = new Array(end - begin);
+            for (let offset = begin, i = 0; offset < end; i += 1, offset += 1) {
+                bytes[i] = byteCharacters[offset].charCodeAt(0);
+            }
+
+            byteArrays[sliceIndex] = new Uint8Array(bytes);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
     function handleClientSelect(e) {
         if(e.key!=="Add_Client"){
             setClient(allClients.reduce(client=>client._id===e.key))
