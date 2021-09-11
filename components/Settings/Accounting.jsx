@@ -120,7 +120,12 @@ function Accounting({countryData,currentUser}) {
             <Divider className="mt-3 mb-2"/>
 
             {banks.length === 0 &&
-                <EmptyContainer/>
+            <Row justify="center">
+
+                    <div><EmptyContainer/></div>
+
+            </Row>
+
             }
 
             {banks.length > 0 &&
