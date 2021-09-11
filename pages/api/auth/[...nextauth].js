@@ -29,15 +29,26 @@ const providers = [
     }),
     Providers.Google({
         id: "google",
-        clientId: "58284380920-nsvt55760duphe8j5hsg4ngadb68jar1.apps.googleusercontent.com",
-        clientSecret: "X-BhSI5Qfq1HAOEBKgVw9iTV",
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         async profile(profile, tokens) {
-            return {
-                id: profile.id,
-                name: profile.name,
-                email: profile.email,
-                image: profile.picture,
-                token:"sgjengijneijgegrehdrtyt"
+            let params = {token:tokens.idToken,email:profile.email}
+            try{
+                const res = await axios.post(`${process.env.SERVER_URL}/auth/oauth/google`,params);
+                if(res.status === 200){
+                    let {user,token} = res.data;
+                    return {
+                        id: user._id,
+                        name: user._fname,
+                        email: user.email,
+                        token:token,
+                        user:JSON.stringify(user)
+                    }
+                }
+                return null;
+            }catch (e) {
+                console.log(e);
+                return null;
             }
         },
 
@@ -55,7 +66,10 @@ const callbacks = {
     async jwt(token, user) {
         if (user) {
             token.token = user.token;
-            token.user = user.user;
+            if(typeof user.user === typeof "")
+                token.user = JSON.parse(user.user);
+            else
+                token.user = user.user;
         }
         return Promise.resolve(token);
     },

@@ -11,11 +11,11 @@ const withAuth = (WrappedComponent) => {
                 const session = await getSession();
                 if (session) {
                     // console.log("session",session.user);
-                    if(!session?.user.user?.hasBusiness && Router.pathname !== '/new'){
-                        router.replace("/new")
-                    }else{
+                    // if(!session?.user.user?.hasBusiness && router.pathname !== '/new'){
+                    //     router.replace("/new")
+                    // }else{
                         setAuth(true);
-                    }
+                    // }
                 } else {
                     router.replace("/");
                 }
