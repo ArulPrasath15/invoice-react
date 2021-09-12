@@ -57,7 +57,13 @@ import {setDefaultBusiness,setBusiness} from '../../store/businessStore'
             }
         }
         else{
-            Router.replace('/settings?action=newBusiness');
+            if(['settings'].includes(pathname))
+            {
+                Router.reload('/settings?action=newBusiness');
+            }else
+            {
+                Router.replace('/settings?action=newBusiness');
+            }
 
         }
     }
