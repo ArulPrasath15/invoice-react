@@ -9,8 +9,9 @@ const withAuth = (WrappedComponent) => {
         useEffect( () => {
             (async ()=>{
                 const session = await getSession();
+                console.log(session);
                 if (session) {
-                    if(session.user.user?.hasBusiness && router.pathname !== '/new'){
+                    if(!session.user.user.hasBusiness && router.pathname !== '/new'){
                         await router.replace("/new")
                     }else{
                         setAuth(true);
