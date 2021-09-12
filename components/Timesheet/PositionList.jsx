@@ -3,12 +3,76 @@
 * @author: Abi
 * @description: ----------------
 */
-import React, {useState} from 'react';
-import {Col, Row, Space, Table} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Button, Col, Drawer, message, Popconfirm, Row, Space, Table, Tooltip} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {useRouter} from "next/router";
+import axios from "axios";
+import EmptyContainer from "../Utils/EmptyContainer";
+import PositionForm from "./PositionForm";
+import moment from "moment";
 
 const PositionList = () => {
+    const router = useRouter();
+    const [data, setData] = useState([]);
+    const [position, setPosition] = useState({});
+    const [refresh, setRefresh] = useState(false);
+    const [drawer, setDrawer] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const {tid}=router.query;
+    useEffect(()=>{
+        (async ()=>{
+            try{
+                const res = await axios.get(`/position/${tid}`);
+                if(res.status == 200){
+                    if(res.data.positions)
+                    {
+                        if(res.data.positions.length > 0)
+                            setData(res.data.positions);
+                        else
+                            setIsEmpty(true);
+                    }
+                }
+            }catch (err){
+                console.log(err);
+            }
+        })();
+    },[refresh, tid]);
+    
+    async function deletePosition(pid) {
+        const hide=message.loading('Please wait...',0);
+        try{
+            const res = await axios.delete(`/position/${pid}`);
+            if(res.status == 200){
+                hide();
+                message.success('Deleted Position',2)
+                setRefresh(true);
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error');
+            } else {
+                message.error(err.message)
+            }
+        }
+        setRefresh(false);
+    }
+    function closeDrawer(ref)
+    {
+        setDrawer(false);
+        if(ref)
+            setRefresh(true);
+        setRefresh(false);
+    }
+    function openDrawer(values)
+    {
+        setPosition(values)
+        setDrawer(true);
+    }
+    
     const columns = [
         {
             title: 'Title',
@@ -18,13 +82,21 @@ const PositionList = () => {
         },
         {
             title: 'Start Date',
-            dataIndex: 'sdate',
+            dataIndex: ['timeframe','from'],
             sorter: (a, b) => a.value - b.value,
+            // eslint-disable-next-line react/display-name
+            render: (text) => (
+                <span>{moment(text).format('DD-MM-YYYY')}</span>
+            )
         },
         {
             title: 'End Date',
-            dataIndex: 'edate',
+            dataIndex: ['timeframe','to'],
             sorter: (a, b) => a.value - b.value,
+            // eslint-disable-next-line react/display-name
+            render: (text) => (
+                <span>{moment(text).format('DD-MM-YYYY')}</span>
+            )
         },
         {
             title: 'Fee Type',
@@ -36,59 +108,27 @@ const PositionList = () => {
         },
         {
             title: 'Amount',
-            dataIndex: 'amt',
-        },
-        {
-            title: 'Total',
-            dataIndex: 'total',
+            dataIndex: 'amount',
         },
         {
             title: 'Action',
             key: 'action',
             // eslint-disable-next-line react/display-name
             render: (record) => (
-                // record.id
                 <Space size="middle">
-                    <EditOutlined style={{color:"#D3C17A"}}/>
-                    <DeleteOutlined style={{color:"red"}}/>
+                    <Tooltip title="Edit" >
+                        <Button style={{backgroundColor:"#D3C17A"}}  shape="circle" icon={<EditOutlined style={{color:"white"}} />} onClick={()=>{openDrawer(record)}}/>
+                    </Tooltip>
+                    <Popconfirm title="Are you sure?" okText="Yes! Delete" okType="danger" cancelText="Cancel" onConfirm={()=>deletePosition(record._id)}>
+                        <Tooltip title="Delete" >
+                            <Button style={{backgroundColor:"red"}} shape="circle" icon={ <DeleteOutlined style={{color:"white"}}  />}/>
+                        </Tooltip>
+                    </Popconfirm>
                 </Space>
             ),
         },
     ];
-    const data = [
-        {
-            key: '1',
-            title: "scratch",
-            sdate: "23/06/2001",
-            edate: "23/05/2020",
-            feetype: 'Fixed',
-            fee: 609,
-            amt: 666.31,
-            total: 353
-        },
-        {
-            key: '2',
-            title: "overcome",
-            sdate: "23/06/2001",
-            edate: "23/05/2020",
-            feetype: 'Fixed',
-            fee: 609,
-            amt: 666.31,
-            total: 353
-        },
-        {
-            key: '3',
-            title: "staff",
-            sdate: "23/06/2001",
-            edate: "23/05/2020",
-            feetype: 'Fixed',
-            fee: 609,
-            amt: 666.31,
-            total: 353
-        },
-
-    ];
-
+    
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
@@ -101,16 +141,28 @@ const PositionList = () => {
         onChange: onSelectChange,
     };
     return (
-        <div>
-            <div className='mt-5 mx-5'>
-                <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
-
-                    <Col span={24}>
-                        <Table columns={columns} rowSelection={rowSelection} dataSource={data} onChange={onChange} />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <>
+            {
+                isEmpty && <div className='mt-5 mx-5'>
+                    <EmptyContainer/>
+                </div>
+            }
+            {
+                !isEmpty && <>
+                    <div className='mt-5 mx-5'>
+                        <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
+                            <Col span={24}>
+                                <Table columns={columns} rowKey={project=>project._id} rowSelection={rowSelection} dataSource={data}
+                                       onChange={onChange}/>
+                            </Col>
+                        </Row>
+                    </div>
+                    <Drawer title="Edit Project" width={720} visible={drawer} closable={true} onClose={()=>closeDrawer(false)} bodyStyle={{ paddingBottom: 20 }} >
+                        <PositionForm position={position} closeDrawer={closeDrawer}/>
+                    </Drawer>
+                </>
+            }
+        </>
     );
 };
 
