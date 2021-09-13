@@ -13,6 +13,7 @@ import {getSession} from "next-auth/client";
 import axios from "axios";
 import {useRouter} from "next/router";
 import {connect} from 'react-redux';
+import { Skeleton } from 'antd';
 
 
 function General({countryData,default_business}){
@@ -22,6 +23,8 @@ function General({countryData,default_business}){
     const [showNew, setNew] = useState(false);
     const [acctype, setAcctype] = useState('Freelancer');
     const [generalData, setGeneralData] = useState();
+    const [loading, setLoading] = useState(true);
+
 
     const onEdit = () => {
         setEditing(!editing)
@@ -68,6 +71,7 @@ function General({countryData,default_business}){
     }
 
     useEffect(()=>{
+        setLoading(true);
         getSession().then(async (session,loading) => {
             if (session ) {
                 setUserId(session.user.user.id)
@@ -77,6 +81,7 @@ function General({countryData,default_business}){
                     if (res.status===200) {
                         const res = await axios.get('/business/'+default_business._id );
                         setGeneralData(res.data)
+                        setLoading(false);
                     }
                 }catch(err){
                 }
@@ -93,9 +98,11 @@ function General({countryData,default_business}){
 
     return (
         <>
-
-            {!editing && generalData && !showNew && <BusinessView generalData = {generalData} onEdit={onEdit} handleSelection={handleSelection} />}
-            {showNew &&
+            {loading===true &&
+              <Skeleton active />
+            }
+            {!editing && generalData && !showNew && loading===false && <BusinessView generalData = {generalData} onEdit={onEdit} handleSelection={handleSelection} />}
+            {showNew && loading===false &&
             <div >
                 <Row justify="space-between">
                     <Col>

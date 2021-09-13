@@ -2,6 +2,7 @@ import { useSession,getSession } from "next-auth/client"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+//TODO: check if the new business in available in hoc
 const withAuth = (WrappedComponent) => {
     return (props) => {
         const router = useRouter();
@@ -11,11 +12,11 @@ const withAuth = (WrappedComponent) => {
                 const session = await getSession();
                 console.log(session);
                 if (session) {
-                    if(!session.user.user.hasBusiness && router.pathname !== '/new'){
-                        await router.replace("/new")
-                    }else{
+                    // if(router.pathname !== '/new'){
+                    //     await router.replace("/new")
+                    // }else{
                         setAuth(true);
-                    }
+                    // }
                 } else {
                     await router.replace("/");
                 }
