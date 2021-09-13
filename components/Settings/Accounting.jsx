@@ -11,8 +11,10 @@ import BankCard from "./BankCard";
 const { Panel } = Collapse;
 import {connect} from "react-redux";
 import EmptyContainer from "../Utils/EmptyContainer";
+import { Skeleton } from 'antd';
 
 function Accounting({countryData,currentUser}) {
+    const [loading, setLoading] = useState(true);
     const [banks,setBanks] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedBankId, setSelectedBankId] = useState();
@@ -23,11 +25,14 @@ function Accounting({countryData,currentUser}) {
 
     useEffect(()=>{
         (async ()=>{
+            setLoading(true)
             try{
                 const res = await axios.get('/bank');
                 if(res.status === 200){
                     if(res.data)
-                        setBanks(res.data.bank);
+                    {   setBanks(res.data.bank);
+                        setLoading(false)
+                    }
                 }
             }catch (err){
                 console.log(err);
@@ -135,15 +140,18 @@ function Accounting({countryData,currentUser}) {
             </Row>
             <Divider className="mt-3 mb-2"/>
 
-            {banks.length === 0 &&
+            {loading&&
+               <Skeleton active />
+            }
+
+            {banks.length === 0 && loading===false &&
             <Row justify="center">
                     <div><EmptyContainer action={showNewModal} header="Add New Bank Detail" description="" /></div>
             </Row>
-
             }
 
             {banks.length > 0 &&
-            <Row  justify='space-between' gutter={24}>
+            <Row  justify='space-around' gutter={24}>
                 {banks.map(bank=>{
                     return (
                         <Col span={11} key={bank._id} className="mt-5">

@@ -1,4 +1,4 @@
-import {Row, Col, Button, Divider, Radio, Input, Form, Select, Space, Image, DatePicker} from 'antd';
+import {Row, Col, Button, Divider, Radio, Input, Form, Select, Space, Image, DatePicker, Skeleton} from 'antd';
 import { EditOutlined,SaveOutlined,CloseOutlined,ShopOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
@@ -37,6 +37,8 @@ export function MyProfile() {
     const [imgUploadLoading, setImgUploadLoading] = useState(false);
     const [imgUrl, setImgUrl] = useState('');
     const [userData, setUserData] = useState();
+    const [loading, setLoading] = useState(true);
+
     const handleChange = info => {
         if (info.file.status === 'uploading') {
             setImgUploadLoading(true)
@@ -84,6 +86,7 @@ export function MyProfile() {
         }
     }
     useEffect(()=>{
+        setLoading(true)
         getSession().then(async (session,loading) => {
             if (session ) {
                 // console.log(session.user.user.id)
@@ -91,6 +94,7 @@ export function MyProfile() {
                     const res = await axios.get('/auth/getUser/'+session.user.user.id );
                     if (res.status===200) {
                         setUserData(res.data.user)
+                        setLoading(false)
                     }
                 }catch(err){
                 }
@@ -100,7 +104,12 @@ export function MyProfile() {
 
     return (
         <>
-            {!editing && userData &&
+            {loading===true &&
+              <Skeleton active />
+            }
+
+
+            {!editing && userData && loading===false &&
             <div style={{paddingBottom:'18px'}} >
                 <Row justify={"space-between"} align={"middle"}>
                     <Col>
@@ -113,11 +122,14 @@ export function MyProfile() {
 
                 <hr style={{border: "none", borderTop: "1px dotted #4d4d4d", height: "1px", width: "100%"}}/>
                 <Space direction={'vertical'}>
+                    { userData.imgurl ?
                     <div style={{padding: "6px"}}>
-                        {
-                            userData.imgurl==='' ? <Image width={150} height={150} src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" alt="Picture of the author"/> :<Image width={150} height={150} src={userData.imgurl} alt="Picture of the author"/>
-                        }
+                         <Image width={150} height={150} src={userData.imgurl} alt="Picture of the author"/>
+                    </div> :
+                    <div style={{width:"9rem", height: "9rem", borderRadius: "50%", background: "#807e7e", fontSize: "3.5rem", color: "#fff", textAlign: "center", lineHeight: "9rem", margin: "2rem 0",}}>
+                        {userData.fname[0].toUpperCase()+userData.lname[0].toUpperCase()}
                     </div>
+                    }
                     <Space>
                         <Title level={4} type={'secondary'} className='px-2' strong>{userData.fname} {userData.lname}</Title>
                     </Space>
