@@ -1,4 +1,4 @@
-import {Row, Col, Button, Divider, Input, Form, Select, Empty} from 'antd';
+import {Row, Col, Button, Divider, Input, Form, Select, Empty, Drawer, Space, Card} from 'antd';
 import { CloseOutlined, PlusOutlined, SaveOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
@@ -11,22 +11,28 @@ import BankCard from "./BankCard";
 const { Panel } = Collapse;
 import {connect} from "react-redux";
 import EmptyContainer from "../Utils/EmptyContainer";
+import { Skeleton } from 'antd';
 
 function Accounting({countryData,currentUser}) {
+    const [loading, setLoading] = useState(true);
     const [banks,setBanks] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedBankId, setSelectedBankId] = useState();
     const [refresh, setRefresh] = useState();
     const [modelType, setModelType] = useState();
+    const [disableEditor, setDisableEditor] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(()=>{
         (async ()=>{
+            setLoading(true)
             try{
                 const res = await axios.get('/bank');
                 if(res.status === 200){
                     if(res.data)
-                        setBanks(res.data.bank);
+                    {   setBanks(res.data.bank);
+                        setLoading(false)
+                    }
                 }
             }catch (err){
                 console.log(err);
@@ -36,6 +42,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for update bank
     const showUpdateModal = (value) => {
+        setDisableEditor(false)
         setModelType("update")
         setSelectedBankId(value._id)
         form.setFieldsValue(value)
@@ -44,6 +51,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for add bank
     const showNewModal = (value) => {
+        setDisableEditor(false)
         setModelType("new")
         form.resetFields()
         setIsModalVisible(true);
@@ -110,6 +118,19 @@ function Accounting({countryData,currentUser}) {
         setIsModalVisible(false);
     }
 
+    //view the data in drawer
+    const viewModal = (value) => {
+        setDisableEditor(true);
+        setModelType("view")
+        form.setFieldsValue(value)
+        setIsModalVisible(true);
+    }
+
+    const handleViewClose = () => {
+        alert("closed")
+        form.resetFields()
+        setIsModalVisible(false);
+    }
     return (
         <>
             <Row justify="end">
@@ -119,34 +140,41 @@ function Accounting({countryData,currentUser}) {
             </Row>
             <Divider className="mt-3 mb-2"/>
 
-            {banks.length === 0 &&
+            {loading&&
+               <Skeleton active />
+            }
+
+            {banks.length === 0 && loading===false &&
             <Row justify="center">
-
-                    <div><EmptyContainer/></div>
-
+                    <div><EmptyContainer action={showNewModal} header="Add New Bank Detail" description="" /></div>
             </Row>
-
             }
 
             {banks.length > 0 &&
-            <Row  justify='space-between' gutter={24}>
+            <Row  justify='space-around' gutter={24}>
                 {banks.map(bank=>{
                     return (
-                        <Col span={24} key={bank._id} className="mt-5">
-                            <Collapse  bordered={true}  expandIconPosition="right" >
-                                <Panel header={bank.bank_name +" - "+bank.acc_number} key={bank._id}>
-                                    <BankCard bank={bank} deleteBank={deleteBank}  showModal={showUpdateModal} />
-                                </Panel>
-                            </Collapse>
+                        <Col span={11} key={bank._id} className="mt-5">
+                            <Card hoverable >
+                            {/*<Collapse  bordered={true}  expandIconPosition="right" >*/}
+                            {/*    <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>*/}
+                                    <BankCard bank={bank} viewModal={viewModal} deleteBank={deleteBank}  showModal={showUpdateModal} />
+                                {/*</Panel>*/}
+                            {/*</Collapse>*/}
+                            </Card>
                         </Col>
                     )
                 })}
             </Row>
             }
 
-            <Modal  style={{top: 20}} name="update" title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } onCancel={handleUpdateCancel} visible={isModalVisible}  footer={null}>
+            <Drawer title={modelType==="update"? "Edit Bank Details":modelType==="view"?"Bank Details":"Add New Bank Details" } name="update" width="40vw" visible={isModalVisible} closable={true} onClose={handleUpdateCancel} bodyStyle={{ paddingBottom: 20 }} >
+                <fieldset disabled={disableEditor} >
                 <Form layout="vertical" name="basic" form={form}  onFinish={modelType==='update' ? handleUpdateOk : handleNewOk}>
                     <Form.Item label={'Bank Name'}  name="bank_name" rules={[{required: true, message: 'Please enter your Bank Name '},]}>
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item label={'Account Holder Name'}  name="acc_holdername" rules={[{required: true, message: 'Please enter your Account Holder Name '},]}>
                         <Input/>
                     </Form.Item>
                     <Form.Item className='pt-3'  label="Account Number" name="acc_number" rules={[{required: true, message: 'Please enter Account Number '}]}>
@@ -154,7 +182,7 @@ function Accounting({countryData,currentUser}) {
                     </Form.Item>
                     <Form.Item label={'Account Type'} name="acc_type" rules={[{required: true, message: "Choose your business type"}]}>
                         <Select className='w-100'>
-                            <Option value="Personal">Personal</Option>
+                            <Option value="Current">Current</Option>
                             <Option value="Saving">Saving</Option>
                         </Select>
                     </Form.Item>
@@ -204,9 +232,9 @@ function Accounting({countryData,currentUser}) {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row justify={"space-between"}>
+                    <Row justify={"space-between"} style={{marginBottom:"3rem"}}>
                         <Col span={11}>
-                            <Form.Item label="Mirc"  name="mirc" rules={[{ message: 'Please enter City Name '}]}>
+                            <Form.Item label="Micr"  name="micr" rules={[{ message: 'Please enter City Name '}]}>
                                 <Input/>
                             </Form.Item>
                         </Col>
@@ -222,17 +250,26 @@ function Accounting({countryData,currentUser}) {
                     {/*    </Select>*/}
                     {/*</Form.Item>*/}
 
-                    <Row className='mt-5' justify={"space-between"}>
-                        <Col>
-                            <Button type="primary" icon={<SaveOutlined/>} htmlType="submit" >Save</Button>
-                        </Col>
-                        <Col>
-                            <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>handleUpdateCancel()} >Cancel</Button>
-                        </Col>
-                    </Row>
+                    { modelType!=="view" &&
+                    <div style={{position: 'absolute', bottom: 0, width: '100%', borderTop: '1px solid #e8e8e8', padding: '10px 16px', textAlign: 'right', left: 0, background: '#fff', borderRadius: '0 0 4px 4px',}}>
+                        <Row justify={"space-around"} >
+                            <Col><Button type="primary" icon={<SaveOutlined/>} htmlType="submit">Save</Button></Col>
+                            <Col><Button type="dashed" icon={<CloseOutlined/>} onClick={() => handleUpdateCancel()}>Cancel</Button></Col>
+                           </Row>
+                    </div>}
+
+                    {/*<Row className='mt-5' justify={"space-between"}>*/}
+                    {/*    <Col>*/}
+                    {/*        <Button type="primary" icon={<SaveOutlined/>} htmlType="submit" >Save</Button>*/}
+                    {/*    </Col>*/}
+                    {/*    <Col>*/}
+                    {/*        <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>handleUpdateCancel()} >Cancel</Button>*/}
+                    {/*    </Col>*/}
+                    {/*</Row>*/}
 
                 </Form>
-            </Modal>
+                    </fieldset>
+            </Drawer>
         </>
     )
 }

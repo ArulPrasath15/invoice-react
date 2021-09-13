@@ -19,6 +19,8 @@ const ProjectForm = ({default_business, project, closeDrawer}) => {
     const router=useRouter();
     const [form] = Form.useForm();
     const {data:clients}=useClients();
+
+
     useEffect(() => {
         if(project)
             form.setFieldsValue({client_id:project.client_id._id,name:project.name,desc:project.desc});
@@ -39,7 +41,7 @@ const ProjectForm = ({default_business, project, closeDrawer}) => {
             if(res.status == 200){
                 hide();
                 (project)?message.success('Updated Project',2):message.success('Added New Project',2);
-                (project)?closeDrawer(true):router.replace('/project');
+                (project)?closeDrawer(true):await router.replace('/project');
             }
             else{
                 Error(res.data.msg)

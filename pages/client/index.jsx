@@ -21,12 +21,7 @@ function Client() {
                 <title>Client | Penta Invoice</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            <TitleStrip head={{
-                                title: "My Clients",
-                                desc: "Add new clients and store all client related information in client profiles",
-                                action:"Add Client",
-                                action_link:"/client/new"
-            }}/>
+            <TitleStrip head={{title: "My Clients", desc: "Add new clients and store all client related information in client profiles", action:"Add Client", action_link:"/client/new"}}/>
             <div className='mx-5 mt-5 mb-5'>
                 {clients.length === 0 &&
                 <Row justify='center' align="middle"  style={{minHeight: '60vh'}}>

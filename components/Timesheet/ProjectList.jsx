@@ -143,7 +143,6 @@ const ProjectList = ({default_business}) => {
                     </Drawer>
                 </>
             }
-
         </>
     );
 };
