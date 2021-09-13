@@ -10,7 +10,21 @@ import {Col, Row} from "antd";
 import TimesheetInfo from "../../../../../components/Timesheet/TimesheetInfo";
 import {useRouter} from "next/router";
 import {TitleStrip} from "../../../../../components/Utils/TitleStrip";
+import axios from "axios";
 
+export async function getServerSideProps({query}) {
+
+    let {pid,tid}=query;
+    let res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
+    if(!res.data.isValid)
+        return {redirect: {permanent: false, destination: "/404"}}
+    res = await axios.get(`${process.env.SERVER_URL}/isValid/timesheet/${tid}`)
+    if(!res.data.isValid)
+        return {redirect: {permanent: false, destination: "/404"}}
+    return {
+        props: {}, // will be passed to the page component as props
+    }
+}
 
 const TimesheetDetails = () => {
     const router=useRouter();

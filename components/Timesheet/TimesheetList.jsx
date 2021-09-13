@@ -94,8 +94,14 @@ const TimesheetList = ({data: currency}) => {
         },
         {
             title: 'Currency',
-            dataIndex: 'currency',
+            dataIndex: ['currency','code'],
             sorter: (a, b) => a.value - b.value,
+            // eslint-disable-next-line react/display-name
+            // render: (record) =>{
+            //     // console.log(text)
+            //     return (<span>{currency[record.currency].code +' - '+currency.text.symbol}</span>);
+            // }
+
         },
         {
             title: 'Budget',

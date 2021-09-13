@@ -8,19 +8,10 @@ import ClientForm from "../../components/Client/ClientForm";
 import {Button, Col, Row, Typography , Popconfirm} from "antd";
 import Head from "next/head";
 import {useRouter} from "next/router";
+import getCurrency from "../../hooks/getCurrency";
 
 export async function getServerSideProps() {
-    const res = await fetch('https://restcountries.eu/rest/v2/all');
-    let countries = await res.json();
-    let data=[];
-    await countries.forEach(country=>{
-        if(country.alpha3Code!=null && country.callingCodes[0] !=null && country.name != null)
-            data.push({
-                code: country.alpha3Code,
-                callingCode: country.callingCodes[0],
-                name:country.name
-            });
-    });
+    let data=await getCurrency();
     return {
         props: {data}, // will be passed to the page component as props
     }

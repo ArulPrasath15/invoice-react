@@ -1,20 +1,11 @@
 import React from 'react';
 import Head from "next/head";
 import Template1 from "../../../components/Templates/template-1";
+import getCurrency from "../../../hooks/getCurrency";
 
 
 export async function getServerSideProps() {
-    const res = await fetch('https://restcountries.eu/rest/v2/all');
-    let countries = await res.json();
-    let data=[];
-    await countries.forEach(country=>{
-        if(country.alpha3Code!=null && country.currencies?.[0]?.code!=null && country.currencies[0].symbol)
-            data.push({
-                code: country.alpha3Code,
-                currency: country.currencies[0].code,
-                symbol: country.currencies[0].symbol
-            });
-    });
+    const data=await getCurrency();
     return {
         props: {data}, // will be passed to the page component as props
     }

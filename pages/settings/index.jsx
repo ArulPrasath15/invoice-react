@@ -11,20 +11,11 @@ import {MyProfile} from "../../components/Settings/MyProfile";
 import Head from "next/head";
 const { TabPane } = Tabs;
 import { Typography } from 'antd';
+import getCurrency from "../../hooks/getCurrency";
 const { Title,Text } = Typography;
 
 export async function getServerSideProps(context) {
-    const res = await fetch('https://restcountries.eu/rest/v2/all');
-    let countries = await res.json();
-    let data=[];
-    await countries.forEach(country=>{
-        if(country.name && country.callingCodes[0] )
-            data.push({
-                countryName: country.name,
-                countryCallingCodes: country.callingCodes[0],
-                countryCode: country.alpha3Code,
-            });
-    });
+    const data=await getCurrency();
     return {
         props: {data}, // will be passed to the page component as props
     }

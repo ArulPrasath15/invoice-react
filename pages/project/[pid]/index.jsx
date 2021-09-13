@@ -4,23 +4,14 @@ import {useRouter} from "next/router";
 import TimesheetList from "../../../components/Timesheet/TimesheetList";
 import {TitleStrip} from "../../../components/Utils/TitleStrip";
 import axios from "axios";
+import getCurrency from "../../../hooks/getCurrency";
 
 //TODO: Validate the PID from backend
 
 export async function getServerSideProps({query}) {
-    let res = await fetch('https://restcountries.eu/rest/v2/all');
-    let countries = await res.json();
-    let data=[];
-    await countries.forEach(country=>{
-        if(country.alpha3Code!=null && country.currencies?.[0]?.code!=null && country.currencies[0].symbol)
-            data.push({
-                code: country.alpha3Code,
-                currency: country.currencies[0].code,
-                symbol: country.currencies[0].symbol
-            });
-    });
+    const data=await getCurrency();
     let {pid}=query;
-    res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
+    const res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
     if(!res.data.isValid)
     {
         return {redirect: {permanent: false, destination: "/404"}}

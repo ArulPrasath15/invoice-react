@@ -13,14 +13,12 @@ const {TextArea} = Input;
 const { Option } = Select;
 
 const TimesheetForm = ({data,timesheet,closeDrawer}) => {
-    console.log(data)
-    // const {data,timesheet,closeDrawer}=props;
     const [form] = Form.useForm();
     const router=useRouter();
     const {pid}=router.query;
     useEffect(() => {
         if(timesheet)
-            form.setFieldsValue({project_id:timesheet.project_id,title:timesheet.title,desc:timesheet.desc,currency:timesheet.currency,budget:timesheet.budget});
+            form.setFieldsValue({project_id:timesheet.project_id,title:timesheet.title,desc:timesheet.desc,currency:timesheet.currency._id,budget:timesheet.budget});
     },[form, timesheet])
 
     const onSubmit = async (values)=>{
@@ -70,7 +68,7 @@ const TimesheetForm = ({data,timesheet,closeDrawer}) => {
                                     <Form.Item label="Currency" name="currency" required>
 	                                        <Select showSearch placeholder="Select Currency" optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                             {data.map(country => (
-                                                <Option value={country.code} key={country.code}>{country.currency +' - '+country.symbol}</Option>
+                                                <Option value={country._id} key={country._id}>{country.code +' - '+country.symbol}</Option>
                                             ))}
                                         </Select>
                                     </Form.Item>

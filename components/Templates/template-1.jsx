@@ -577,11 +577,11 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                                         <Table.Summary.Cell colSpan={2} />
                                         <Table.Summary.Cell ><b>Total </b></Table.Summary.Cell>
                                         <Table.Summary.Cell >
-                                            {/* Todo : Add Currency Dropdown*/}
+                                            {/* Todo : Add Currency Dropdown Check*/}
 
                                             <Select showSearch optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} onChange={(value)=>{setCurrency(value)}} defaultValue={currency}>
                                                 {currencyList.map(country => (
-                                                       <Option value={country.symbol} key={country.code}>{country.currency}</Option>
+                                                       <Option value={country._id} key={country._id}>{country.code +' - '+country.symbol}</Option>
                                                 ))}
                                             </Select>
 
