@@ -8,10 +8,11 @@ import TimesheetForm from "../../../../components/Timesheet/TimesheetForm";
 import Head from "next/head";
 import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
+import axios from "axios";
 const { Title, Text } = Typography;
 
-export async function getServerSideProps() {
-    const res = await fetch('https://restcountries.eu/rest/v2/all');
+export async function getServerSideProps({query}) {
+    let res = await fetch('https://restcountries.eu/rest/v2/all');
     let countries = await res.json();
     let data=[];
     await countries.forEach(country=>{
@@ -22,6 +23,13 @@ export async function getServerSideProps() {
                 symbol: country.currencies[0].symbol
             });
     });
+
+    let {pid}=query;
+    res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
+    if(!res.data.isValid)
+    {
+        return {redirect: {permanent: false, destination: "/404"}}
+    }
     return {
         props: {data}, // will be passed to the page component as props
     }

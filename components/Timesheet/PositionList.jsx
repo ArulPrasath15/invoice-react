@@ -100,7 +100,7 @@ const PositionList = () => {
         },
         {
             title: 'Fee Type',
-            dataIndex: 'feetype',
+            dataIndex: 'fee_type',
         },
         {
             title: 'Fee',

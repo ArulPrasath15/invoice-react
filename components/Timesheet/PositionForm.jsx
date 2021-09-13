@@ -31,30 +31,30 @@ const PositionForm = ({position,closeDrawer}) => {
             to:values.timeframe[1].format('YYYY-MM-DD')
         }
 
-        // try{
-        //     let res;
-        //     if (position) {
-        //         res = await axios.put(`/position`, {id: position._id, updates: values});
-        //     } else {
-        //         res = await axios.post(`/position`, values);
-        //     }
-        //     if(res.status == 200){
-        //         hide();
-        //         (position)?message.success('Updated Position',2):message.success('Added New Position',2);
-        //         (position)?closeDrawer(true):await router.replace('/position');
-        //     }
-        //     else{
-        //         Error(res.data.msg)
-        //     }
-        // }catch (err){
-        //     hide();
-        //     if (!err.response) {
-        //         console.log("Custom Network Error",err)
-        //         message.error('Network Error');
-        //     } else {
-        //         message.error(err.message)
-        //     }
-        // }
+        try{
+            let res;
+            if (position) {
+                res = await axios.put(`/position`, {id: position._id, updates: values});
+            } else {
+                res = await axios.post(`/position`, values);
+            }
+            if(res.status == 200){
+                hide();
+                (position)?message.success('Updated Position',2):message.success('Added New Position',2);
+                (position)?closeDrawer(true):router.back();
+            }
+            else{
+                Error(res.data.msg)
+            }
+        }catch (err){
+            hide();
+            if (!err.response) {
+                console.log("Custom Network Error",err)
+                message.error('Network Error');
+            } else {
+                message.error(err.message)
+            }
+        }
     }
 
     return (
