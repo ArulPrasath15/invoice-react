@@ -69,21 +69,21 @@ function BankCard({showModal,bank,deleteBank,viewModal}) {
                 {/*</Col>*/}
 
             </Row>
-            <Divider className="mt-3 mb-2"/>
-            <Row justify="start">
-                <Col>
-                    <Button type="primary" icon={<EditOutlined/>} onClick={() => showModal(bank)}>Edit</Button>
-                </Col>
-                {/*<Col style={{marginLeft: '10px'}}>*/}
-                {/*    <Button type="primary" icon={<EyeOutlined />} onClick={() => viewModal(bank)}>View</Button>*/}
+            {/*<Divider className="mt-3 mb-2"/>*/}
+            {/*<Row justify="start">*/}
+                {/*<Col>*/}
+                {/*    <Button type="primary" icon={<EditOutlined/>} onClick={() => showModal(bank)}>Edit</Button>*/}
                 {/*</Col>*/}
-                <Col style={{marginLeft: '10px'}}>
-                    <Popconfirm  title="Are you sure to delete this Bank Account?" onConfirm={()=>deleteBank(bank._id)} okText="Yes" cancelText="No">
-                        <Button  type="dashed" danger icon={<DeleteTwoTone twoToneColor="red"/>}>Delete</Button>
-                    </Popconfirm>
+                {/*/!*<Col style={{marginLeft: '10px'}}>*!/*/}
+                {/*/!*    <Button type="primary" icon={<EyeOutlined />} onClick={() => viewModal(bank)}>View</Button>*!/*/}
+                {/*/!*</Col>*!/*/}
+                {/*<Col style={{marginLeft: '10px'}}>*/}
+                {/*    <Popconfirm  title="Are you sure to delete this Bank Account?" onConfirm={()=>deleteBank(bank._id)} okText="Yes" cancelText="No">*/}
+                {/*        <Button  type="dashed" danger icon={<DeleteTwoTone twoToneColor="red"/>}>Delete</Button>*/}
+                {/*    </Popconfirm>*/}
 
-                </Col>
-            </Row>
+                {/*</Col>*/}
+            {/*</Row>*/}
         </>
     )
 }

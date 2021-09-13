@@ -1,5 +1,20 @@
-import {Row, Col, Button, Divider, Input, Form, Select, Empty, Drawer, Space, Card} from 'antd';
-import { CloseOutlined, PlusOutlined, SaveOutlined} from '@ant-design/icons';
+import {
+    Row,
+    Col,
+    Button,
+    Divider,
+    Input,
+    Form,
+    Select,
+    Empty,
+    Drawer,
+    Space,
+    Card,
+    Dropdown,
+    Menu,
+    Popconfirm
+} from 'antd';
+import { CloseOutlined, PlusOutlined, SaveOutlined,EditOutlined,DeleteTwoTone,EllipsisOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
 import React, {useEffect, useState} from "react";
@@ -154,8 +169,23 @@ function Accounting({countryData,currentUser}) {
             <Row  justify='space-around' gutter={24}>
                 {banks.map(bank=>{
                     return (
-                        <Col span={11} key={bank._id} className="mt-5">
-                            <Card hoverable >
+                        <Col span={11} key={bank._id} className="mt-5"  >
+                            <Card hoverable title={bank.bank_name} extra={
+                                <Dropdown  overlay={
+                                    <Menu>
+                                    <Menu.Item>
+                                         <Button type="primary" style={{paddingRight:"2rem"}} icon={<EditOutlined/>} onClick={() => showUpdateModal(bank)}>Edit</Button>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <Popconfirm  title="Are you sure to delete this Bank Account?" onConfirm={()=>deleteBank(bank._id)} okText="Yes" cancelText="No">
+                                            <Button  type="dashed" danger icon={<DeleteTwoTone twoToneColor="red"/>}>Delete</Button>
+                                        </Popconfirm>
+                                    </Menu.Item>
+                                 </Menu>}
+                                   placement="bottomLeft" arrow>
+                                    <Button style={{borderColor:"#d8d8d8"}} type={'text'} icon={<EllipsisOutlined /> } />
+                                </Dropdown>
+                            }>
                             {/*<Collapse  bordered={true}  expandIconPosition="right" >*/}
                             {/*    <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>*/}
                                     <BankCard bank={bank} viewModal={viewModal} deleteBank={deleteBank}  showModal={showUpdateModal} />
