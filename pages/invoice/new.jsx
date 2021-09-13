@@ -1,7 +1,6 @@
 import React from 'react';
 import Head from "next/head";
-import Template1 from "../../../components/Templates/template-1";
-
+import Template1 from "../../components/Templates/template-1";
 
 export async function getServerSideProps() {
     const res = await fetch('https://restcountries.eu/rest/v2/all');
@@ -23,7 +22,7 @@ function Index({data}) {
     return (
         <>
             <Head>
-                <title>Invoice | Penta Invoice</title>
+                <title>New Invoice | Penta Invoice</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <Template1 currencyList={data}/>
@@ -31,5 +30,7 @@ function Index({data}) {
 
     );
 }
+
+
 
 export default Index;
