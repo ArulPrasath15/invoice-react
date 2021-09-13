@@ -9,13 +9,14 @@ import axios from 'axios';
 import {connect} from 'react-redux'
 import Head from 'next/head';
 import Link from 'next/link'
-import { Button, Typography, Col, Row , Card,Tabs} from 'antd';
-import {EditOutlined} from '@ant-design/icons';
+import {Button, Typography, Col, Row, Card, Tabs, Drawer, Menu, Dropdown} from 'antd';
+import {CloseOutlined, EditOutlined, EllipsisOutlined, SaveOutlined} from '@ant-design/icons';
 import Breadcrumbs from '../../../components/Utils/Breadcrumb'
 import ClientProfile from '../../../components/Client/ClientProfile'
 import ClientRecipient from '../../../components/Client/ClientRecipient'
 import ClientFiles from '../../../components/Client/ClientFiles'
 import ClientEdit from "../../../components/Client/ClientEdit";
+import ProjectForm from "../../../components/Timesheet/ProjectForm";
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
@@ -55,6 +56,17 @@ function ClientView(props) {
             }
         })();
     },[Router.query,default_business]);
+
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <a>
+                   Delete
+                </a>
+            </Menu.Item>
+        </Menu>
+    );
+
     return(
         <>
             <Head>
@@ -63,13 +75,18 @@ function ClientView(props) {
             </Head>
             <div className='mt-5 mx-5 mb-5'>
                 <Row justify='space-between'  className='bg-white px-5 py-2 br-5'>
-                    <Col span={13}>
+                    <Col >
                         <Title level={4} >Client Profile</Title>
                         <Text className={'mt-3'} type={'secondary'}>View and update client related activities here</Text>
                     </Col>
-                    <Col span={3} offset={6}>
+                    <Col>
                         {!edit &&
-                        <Button type={'primary'} icon={<EditOutlined/>} onClick={()=>{setEdit(true)}}> Edit</Button>
+                            <>
+                                <Button style={{marginRight:'1rem'}} type={'primary'} icon={<EditOutlined/>} onClick={()=>{setEdit(true)}}> Edit</Button>
+                                <Dropdown  overlay={menu} placement="bottomLeft" arrow>
+                                    <Button type={'text'} icon={<EllipsisOutlined /> } />
+                                </Dropdown>
+                            </>
                         }
                     </Col>
                     <Col span={24} className='bg-white py-2 br-5'>
@@ -78,8 +95,7 @@ function ClientView(props) {
                 </Row>
             </div>
 
-            {!edit &&
-            <div className="mx-5 mt-5">
+            <div className="mx-5 mt-5 mb-5">
                 <Row gutter={24}>
                     <Col span={24}>
                         <Card size="large"  >
@@ -100,12 +116,9 @@ function ClientView(props) {
                     </Col>
                 </Row>
             </div>
-            }
-            {edit &&
-                <Card className={'mt-5 mx-5 mb-5'}>
-                    <ClientEdit client={client} countryData={countryData} setEdit={setEdit} setClient={setClient} />
-                </Card>
-            }
+            <Drawer title="Edit Client" width={720} visible={edit} closable={true} onClose={()=>setEdit(false)} bodyStyle={{ paddingBottom: 20 }} >
+                <ClientEdit client={client} countryData={countryData} setEdit={setEdit} setClient={setClient} />
+            </Drawer>
         </>
     );
 }

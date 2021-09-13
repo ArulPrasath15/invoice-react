@@ -6,8 +6,16 @@
 
 import  styles from  '../../assets/css/template.module.css'
 import React, {useEffect, useState} from 'react';
-import {Button, DatePicker, Input, Table, Tooltip,Select,Menu,Dropdown} from 'antd';
-import {BankOutlined, BankTwoTone, FileTextTwoTone, PlusOutlined, UserOutlined} from "@ant-design/icons";
+import {Button, DatePicker, Input, Table, Tooltip, Select, Menu, Dropdown, InputNumber, Spin} from 'antd';
+import {
+    BankOutlined,
+    BankTwoTone,
+    DownloadOutlined, FileSyncOutlined,
+    FileTextTwoTone,
+    PlusOutlined,
+    SendOutlined,
+    UserOutlined
+} from "@ant-design/icons";
 import {connect} from "react-redux";
 import axios from "axios";
 import { Typography, Card } from 'antd';
@@ -22,9 +30,17 @@ const { Step } = Steps;
 
 
 const { Text, Link } = Typography;
-var FileSaver = require('file-saver');
+const FileSaver = require('file-saver');
 
-function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setITax,setSTax,setCTax,iTax,sTax,cTax,resetInvoice}) {
+
+
+
+function zeroPad(num, places) {
+    var zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
+function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setITax,setSTax,setCTax,iTax,sTax,cTax,resetInvoice,currencyList}) {
     const router = useRouter();
     const {data: allClients} = useClients();
     const [client,setClient] = useState({});
@@ -53,19 +69,39 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
         completed:"",
         stage:-1
     });
-    const [disable,setDisable] = useState(false);
+    const [currency,setCurrency] = useState('₹');
+    const [isCreated,setIsCreated] = useState(false);
+    const [loading,setLoading] = useState(false);
+
 
 
     useEffect(()=>{
         (async ()=>{
-
                 await resetInvoice({reset:true});
                 try{
-                    // const res1=await axios.get("invoice/generateInvoice/61286a21426c224ed454e0a9");
-                    // const blobPDF = base64toBlob(res1.data.pdf, 'application/pdf');
-                    //
-                    // FileSaver.saveAs(blobPDF, "Invoice.pdf");
-                    // console.log(res1.data.pdf);
+
+                    if(router.pathname==="/invoice/new"){
+                        const res1 = await axios.get(`/invoice/business_id/${default_business._id}`);
+                        if(res1.status === 200){
+                            setInvoiceNo((new Date().toISOString().slice(0, 10))+'-'+default_business.pretext+'-'+(zeroPad(res1.data.len+1, 4)));
+                        }
+                        const newData = [...tableData];
+                        for (let index = 0; index < tableData.length; index++) {
+                            setTotal(newData, index);
+                        }
+                        setTableData(newData);
+                    }
+                    else if(router.pathname==="/invoice/[id]"){
+                        const res2 = await axios.get(`/invoice/invoice/${default_business._id}/${router.query.id}`);
+                        if(res2.status === 200){
+                            let inv=res2.data.invoice;
+                            console.log(inv)
+                            setInvoiceNo(inv.invoice_no);
+                            setClient(allClients.reduce(client=>client._id===inv.client_id));
+                            setBank(allBanks.reduce(bank=>bank._id===inv.bank_id));
+                            // setTableData(inv.row_items)
+                        }
+                    }
                     const res = await axios.get('/bank');
                     if(res.status === 200){
                         if(res.data.bank)
@@ -77,13 +113,9 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                 catch (e) {
                     console.error(e);
                 }
-                setInvoiceNo(router.query.id);
 
-                const newData = [...tableData];
-                for (let index = 0; index < tableData.length; index++) {
-                    setTotal(newData, index);
-                }
-                setTableData(newData);
+
+
 
 
         })();
@@ -129,8 +161,15 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
 
     function handleBankSelect(e) {
+
+
         if(e.key!=="Add_Bank"){
-            setBank(allBanks.reduce(Bank=>bank._id===e.key))
+            allBanks.forEach((bank)=>{
+                if(bank._id===e.key){
+                    setBank(bank);
+                }
+            })
+            // setBank(allBanks.reduce(bank=>bank._id===e.key))
         }
         else {
             router.push("../settings");
@@ -146,6 +185,8 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
         </Menu>
     );
     const handleSave=(option)=>{
+
+
         var dt=new Date();
         let today=String(dt.getDate()).padStart(2, '0') +"-"+String(dt.getMonth()).padStart(2, '0')+"-"+dt.getFullYear()+" "+String(dt.getHours()).padStart(2, '0')+":"+String(dt.getMinutes()).padStart(2, '0');
         let stat={
@@ -153,40 +194,66 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             created:"",
             sent:"",
             completed:"",
-            stage:option
+            stage:-1
+        }
+        let currentStatus="Drafted";
+        stat.stage=option;
+
+        if(option===3){
+            stat.stage=1;
         }
         switch(option){
-            case 1: stat.created=today;break;
-            case 2: stat.sent=today; stat.created=today;break;
+            case 1: stat.created=today;currentStatus="Created";break;
+            case 2: stat.created=today;stat.sent=today;currentStatus="Sent";break;
+            case 3: stat.created=today;currentStatus="Created";break;
 
         }
 
         const payload = {
             invoice_no: invoiceNo,
             business_id: default_business._id,
-            project_id: "",
             client_id: client._id,
-            amount: total,
+            row_items: tableData,
             gst:{
                 CGST:CGST,
                 SGST:SGST,
                 IGST:IGST
             },
+            gstAmount:{
+                CGST:cTax,
+                SGST:sTax,
+                IGST:iTax
+            },
+            amount: total,
             bank_id: bank._id,
-            invoice_date: invoiceDate,
-            credit_period: invoiceDueDate,
-            row_items: tableData,
+            invoice_date: new Date(invoiceDate.split("/").reverse().join("-")),
+            due_date: new Date(invoiceDate.split("/").reverse().join("-")),
+            currency:currency,
             status: stat,
+            currentStatus: currentStatus,
             notes: "",
             addl_fields: {},
         };
+        // console.log(payload);
+
         (async ()=>{
             try{
                 const res = await axios.post(`/invoice/`,payload);
                 if(res.status === 200){
                     if(res)
                     {
+                        console.log(res);
+                        stat.stage+=1;
+                        setStatus(stat)
                         notify({type:'success',msg:res.data.msg,des:''})
+                        if(option===2||option===3){
+                            setLoading(true);
+                            generateInvoice(option);
+                            setLoading(false);
+                        }
+                        if(option>0){
+                            setIsCreated(true);
+                        }
                     }
 
                 }
@@ -194,12 +261,34 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                 console.log(err);
             }
         })();
+
+
+
+    }
+    const generateInvoice=async (opt)=>{
+        try{
+            var op=(opt===2)?"Send":"Download";
+            const res=await axios.get(`invoice/generateInvoice/${default_business._id}/${invoiceNo}/${op}`);
+
+            if(res.status === 200){
+                if(res.data)
+                {
+                    if(opt===3){
+                        const blobPDF = base64toBlob(res.data.pdf, 'application/pdf');
+                        FileSaver.saveAs(blobPDF, `${invoiceNo}.pdf`);
+                    }
+                    notify({type:'success',msg:res.data.msg,des:''})
+                }
+
+            }
+        }catch (err){
+            console.log(err);
+        }
     }
     const saveMenu = (
-        <Menu style={{backgroundColor: "whitesmoke"}}>
-            <Menu.Item key="0"><Button type="primary" block>Draft</Button></Menu.Item>
-            <Menu.Item key="2"><Button type="primary" block>Create & Send</Button></Menu.Item>
-            <Menu.Item key="3"><Button type="primary" block>Create & Download</Button></Menu.Item>
+        <Menu style={{fontWeight: 'bold'}}>
+            <Menu.Item key="2" onClick={()=>{handleSave(2)}} icon={<SendOutlined />}>Create & Send</Menu.Item>
+            <Menu.Item key="3"  onClick={()=>{handleSave(3)}} icon={<DownloadOutlined />}>Create & Download</Menu.Item>
         </Menu>
     );
     const onInputChange = (key, index) => (e) => {
@@ -273,8 +362,10 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             // eslint-disable-next-line react/display-name
             render: (text, record, index) => (
                 <Input
+                    type="number"
                     value={text}
                     style={{ border: "none" }}
+                    prefix={currency}
                     onChange={onInputChange("price", index)}
                 />
             )
@@ -283,8 +374,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             dataIndex: "amt",
             title: "Amount",
             width: "16%",
-            // eslint-disable-next-line react/display-name
-            render: (text) => <h4>  {text}</h4>
+            render: (text) => {return (<h4>  {currency}&nbsp;{text}</h4>)}
         }
     ];
     const handleAdd = () => {
@@ -301,11 +391,18 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     const { Option } = Select;
 
     return (
-
+        <Spin spinning={loading} tip="Cooking up your Invoice...">
         <div id="example" style={{margin: "3%"}} className={styles.template} >
-            <Card title={<><FileTextTwoTone  style={{ fontSize: '22px'}}/>&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> } extra={<Dropdown.Button onClick={()=>{handleSave(1)}} type="primary" overlay={saveMenu} style={{float: "right"}}>Create & Save</Dropdown.Button>} style={{marginBottom:"3%"}} >
+            <Card style={{marginBottom:"3%"}}  title={<><FileTextTwoTone  style={{ fontSize: '22px'}}/>&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> }
+                  extra={
+                      <>
+                          {!isCreated && (<Button  type="dashed" onClick={()=>{handleSave(0)}} danger icon={<FileSyncOutlined />} >Save as Draft</Button>)}&nbsp;&nbsp;&nbsp;&nbsp;
+                          {!isCreated &&<Dropdown.Button onClick={()=>{handleSave(1)}} type="primary" overlay={saveMenu} style={{float: "right"}} >Create & Save</Dropdown.Button>}
+                          {isCreated && (<Button type="primary" onClick={()=>{generateInvoice(2)}} icon={<SendOutlined/>}>Send Invoice</Button>)}&nbsp;&nbsp;&nbsp;&nbsp;
+                          {isCreated && <Button type="primary" onClick={()=>{generateInvoice(3)}} icon={<DownloadOutlined/>}>Download Invoice</Button>}
+                      </>} >
 
-            <Steps current={status.stage} percent={99}>
+            <Steps current={status.stage} percent={60}>
                 <Step title="Draft" description={status.drafted} />
                 <Step title="Created"  description={status.created} />
                 <Step title="Sent" description={status.sent}/>
@@ -313,7 +410,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             </Steps>
             </Card>
 
-            <div  className="page-container hidden-on-narrow" style={disable ? {pointerEvents: "none"} : {}}>
+            <div  className="page-container hidden-on-narrow" style={isCreated ? {pointerEvents: "none"} : {}}>
                 <div className={styles.pdfPage+' '+styles.sizeA4}>
 
                     <div className={styles.pdfHeader}>
@@ -389,7 +486,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                                             <b>Sub Total</b>
                                         </Table.Summary.Cell>
                                         <Table.Summary.Cell>
-                                            {subTotal}
+                                            {currency}     {subTotal}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row >
                                     <Table.Summary.Row>
@@ -417,7 +514,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                                         </Table.Summary.Cell>
                                         <Table.Summary.Cell>
-                                            {iTax}
+                                            {currency}     {iTax}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row>
 
@@ -445,7 +542,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                                         </Table.Summary.Cell>
                                         <Table.Summary.Cell>
-                                            {sTax}
+                                            {currency}     {sTax}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row>
 
@@ -472,15 +569,25 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                                         </Table.Summary.Cell>
                                         <Table.Summary.Cell>
-                                            {cTax}
+                                            {currency}    {cTax}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row>
 
                                     <Table.Summary.Row>
                                         <Table.Summary.Cell colSpan={2} />
-                                        <Table.Summary.Cell colSpan={2} ><b>Total </b></Table.Summary.Cell>
+                                        <Table.Summary.Cell ><b>Total </b></Table.Summary.Cell>
+                                        <Table.Summary.Cell >
+                                            {/* Todo : Add Currency Dropdown*/}
+
+                                            <Select showSearch optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} onChange={(value)=>{setCurrency(value)}} defaultValue={currency}>
+                                                {currencyList.map(country => (
+                                                       <Option value={country.symbol} key={country.code}>{country.currency}</Option>
+                                                ))}
+                                            </Select>
+
+                                        </Table.Summary.Cell>
                                         <Table.Summary.Cell>
-                                            {total}
+                                            {currency}   {total}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row>
                                 </Table.Summary>
@@ -502,6 +609,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                             Accounts Details:<br/>
                             Bank Name: {bank.bank_name}<br/>
                             Branch: {bank.branch}<br/>
+                            Account Holder Name: {bank.acc_holdername}<br/>
                             Account No: {bank.acc_number}<br/>
                             IFSC Code: {bank.ifsc}<br/>
                             Account Type: {bank.acc_type}<br/>
@@ -521,6 +629,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             </div>
 
         </div>
+        </Spin>
     );
 }
 
