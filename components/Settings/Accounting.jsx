@@ -1,4 +1,4 @@
-import {Row, Col, Button, Divider, Input, Form, Select, Empty, Drawer, Space} from 'antd';
+import {Row, Col, Button, Divider, Input, Form, Select, Empty, Drawer, Space, Card} from 'antd';
 import { CloseOutlined, PlusOutlined, SaveOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
@@ -18,6 +18,7 @@ function Accounting({countryData,currentUser}) {
     const [selectedBankId, setSelectedBankId] = useState();
     const [refresh, setRefresh] = useState();
     const [modelType, setModelType] = useState();
+    const [disableEditor, setDisableEditor] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(()=>{
@@ -36,6 +37,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for update bank
     const showUpdateModal = (value) => {
+        setDisableEditor(false)
         setModelType("update")
         setSelectedBankId(value._id)
         form.setFieldsValue(value)
@@ -44,6 +46,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for add bank
     const showNewModal = (value) => {
+        setDisableEditor(false)
         setModelType("new")
         form.resetFields()
         setIsModalVisible(true);
@@ -110,6 +113,19 @@ function Accounting({countryData,currentUser}) {
         setIsModalVisible(false);
     }
 
+    //view the data in drawer
+    const viewModal = (value) => {
+        setDisableEditor(true);
+        setModelType("view")
+        form.setFieldsValue(value)
+        setIsModalVisible(true);
+    }
+
+    const handleViewClose = () => {
+        alert("closed")
+        form.resetFields()
+        setIsModalVisible(false);
+    }
     return (
         <>
             <Row justify="end">
@@ -121,9 +137,7 @@ function Accounting({countryData,currentUser}) {
 
             {banks.length === 0 &&
             <Row justify="center">
-
                     <div><EmptyContainer action={showNewModal} header="Add New Bank Detail" description="" /></div>
-
             </Row>
 
             }
@@ -132,19 +146,22 @@ function Accounting({countryData,currentUser}) {
             <Row  justify='space-between' gutter={24}>
                 {banks.map(bank=>{
                     return (
-                        <Col span={24} key={bank._id} className="mt-5">
-                            <Collapse  bordered={true}  expandIconPosition="right" >
-                                <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>
-                                    <BankCard bank={bank} deleteBank={deleteBank}  showModal={showUpdateModal} />
-                                </Panel>
-                            </Collapse>
+                        <Col span={11} key={bank._id} className="mt-5">
+                            <Card hoverable >
+                            {/*<Collapse  bordered={true}  expandIconPosition="right" >*/}
+                            {/*    <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>*/}
+                                    <BankCard bank={bank} viewModal={viewModal} deleteBank={deleteBank}  showModal={showUpdateModal} />
+                                {/*</Panel>*/}
+                            {/*</Collapse>*/}
+                            </Card>
                         </Col>
                     )
                 })}
             </Row>
             }
 
-            <Drawer title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } name="update" width="40vw" visible={isModalVisible} closable={true} onClose={handleUpdateCancel} bodyStyle={{ paddingBottom: 20 }} >
+            <Drawer title={modelType==="update"? "Edit Bank Details":modelType==="view"?"Bank Details":"Add New Bank Details" } name="update" width="40vw" visible={isModalVisible} closable={true} onClose={handleUpdateCancel} bodyStyle={{ paddingBottom: 20 }} >
+                <fieldset disabled={disableEditor} >
                 <Form layout="vertical" name="basic" form={form}  onFinish={modelType==='update' ? handleUpdateOk : handleNewOk}>
                     <Form.Item label={'Bank Name'}  name="bank_name" rules={[{required: true, message: 'Please enter your Bank Name '},]}>
                         <Input/>
@@ -225,16 +242,13 @@ function Accounting({countryData,currentUser}) {
                     {/*    </Select>*/}
                     {/*</Form.Item>*/}
 
+                    { modelType!=="view" &&
                     <div style={{position: 'absolute', bottom: 0, width: '100%', borderTop: '1px solid #e8e8e8', padding: '10px 16px', textAlign: 'right', left: 0, background: '#fff', borderRadius: '0 0 4px 4px',}}>
                         <Row justify={"space-around"} >
-                            <Col>
-                                <Button type="primary" icon={<SaveOutlined/>} htmlType="submit" >Save</Button>
-                            </Col>
-                            <Col>
-                                <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>handleUpdateCancel()} >Cancel</Button>
-                            </Col>
-                        </Row>
-                    </div>
+                            <Col><Button type="primary" icon={<SaveOutlined/>} htmlType="submit">Save</Button></Col>
+                            <Col><Button type="dashed" icon={<CloseOutlined/>} onClick={() => handleUpdateCancel()}>Cancel</Button></Col>
+                           </Row>
+                    </div>}
 
                     {/*<Row className='mt-5' justify={"space-between"}>*/}
                     {/*    <Col>*/}
@@ -246,6 +260,7 @@ function Accounting({countryData,currentUser}) {
                     {/*</Row>*/}
 
                 </Form>
+                    </fieldset>
             </Drawer>
         </>
     )
