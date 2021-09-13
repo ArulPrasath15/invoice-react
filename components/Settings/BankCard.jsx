@@ -17,6 +17,10 @@ function BankCard({showModal,bank,deleteBank}) {
                 </Col>
                 <Col span={24}>
                     <Text className={'text-secondary'}>Account No : </Text>
+                    <Text className='px-2' strong>{bank.acc_holdername}</Text>
+                </Col>
+                <Col span={24}>
+                    <Text className={'text-secondary'}>Account No : </Text>
                     <Text className='px-2' strong>{bank.acc_number}</Text>
                 </Col>
                 <Col span={24}>
@@ -46,10 +50,6 @@ function BankCard({showModal,bank,deleteBank}) {
                 <Col span={24}>
                     <Text className={'text-secondary'}>State : </Text>
                     <Text className='px-2' strong>{bank.state}</Text>
-                </Col>
-                <Col span={24}>
-                    <Text className={'text-secondary'}>Pincode : </Text>
-                    <Text className='px-2' strong>{bank.pincode}</Text>
                 </Col>
                 <Col span={24}>
                     <Text className={'text-secondary'}>Country : </Text>
