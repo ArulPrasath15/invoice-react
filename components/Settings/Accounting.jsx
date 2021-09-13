@@ -1,5 +1,20 @@
-import {Row, Col, Button, Divider, Input, Form, Select, Empty, Drawer, Space} from 'antd';
-import { CloseOutlined, PlusOutlined, SaveOutlined} from '@ant-design/icons';
+import {
+    Row,
+    Col,
+    Button,
+    Divider,
+    Input,
+    Form,
+    Select,
+    Empty,
+    Drawer,
+    Space,
+    Card,
+    Dropdown,
+    Menu,
+    Popconfirm
+} from 'antd';
+import { CloseOutlined, PlusOutlined, SaveOutlined,EditOutlined,DeleteTwoTone,EllipsisOutlined} from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title,Text } = Typography;
 import React, {useEffect, useState} from "react";
@@ -11,22 +26,28 @@ import BankCard from "./BankCard";
 const { Panel } = Collapse;
 import {connect} from "react-redux";
 import EmptyContainer from "../Utils/EmptyContainer";
+import { Skeleton } from 'antd';
 
 function Accounting({countryData,currentUser}) {
+    const [loading, setLoading] = useState(true);
     const [banks,setBanks] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedBankId, setSelectedBankId] = useState();
     const [refresh, setRefresh] = useState();
     const [modelType, setModelType] = useState();
+    const [disableEditor, setDisableEditor] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(()=>{
         (async ()=>{
+            setLoading(true)
             try{
                 const res = await axios.get('/bank');
                 if(res.status === 200){
                     if(res.data)
-                        setBanks(res.data.bank);
+                    {   setBanks(res.data.bank);
+                        setLoading(false)
+                    }
                 }
             }catch (err){
                 console.log(err);
@@ -36,6 +57,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for update bank
     const showUpdateModal = (value) => {
+        setDisableEditor(false)
         setModelType("update")
         setSelectedBankId(value._id)
         form.setFieldsValue(value)
@@ -44,6 +66,7 @@ function Accounting({countryData,currentUser}) {
 
     //To open the modal for add bank
     const showNewModal = (value) => {
+        setDisableEditor(false)
         setModelType("new")
         form.resetFields()
         setIsModalVisible(true);
@@ -110,6 +133,19 @@ function Accounting({countryData,currentUser}) {
         setIsModalVisible(false);
     }
 
+    //view the data in drawer
+    const viewModal = (value) => {
+        setDisableEditor(true);
+        setModelType("view")
+        form.setFieldsValue(value)
+        setIsModalVisible(true);
+    }
+
+    const handleViewClose = () => {
+        alert("closed")
+        form.resetFields()
+        setIsModalVisible(false);
+    }
     return (
         <>
             <Row justify="end">
@@ -119,32 +155,51 @@ function Accounting({countryData,currentUser}) {
             </Row>
             <Divider className="mt-3 mb-2"/>
 
-            {banks.length === 0 &&
+            {loading&&
+               <Skeleton active />
+            }
+
+            {banks.length === 0 && loading===false &&
             <Row justify="center">
-
                     <div><EmptyContainer action={showNewModal} header="Add New Bank Detail" description="" /></div>
-
             </Row>
-
             }
 
             {banks.length > 0 &&
-            <Row  justify='space-between' gutter={24}>
+            <Row  justify='space-around' gutter={24}>
                 {banks.map(bank=>{
                     return (
-                        <Col span={24} key={bank._id} className="mt-5">
-                            <Collapse  bordered={true}  expandIconPosition="right" >
-                                <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>
-                                    <BankCard bank={bank} deleteBank={deleteBank}  showModal={showUpdateModal} />
-                                </Panel>
-                            </Collapse>
+                        <Col span={11} key={bank._id} className="mt-5"  >
+                            <Card hoverable title={bank.bank_name} extra={
+                                <Dropdown  overlay={
+                                    <Menu>
+                                    <Menu.Item>
+                                         <Button type="primary" style={{paddingRight:"2rem"}} icon={<EditOutlined/>} onClick={() => showUpdateModal(bank)}>Edit</Button>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <Popconfirm  title="Are you sure to delete this Bank Account?" onConfirm={()=>deleteBank(bank._id)} okText="Yes" cancelText="No">
+                                            <Button  type="dashed" danger icon={<DeleteTwoTone twoToneColor="red"/>}>Delete</Button>
+                                        </Popconfirm>
+                                    </Menu.Item>
+                                 </Menu>}
+                                   placement="bottomLeft" arrow>
+                                    <Button style={{borderColor:"#d8d8d8"}} type={'text'} icon={<EllipsisOutlined /> } />
+                                </Dropdown>
+                            }>
+                            {/*<Collapse  bordered={true}  expandIconPosition="right" >*/}
+                            {/*    <Panel header={bank.bank_name +" - "+bank.acc_holdername+" - "+bank.acc_number} key={bank._id}>*/}
+                                    <BankCard bank={bank} viewModal={viewModal} deleteBank={deleteBank}  showModal={showUpdateModal} />
+                                {/*</Panel>*/}
+                            {/*</Collapse>*/}
+                            </Card>
                         </Col>
                     )
                 })}
             </Row>
             }
 
-            <Drawer title={modelType==="update"? "Edit Bank Details":"Add New Bank Details" } name="update" width="40vw" visible={isModalVisible} closable={true} onClose={handleUpdateCancel} bodyStyle={{ paddingBottom: 20 }} >
+            <Drawer title={modelType==="update"? "Edit Bank Details":modelType==="view"?"Bank Details":"Add New Bank Details" } name="update" width="40vw" visible={isModalVisible} closable={true} onClose={handleUpdateCancel} bodyStyle={{ paddingBottom: 20 }} >
+                <fieldset disabled={disableEditor} >
                 <Form layout="vertical" name="basic" form={form}  onFinish={modelType==='update' ? handleUpdateOk : handleNewOk}>
                     <Form.Item label={'Bank Name'}  name="bank_name" rules={[{required: true, message: 'Please enter your Bank Name '},]}>
                         <Input/>
@@ -225,16 +280,13 @@ function Accounting({countryData,currentUser}) {
                     {/*    </Select>*/}
                     {/*</Form.Item>*/}
 
+                    { modelType!=="view" &&
                     <div style={{position: 'absolute', bottom: 0, width: '100%', borderTop: '1px solid #e8e8e8', padding: '10px 16px', textAlign: 'right', left: 0, background: '#fff', borderRadius: '0 0 4px 4px',}}>
                         <Row justify={"space-around"} >
-                            <Col>
-                                <Button type="primary" icon={<SaveOutlined/>} htmlType="submit" >Save</Button>
-                            </Col>
-                            <Col>
-                                <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>handleUpdateCancel()} >Cancel</Button>
-                            </Col>
-                        </Row>
-                    </div>
+                            <Col><Button type="primary" icon={<SaveOutlined/>} htmlType="submit">Save</Button></Col>
+                            <Col><Button type="dashed" icon={<CloseOutlined/>} onClick={() => handleUpdateCancel()}>Cancel</Button></Col>
+                           </Row>
+                    </div>}
 
                     {/*<Row className='mt-5' justify={"space-between"}>*/}
                     {/*    <Col>*/}
@@ -246,6 +298,7 @@ function Accounting({countryData,currentUser}) {
                     {/*</Row>*/}
 
                 </Form>
+                    </fieldset>
             </Drawer>
         </>
     )

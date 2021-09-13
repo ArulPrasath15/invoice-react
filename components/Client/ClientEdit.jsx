@@ -47,20 +47,6 @@ function ClientEdit(props) {
             name="basic"
             onFinish={onSubmit}
         >
-
-            <Row justify={'space-between'}>
-                <Col>
-                    <Title type='secondary' level={5}>CLIENT DETAILS</Title>
-                </Col>
-                <Col>
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-                            Save
-                        </Button>
-                        <Button type={'text'} icon={<CloseOutlined />} danger onClick={()=>{setEdit(false)}}>Discard</Button>
-                    </Form.Item>
-                </Col>
-            </Row>
             <Form.Item
                 label="Client Business Name"
                 name="business_name"
@@ -194,7 +180,7 @@ function ClientEdit(props) {
                 <Title type='secondary' level={5}>ADDITIONAL INFO</Title>
                 <Divider />
             </div>
-            <Row justify='space-between'>
+            <Row justify='space-between' className={'mb-5'}>
                 <Col span='11'>
                     <Form.Item
                         name='website'
@@ -214,7 +200,21 @@ function ClientEdit(props) {
                     </Form.Item>
                 </Col>
             </Row>
+            <div style={{position: 'absolute', bottom: 0, width: '100%', borderTop: '1px solid #e8e8e8', padding: '10px 16px', textAlign: 'right', left: 0, background: '#fff', borderRadius: '0 0 4px 4px',}}>
+                <Row justify={"space-around"}>
+                    <Col>
+                        <Form.Item style={{padding:0,margin:0}}  >
+                            <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+                                Save
+                            </Button>
+                        </Form.Item>
+                    </Col>
 
+                    <Col>
+                        <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>setEdit(false)} >Cancel</Button>
+                    </Col>
+                </Row>
+            </div>
         </Form>
     );
 }
