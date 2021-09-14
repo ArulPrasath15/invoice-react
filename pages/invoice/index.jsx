@@ -39,6 +39,7 @@ function Invoice({default_business}) {
         {
             title: 'Invoice No',
             dataIndex: 'invoice_no',
+            // eslint-disable-next-line react/display-name
             render:(text,row)=>{
                 return(
                 <Link href={`/invoice/${row._id}`}>{text}</Link>
@@ -49,6 +50,7 @@ function Invoice({default_business}) {
         {
             title: 'Status',
             dataIndex: 'currentStatus',
+            // eslint-disable-next-line react/display-name
             render:(text)=>{
                return  <Badge status={text==="Completed"?"success":"processing"} size="large"  text={text}/>
             }
@@ -86,17 +88,9 @@ function Invoice({default_business}) {
             </Head>
             <TitleStrip head={{title: "My Invoices", desc: "Add new invoices and store all invoice related information", action:"Add Invoice", action_link:`/invoice/new`}}/>
         <div className="mx-5 mt-5">
-           {/*<div className='mt-5'>*/}
-           {/*     <Row justify="space-around" align="middle">*/}
-           {/*         <Col span={7} offset={17}>*/}
-           {/*             <Search size="large" placeholder="Search Invoice" enterButton/>*/}
-           {/*         </Col>*/}
-           {/*     </Row>*/}
-           {/* </div>*/}
-
             <div className="bg-w mt-5">
                 {
-                    isEmpty?<EmptyContainer/>:<Table columns={columns} className='br-5' dataSource={invoices} rowKey={invoice=>invoice.invoice_no} onChange={onChange}/>
+                    isEmpty? <EmptyContainer header="Add New Invoice" description="Create an invoice to send to the clients" link={"/invoice/new"} />:<Table columns={columns} className='br-5' dataSource={invoices} rowKey={invoice=>invoice.invoice_no} onChange={onChange}/>
                 }
             </div>
         </div>

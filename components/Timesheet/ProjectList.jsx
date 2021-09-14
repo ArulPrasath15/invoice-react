@@ -125,7 +125,7 @@ const ProjectList = ({default_business}) => {
         <>
             {
                 isEmpty && <div className='mt-5 mx-5'>
-                    <EmptyContainer/>
+                    <EmptyContainer header="Add New Project" description="Create Project and create them to invoice" link={"/project"} />
                 </div>
             }
             {

@@ -135,7 +135,7 @@ const TimesheetList = ({data: currency}) => {
         <>
             {
                 isEmpty && <div className='mt-5 mx-5'>
-                    <EmptyContainer/>
+                    <EmptyContainer header="Add New Timesheet" description="Create Timesheet and create them to invoice" link={"/project/"+pid+"/timesheet/new"} />
                 </div>
             }
             {
