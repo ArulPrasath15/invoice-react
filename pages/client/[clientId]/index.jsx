@@ -17,12 +17,21 @@ import ClientRecipient from '../../../components/Client/ClientRecipient'
 import ClientFiles from '../../../components/Client/ClientFiles'
 import ClientEdit from "../../../components/Client/ClientEdit";
 import ProjectForm from "../../../components/Timesheet/ProjectForm";
-import getCurrency from "../../../hooks/getCurrency";
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 export async function getServerSideProps() {
-    const data=await getCurrency();
+    const res = await fetch('https://restcountries.eu/rest/v2/all');
+    let countries = await res.json();
+    let countryData=[];
+    await countries.forEach(country=>{
+        if(country.alpha3Code!=null && country.callingCodes[0] !=null && country.name != null)
+            countryData.push({
+                code: country.alpha3Code,
+                callingCode: country.callingCodes[0],
+                name:country.name
+            });
+    });
     return {
         props: {countryData}, // will be passed to the page component as props
     }
@@ -41,7 +50,7 @@ function ClientView(props) {
                 if(res.data.client)
                     setClient(res.data.client);
                 else
-                    Error(res.data.msg);
+                    throw Error(res.data.msg);
             }catch (e){
                 console.log(e);
             }

@@ -123,7 +123,7 @@ function ClientForm(props) {
                             {data.length > 0 &&
                             data.map(country => {
                                 return (
-                                    <Option value={country._id} key={country._id}>{country.code +' - '+country.symbol}</Option>
+                                    <Option value={country.name} key={country.code}>{country.name}</Option>
                                 )
                             })
                             }

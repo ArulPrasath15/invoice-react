@@ -254,8 +254,8 @@ function Accounting({countryData,currentUser}) {
                                 <Select placeholder="Country" allowClear showSearch
                                         filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                     {countryData.map(country => (
-                                        <Option value={country._id}
-                                                key={country._id}>{country.code +' - '+country.symbol}</Option>
+                                        <Option value={country.countryName}
+                                                key={country.countryName}>{country.countryName}</Option>
                                     ))}
                                     <Option value={'India'}>India</Option>
                                 </Select>
