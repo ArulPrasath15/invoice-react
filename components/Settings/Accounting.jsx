@@ -166,7 +166,7 @@ function Accounting({countryData,currentUser}) {
             }
 
             {banks.length > 0 &&
-            <Row  justify='space-around' gutter={24}>
+            <Row  justify='space-between' gutter={24}>
                 {banks.map(bank=>{
                     return (
                         <Col span={11} key={bank._id} className="mt-5"  >
@@ -174,7 +174,7 @@ function Accounting({countryData,currentUser}) {
                                 <Dropdown  overlay={
                                     <Menu>
                                     <Menu.Item>
-                                         <Button type="primary" style={{paddingRight:"2rem"}} icon={<EditOutlined/>} onClick={() => showUpdateModal(bank)}>Edit</Button>
+                                         <Button type="text" style={{paddingRight:"2rem"}} icon={<EditOutlined/>} onClick={() => showUpdateModal(bank)}>Edit</Button>
                                     </Menu.Item>
                                     <Menu.Item>
                                         <Popconfirm  title="Are you sure to delete this Bank Account?" onConfirm={()=>deleteBank(bank._id)} okText="Yes" cancelText="No">
@@ -183,7 +183,7 @@ function Accounting({countryData,currentUser}) {
                                     </Menu.Item>
                                  </Menu>}
                                    placement="bottomLeft" arrow>
-                                    <Button style={{borderColor:"#d8d8d8"}} type={'text'} icon={<EllipsisOutlined /> } />
+                                    <Button type={'text'} icon={<EllipsisOutlined /> } />
                                 </Dropdown>
                             }>
                             {/*<Collapse  bordered={true}  expandIconPosition="right" >*/}

@@ -26,6 +26,7 @@ import useClients from "../../hooks/useClients";
 import { Steps } from 'antd';
 import moment from 'moment';
 import notify from "../Utils/notify";
+import {InvoiceInfo, TemplateInfo} from "./InvoiceInfo";
 const { Step } = Steps;
 
 
@@ -410,9 +411,10 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             </Steps>
             </Card>
 
+                <InvoiceInfo/>
+
             <div  className="page-container hidden-on-narrow" style={isCreated ? {pointerEvents: "none"} : {}}>
                 <div className={styles.pdfPage+' '+styles.sizeA4}>
-
                     <div className={styles.pdfHeader}>
                             <span className={styles.companyLogo}>
                                  {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
@@ -548,7 +550,6 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                                     <Table.Summary.Row>
                                         <Table.Summary.Cell colSpan={2} />
-
                                         <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
                                         <Table.Summary.Cell>
                                             <Select defaultValue={CGST}  onChange={async (vat)=>{
