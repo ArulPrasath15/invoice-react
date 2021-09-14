@@ -6,8 +6,6 @@ import {TitleStrip} from "../../../components/Utils/TitleStrip";
 import axios from "axios";
 import getCurrency from "../../../hooks/getCurrency";
 
-//TODO: Validate the PID from backend
-
 export async function getServerSideProps({query}) {
     const data=await getCurrency();
     let {pid}=query;

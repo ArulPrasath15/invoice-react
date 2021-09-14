@@ -7,7 +7,7 @@ import {setBusiness,setDefaultBusiness} from '../store/businessStore'
 import Head from "next/head";
 import axios from "axios";
 import DashboardComponent from '../components/Dashboard/Dashboard'
-// ToDo: Get Business details and settings and store them in store
+
  function Dashboard({ setUser, setBusiness,setDefaultBusiness,default_business}) {
      const router = useRouter()
      const [username, setUsername] = useState('');
