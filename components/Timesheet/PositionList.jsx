@@ -20,7 +20,7 @@ const PositionList = () => {
     const [drawer, setDrawer] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const {tid}=router.query;
+    const {pid,tid}=router.query;
     useEffect(()=>{
         (async ()=>{
             try{
@@ -144,7 +144,7 @@ const PositionList = () => {
         <>
             {
                 isEmpty && <div className='mt-5 mx-5'>
-                    <EmptyContainer/>
+                    <EmptyContainer header="Add New Position" description="Create Position for timesheet and create them to invoice" link={"/project/"+pid+"/timesheet/"+tid+"/position/new"} />
                 </div>
             }
             {

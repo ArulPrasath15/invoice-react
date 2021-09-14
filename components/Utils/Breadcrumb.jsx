@@ -27,11 +27,13 @@ const Breadcrumbs = () => {
     return (
        <>
            <Breadcrumb separator=">">
-               <Breadcrumb.Item href="/"><HomeOutlined /></Breadcrumb.Item>
+               <Breadcrumb.Item><Link href="/"><a><HomeOutlined /></a></Link></Breadcrumb.Item>
                {
-                   routes.map((route, index) => (
-                       <Breadcrumb.Item key={index}  href={hlinks[index]}>{route.length>10?route.slice(0,6)+'..':route.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase()})}</Breadcrumb.Item>
-                   ))
+                   routes.map((route, index) => {
+                       if(route!="")
+                        return (
+                            <Breadcrumb.Item key={index}><Link href={hlinks[index]}><a>{route.length>10?route.slice(0,6)+'..':route.replace(/(^|\s)\S/g, function(t) { return t.toUpperCase()})}</a></Link></Breadcrumb.Item>
+                   )})
                }
            </Breadcrumb>
        </>

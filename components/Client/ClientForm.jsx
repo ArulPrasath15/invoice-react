@@ -10,10 +10,11 @@ import {useRouter } from 'next/router'
 const { Title, Text } = Typography;
 const { Option } = Select;
 import {connect} from 'react-redux'
+import {CloseOutlined, SaveOutlined} from "@ant-design/icons";
 
 function ClientForm(props) {
     const Router  = useRouter()
-    const {data,default_business} = props
+    const {data,default_business,setEdit} = props
     const countryCode = (
         <Form.Item name="phone_code"
                    rules={[{ required: true, message: 'Please Choose Phonecode ' }]}
@@ -39,7 +40,7 @@ function ClientForm(props) {
             if(res.status == 200){
                 hide();
                 message.success('Added New Client',2);
-                Router.replace('/client')
+                await Router.reload();
             }else{
                 throw Error(res.data.msg)
             }
@@ -55,11 +56,14 @@ function ClientForm(props) {
     }
     return (
 
-        <Form>
-            <div className="mt-3">
-                <Title type='secondary' level={5}>CLIENT DETAILS</Title>
-                <Divider />
-            </div>
+        <Form
+            layout="vertical"
+            onFinish={onSubmit}
+        >
+            {/*<div className="mt-3">*/}
+            {/*    <Title type='secondary' level={5}>CLIENT DETAILS</Title>*/}
+            {/*    <Divider />*/}
+            {/*</div>*/}
             <Form.Item label="Client Business Name" name="business_name" rules={[{ required: true, message: 'Please enter Client Name ' }]}>
                 <Input />
             </Form.Item>
@@ -89,7 +93,7 @@ function ClientForm(props) {
             </Form.Item>
             <small className={'text-secondary'}>Invoices will be sent to this Email</small>
             <Form.Item name="phone" label="Phone Number">
-                <Input addonBefore={countryCode} style={{ width: '100%' }} />
+                <Input style={{ width: '100%' }} />
             </Form.Item>
 
             <div className="mt-3">
@@ -135,7 +139,7 @@ function ClientForm(props) {
                 <Title type='secondary' level={5}>ADDITIONAL INFO</Title>
                 <Divider />
             </div>
-            <Row justify='space-between'>
+            <Row justify='space-between' className={'mb-5'}>
                 <Col span='11'>
                     <Form.Item name='website' label="Website">
                         <Input />
@@ -147,12 +151,20 @@ function ClientForm(props) {
                     </Form.Item>
                 </Col>
             </Row>
-            <div className='mt-5'>
-                <Form.Item >
-                    <Button type="primary" htmlType="submit" shape='round'>
-                        Create Client
-                    </Button>
-                </Form.Item>
+            <div style={{position: 'absolute', bottom: 0, width: '100%', borderTop: '1px solid #e8e8e8', padding: '10px 16px', textAlign: 'right', left: 0, background: '#fff', borderRadius: '0 0 4px 4px',}}>
+                <Row justify={"space-around"}>
+                    <Col>
+                        <Form.Item style={{padding:0,margin:0}}  >
+                            <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+                                Create
+                            </Button>
+                        </Form.Item>
+                    </Col>
+
+                    <Col>
+                        <Button type="dashed" icon={<CloseOutlined/>} onClick={()=>setEdit(false)} >Cancel</Button>
+                    </Col>
+                </Row>
             </div>
         </Form>
     );
