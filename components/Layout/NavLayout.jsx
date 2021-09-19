@@ -18,7 +18,8 @@ import axios from 'axios';
 import {setDefaultBusiness,setBusiness} from '../../store/businessStore'
 
 
-  function NavLayout({children,pathname,business,default_business,setDefaultBusiness,setBusiness}){
+  function NavLayout(props){
+    const {children,pathname,business,default_business,setDefaultBusiness,setBusiness}=props;
     const [session , loading] = useSession()
     const [menuSelected, setMenuSelected] = useState();
     const [collapsed, setCollapsed] = useState(false);

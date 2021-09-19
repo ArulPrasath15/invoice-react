@@ -6,16 +6,18 @@
 import React from 'react';
 import PositionForm from "../../../../../../components/Timesheet/PositionForm";
 import axios from "axios";
+import {getSession} from "next-auth/client";
 
-export async function getServerSideProps({query}) {
-
+export async function getServerSideProps(props) {
+    const {query,req}=props;
+    const session=await getSession({req});
     let {pid,tid}=query;
-    let res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
+    let res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`,{ headers: {"Authorization" : `Bearer ${session?.user.token}`} })
     if(!res.data.isValid)
-        return {redirect: {permanent: false, destination: "/404"}}
-    res = await axios.get(`${process.env.SERVER_URL}/isValid/timesheet/${tid}`)
+        return {redirect: {permanent: false, destination: "/project"}}
+    res = await axios.get(`${process.env.SERVER_URL}/isValid/timesheet/${tid}`,{ headers: {"Authorization" : `Bearer ${session?.user.token}`} })
     if(!res.data.isValid)
-        return {redirect: {permanent: false, destination: "/404"}}
+        return {redirect: {permanent: false, destination: `/project/${pid}`}}
     return {
         props: {}, // will be passed to the page component as props
     }

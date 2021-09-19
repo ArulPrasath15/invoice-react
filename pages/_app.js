@@ -57,8 +57,8 @@ function _App({ Component, pageProps, reduxStore }) {
                   </Col>
               </Row>
               }
-            { (!hideList.includes(router.pathname) && !loader) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} /></NavLayout> }
-            { (hideList.includes(router.pathname) && !loader) && <Component {...pageProps} /> }
+            { (!hideList.includes(router.pathname) && !loader) && <NavLayout pathname={router.pathname.substring(1)}><Component {...pageProps} session={pageProps.session}/></NavLayout> }
+            { (hideList.includes(router.pathname) && !loader) && <Component {...pageProps} session={pageProps.session}/> }
               </PersistGate>
           </Provider>
       </>

@@ -10,15 +10,18 @@ import {Button, Col, Popconfirm, Row, Typography} from "antd";
 import {useRouter} from "next/router";
 import axios from "axios";
 import getCurrency from "../../../../hooks/getCurrency";
+import {getSession} from "next-auth/client";
 const { Title, Text } = Typography;
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps(props) {
+    const {req,query}=props;
+    const session=await getSession({req});
     let data=await getCurrency();
     let {pid}=query;
-    const res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`)
+    const res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`,{ headers: {"Authorization" : `Bearer ${session?.user.token}`} })
     if(!res.data.isValid)
     {
-        return {redirect: {permanent: false, destination: "/404"}}
+        return {redirect: {permanent: false, destination: "/project"}}
     }
     return {
         props: {data}, // will be passed to the page component as props
