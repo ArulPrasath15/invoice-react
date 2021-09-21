@@ -13,6 +13,7 @@ const {TextArea} = Input;
 const { Option } = Select;
 
 const TimesheetForm = ({data,timesheet,closeDrawer}) => {
+    const [prefixValue, setPrefixValue] = useState('');
     const [form] = Form.useForm();
     const router=useRouter();
     const {pid}=router.query;
@@ -50,23 +51,31 @@ const TimesheetForm = ({data,timesheet,closeDrawer}) => {
             }
         }
     }
+    const onFinishFailed = (errorInfo) => {
+        console.log(errorInfo);
+        message.error("Validations Failed");
+    };
+    const setPrefix = (value)=>{
+        setPrefixValue(data.find(o => o._id == value).symbol);
+        console.log(value)
+    }
 
     return (
         <>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className='bg-white px-5 py-2 br-5' style={{minHeight: '60vh'}}>
                     <Card title={(timesheet)?"":"Add Timesheet"} bordered={false} style={{ width: '40vw' }}>
-                        <Form form={form} layout="vertical" onFinish={onSubmit}>
-                            <Form.Item label="Title" name="title" required>
+                        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed}>
+                            <Form.Item label="Title" name="title" rules={[{required: true, message: 'Title is Required'},{type: 'string',message: 'Invalid Title'},]}>
 	                                <Input />
                             </Form.Item>
-                            <Form.Item label="Description" name="desc" required>
+                            <Form.Item label="Description" name="desc" rules={[{required: true, message: 'Description is Required'},{type: 'string',message: 'Invalid Description'},]}>
                                 <TextArea autoSize={{ minRows: 3, maxRows: 5 }} showCount maxLength={200}  />
                             </Form.Item>
                             <Row gutter={8}>
                                 <Col span={12}>
-                                    <Form.Item label="Currency" name="currency" required>
-	                                        <Select showSearch placeholder="Select Currency" optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                                    <Form.Item label="Currency" name="currency" rules={[{required: true, message: 'Currency is Required'}]}>
+	                                        <Select onChange={setPrefix} showSearch placeholder="Select Currency" optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                                             {data.map(country => (
                                                 <Option value={country._id} key={country._id}>{country.code +' - '+country.symbol}</Option>
                                             ))}
@@ -74,8 +83,8 @@ const TimesheetForm = ({data,timesheet,closeDrawer}) => {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Budget" name="budget">
-                                        <InputNumber prefix={<span>$</span>} />
+                                    <Form.Item label="Budget" name="budget" rules={[{required: true, message: 'Budget is Required', pattern: new RegExp(/[+-]?([0-9]*[.])?[0-9]+/)}]}>
+                                        <Input addonBefore={<span>{prefixValue}</span>} />
                                     </Form.Item>
                                 </Col>
                             </Row>

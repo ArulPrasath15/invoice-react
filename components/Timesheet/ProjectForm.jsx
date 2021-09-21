@@ -56,22 +56,26 @@ const ProjectForm = ({default_business, project, closeDrawer}) => {
             }
         }
     }
+    const onFinishFailed = (errorInfo) => {
+        console.log(errorInfo);
+        message.error("Validations Failed");
+    };
 
     return (
         <>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className='bg-white px-5 py-2 br-5' style={{minHeight: '60vh'}}>
                     <Card title={(project)?"":"Add Project"} bordered={false} style={{ width: '40vw' }} >
-                        <Form layout="vertical" name="ProjectForm" onFinish={onSubmit} form={form}>
-                            <Form.Item label="Client" name="client_id" required >
+                        <Form layout="vertical" name="ProjectForm" onFinish={onSubmit} onFinishFailed={onFinishFailed} form={form} autoComplete="off">
+                            <Form.Item label="Client" name="client_id"  rules={[{required: true, message: 'Client is Required'}]} >
                                 <Select placeholder="Select a Client" allowClear>
                                     {clients.map((client)=>{return (<Option key={client._id} value={client._id}>{client.business_name}</Option>)})}
                                 </Select>
                             </Form.Item>
-                            <Form.Item name="name" label="Title" required >
+                            <Form.Item name="name" label="Title" rules={[{required: true, message: 'Title is Required'},{type: 'string',message: 'Invalid Title'},]} >
                                 <Input />
                             </Form.Item>
-                            <Form.Item name="desc" label="Description" required >
+                            <Form.Item name="desc" label="Description" rules={[{required: true, message: 'Description is Required'},{type: 'string',message: 'Invalid Description'},]} >
                                 <TextArea placeholder="Type your description here...." autoSize={{ minRows: 3, maxRows: 5 }}/>
                             </Form.Item>
                             <Form.Item>

@@ -5,7 +5,6 @@
 */
 import React, {useEffect} from 'react';
 import {Button, Card, Col, DatePicker, Form, Input, message, Row, Select} from "antd";
-import Link from "next/link";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -13,7 +12,9 @@ import moment from "moment";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const PositionForm = ({position,closeDrawer}) => {
+//TODO: Ask for Per Hr rate when user selects that field
+
+const PositionForm = ({position,closeDrawer,timesheet}) => {
     const router=useRouter();
     const [form] = Form.useForm();
     const {tid}=router.query;
@@ -56,38 +57,42 @@ const PositionForm = ({position,closeDrawer}) => {
             }
         }
     }
-
+    const onFinishFailed = (errorInfo) => {
+        console.log(errorInfo);
+        message.error("Validations Failed");
+    };
     return (
-        <div>
+        <>
             <div className='mt-5 mx-5'>
                 <Row justify='center' align="middle" className='bg-white px-5 py-2 br-5' style={{minHeight: '60vh'}}>
                     <Card title={(position)?"":"Add Position"} bordered={false} style={{ width: '40vw' }}>
-                        <Form form={form} layout="vertical" onFinish={onSubmit}>
-                            <Form.Item label="Title" name="title" required>
+                        <Form form={form} layout="vertical" onFinish={onSubmit} onFinishFailed={onFinishFailed}>
+                            <Form.Item label="Title" name="title" rules={[{required: true, message: 'Title is Required'},{type: 'string',message: 'Invalid Title'}]}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item label="Time Frame" name="timeframe" required>
+                            <Form.Item label="Time Frame" name="timeframe" rules={[{required: true, message: 'Timeframe is Required'}]}>
                                 <RangePicker />
                             </Form.Item>
                             <Row gutter={8}>
                                 <Col span={12}>
-                                    <Form.Item label="Fee Type" name="fee_type" required>
+                                    <Form.Item label="Fee Type" name="fee_type" rules={[{required: true, message: 'Fee Type is Required'}]}>
                                         <Select placeholder="Select a Type" allowClear>
                                             <Option value="fxd">Fixed</Option>
                                             <Option value="hr">Per Hour</Option>
                                             <Option value="day">Per Day</Option>
+                                            <Option value="day">Per Week</Option>
                                         </Select>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Fee" name="fee">
-                                        <Input addonAfter="INR" />
+                                    <Form.Item label="Fee" name="fee" rules={[{required: true, message: 'Invalid Fee', pattern: new RegExp(/[+-]?([0-9]*[.])?[0-9]+/)},]}>
+                                        <Input type="number" addonAfter={timesheet.currency.code} />
                                     </Form.Item>
                                 </Col>
                             </Row>
                             <Row gutter={8}>
                                 <Col span={12}>
-                                    <Form.Item label="Amount" name="amount">
+                                    <Form.Item label="Amount" name="amount" rules={[{required: true, message: 'Invalid Amount', pattern: new RegExp(/[+-]?([0-9]*[.])?[0-9]+/)}]}>
                                       <Input  type="number"/>
                                     </Form.Item>
                                 </Col>
@@ -99,7 +104,7 @@ const PositionForm = ({position,closeDrawer}) => {
                     </Card>
                 </Row>
             </div>
-        </div>
+        </>
     );
 };
 
