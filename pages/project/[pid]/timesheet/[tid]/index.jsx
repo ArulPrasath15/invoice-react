@@ -23,12 +23,15 @@ export async function getServerSideProps(props) {
     res = await axios.get(`${process.env.SERVER_URL}/isValid/timesheet/${tid}`,{ headers: {"Authorization" : `Bearer ${session?.user.token}`} })
     if(!res.data.isValid)
         return {redirect: {permanent: false, destination: `/project/${pid}`}}
+    res = await axios.get(`${process.env.SERVER_URL}/timesheet/timesheet_id/${tid}`,{ headers: {"Authorization" : `Bearer ${session?.user.token}`} })
+    const timesheet=res.data.timesheet;
     return {
-        props: {}, // will be passed to the page component as props
+        props: {timesheet}, // will be passed to the page component as props
     }
 }
 
-const TimesheetDetails = () => {
+const TimesheetDetails = (props) => {
+    const {timesheet}=props;
     const router=useRouter();
     return (
         <>
@@ -39,7 +42,7 @@ const TimesheetDetails = () => {
             <TitleStrip head={{title: "Positions", desc: "Add new positions and store all position related information", action:"Add Position", action_link:`${router.asPath}/position/new`}}/>
             <Row gutter={[16, 16]}>
                 <Col span={16}>
-                    <PositionList/>
+                    <PositionList timesheet={timesheet}/>
                 </Col>
                 {/*<Col span={8}>*/}
                 {/*    <TimesheetInfo/>*/}

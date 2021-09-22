@@ -14,7 +14,7 @@ const { Title, Text } = Typography;
 const NewTimeSheet = () => {
     const router = useRouter();
     const closeForm = ()=>{
-        router.push('/timesheet')
+        router.push('/project')
     }
     return (
         <>

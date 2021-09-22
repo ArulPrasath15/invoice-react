@@ -5,14 +5,14 @@
 */
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Drawer, message, Popconfirm, Row, Space, Table, Tooltip} from "antd";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {AppstoreAddOutlined, DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
 import EmptyContainer from "../Utils/EmptyContainer";
 import PositionForm from "./PositionForm";
 import moment from "moment";
 
-const PositionList = () => {
+const PositionList = ({timesheet}) => {
     const router = useRouter();
     const [data, setData] = useState([]);
     const [position, setPosition] = useState({});
@@ -140,6 +140,11 @@ const PositionList = () => {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+
+    const hasSelected = selectedRowKeys.length > 0;
+    const createInvoice=()=>{
+        console.log(selectedRowKeys);
+    }
     return (
         <>
             {
@@ -150,6 +155,14 @@ const PositionList = () => {
             {
                 !isEmpty && <>
                     <div className='mt-5 mx-5'>
+                        <div style={{ marginBottom: 16 }}>
+                            <Button type="link" onClick={()=>{createInvoice()}} style={{color:"orange"}} icon={<AppstoreAddOutlined />} disabled={!hasSelected}>
+                                Create Invoice
+                            </Button>
+                            <span style={{ marginLeft: 8 }}>
+                        {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+                      </span>
+                        </div>
                         <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                             <Col span={24}>
                                 <Table columns={columns} rowKey={project=>project._id} rowSelection={rowSelection} dataSource={data}
@@ -158,7 +171,7 @@ const PositionList = () => {
                         </Row>
                     </div>
                     <Drawer title="Edit Project" width={720} visible={drawer} closable={true} onClose={()=>closeDrawer(false)} bodyStyle={{ paddingBottom: 20 }} >
-                        <PositionForm position={position} closeDrawer={closeDrawer}/>
+                        <PositionForm timesheet={timesheet} position={position} closeDrawer={closeDrawer}/>
                     </Drawer>
                 </>
             }

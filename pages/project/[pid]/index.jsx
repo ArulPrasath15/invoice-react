@@ -6,10 +6,12 @@ import {TitleStrip} from "../../../components/Utils/TitleStrip";
 import axios from "axios";
 import getCurrency from "../../../hooks/getCurrency";
 import { getSession } from "next-auth/client"
+import {connect, useSelector} from "react-redux";
 
 export async function getServerSideProps(props) {
     const data=await getCurrency();
-    const {req,query}=props;
+    const {req,query,ctx}=props;
+    console.log(ctx);
     const session=await getSession({req});
     let {pid}=query;
     const res = await axios.get(`${process.env.SERVER_URL}/isValid/project/${pid}`, { headers: {"Authorization" : `Bearer ${session?.user.token}`} })
@@ -21,6 +23,7 @@ export async function getServerSideProps(props) {
         props: {data}, // will be passed to the page component as props
     }
 }
+
 
 function Timesheet({data}) {
     const router = useRouter();
@@ -36,4 +39,10 @@ function Timesheet({data}) {
     )
 }
 
-export default Timesheet;
+const mapStateToProps = (state) => ({
+    default_business: state.businessStore.default_business,
+})
+
+const mapDispatchToProps = { }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timesheet);

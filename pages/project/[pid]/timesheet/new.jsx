@@ -30,8 +30,9 @@ export async function getServerSideProps(props) {
 
 const NewTimeSheet = ({data}) => {
     const router = useRouter();
+    const {pid}=router.query;
     const closeForm = ()=>{
-        router.push('/timesheet')
+        router.push(`/project/${pid}/`)
     }
     return (
         <>
@@ -45,12 +46,7 @@ const NewTimeSheet = ({data}) => {
                         <Title level={4}  >Create New Timesheet</Title>
                     </Col>
                     <Col span={2} offset={12}>
-                        <Popconfirm
-                            title="Your changes will not be saved ?"
-                            onConfirm={closeForm}
-                            okText="Close Any"
-                            cancelText="No"
-                        >
+                        <Popconfirm title="Your changes will not be saved ?" onConfirm={closeForm} okText="Close Any" cancelText="No">
                             <Button type='danger'>Cancel</Button>
                         </Popconfirm>
                     </Col>
