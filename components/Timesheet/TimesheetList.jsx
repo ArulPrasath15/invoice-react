@@ -4,7 +4,7 @@
 * @description: ----------------
 */
 import React, {useEffect, useState} from 'react';
-import {Table, Col, Row, Space, message, Tooltip, Button, Popconfirm, Drawer} from "antd";
+import {Table, Col, Row, Space, message, Tooltip, Button, Popconfirm, Drawer, Skeleton} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -15,6 +15,7 @@ import TimesheetForm from "./TimesheetForm";
 
 const TimesheetList = ({data: currency}) => {
     const router = useRouter();
+    const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
     const [timesheet, setTimesheet]  = useState({});
     const [refresh, setRefresh] = useState(false);
@@ -24,10 +25,12 @@ const TimesheetList = ({data: currency}) => {
     useEffect(()=>{
         (async ()=>{
             try{
+                setLoader(true);
                 const res = await axios.get(`/timesheet/${pid}`);
                 if(res.status == 200){
                     if(res.data.timesheets)
                     {
+                        setLoader(false);
                         if(res.data.timesheets.length > 0)
                             setData(res.data.timesheets);
                         else
@@ -133,13 +136,19 @@ const TimesheetList = ({data: currency}) => {
 
     return (
         <>
+            {/*loader*/}
+            { loader &&
+                <div className={"mx-5 my-5"}>
+                    <Skeleton active paragraph={{width:"5",rows:6}} title={{width:"5"}} />
+                </div>
+            }
             {
-                isEmpty && <div className='mt-5 mx-5'>
+                isEmpty && loader===false &&  <div className='mt-5 mx-5'>
                     <EmptyContainer header="Add New Timesheet" description="Create Timesheet and create them to invoice" link={"/project/"+pid+"/timesheet/new"} />
                 </div>
             }
             {
-                !isEmpty && <>
+                !isEmpty && loader===false &&  <>
                     <div className='mt-5 mx-5'>
                         <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                             <Col span={24}>

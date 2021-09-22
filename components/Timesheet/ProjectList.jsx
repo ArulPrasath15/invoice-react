@@ -4,7 +4,7 @@
 * @description: ----------------
 */
 import React, {useEffect, useState} from 'react';
-import {Table, Col, Row, Space, Drawer, Button, Tooltip, Popconfirm, message} from "antd";
+import {Table, Col, Row, Space, Drawer, Button, Tooltip, Popconfirm, message, Skeleton} from "antd";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -15,6 +15,7 @@ import EmptyContainer from "../Utils/EmptyContainer";
 
 const ProjectList = ({default_business}) => {
     const router = useRouter();
+    const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
     const [project, setProject] = useState({});
     const [refresh, setRefresh] = useState(false);
@@ -23,10 +24,12 @@ const ProjectList = ({default_business}) => {
     useEffect(()=>{
         (async ()=>{
             try{
+                setLoader(true);
                 const res = await axios.get(`/project/${default_business._id}`);
                 if(res.status == 200){
                     if(res.data.projects)
                     {
+                        setLoader(false);
                         if(res.data.projects.length > 0)
 	                        setData(res.data.projects);
                         else
@@ -123,13 +126,21 @@ const ProjectList = ({default_business}) => {
 
     return (
         <>
+            {/*loader*/}
+            { loader &&
+               <div className={"mx-5 my-5"}>
+                   <Skeleton active paragraph={{width:"5",rows:6}} title={{width:"5"}} />
+               </div>
+            }
+            {/*Empty Table*/}
             {
-                isEmpty && <div className='mt-5 mx-5'>
+                isEmpty && loader===false &&  <div className='mt-5 mx-5'>
                     <EmptyContainer header="Add New Project" description="Create Project and create them to invoice" link={"/project"} />
                 </div>
             }
+            {/*Table*/}
             {
-                !isEmpty && <>
+                !isEmpty && loader===false &&  <>
                     <div className='mt-5 mx-5'>
                         <Row justify='center' align="middle" className=' py-2 br-5' layout="vertical" gutter={24}>
                             <Col span={24}>

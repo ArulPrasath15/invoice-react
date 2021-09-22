@@ -4,7 +4,7 @@
 * @description: ----------------
 */
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Drawer, message, Popconfirm, Row, Space, Table, Tooltip} from "antd";
+import {Button, Col, Drawer, message, Popconfirm, Row, Skeleton, Space, Table, Tooltip} from "antd";
 import {AppstoreAddOutlined, DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -14,6 +14,7 @@ import moment from "moment";
 
 const PositionList = ({timesheet}) => {
     const router = useRouter();
+    const [loader, setLoader] = useState(true);
     const [data, setData] = useState([]);
     const [position, setPosition] = useState({});
     const [refresh, setRefresh] = useState(false);
@@ -24,10 +25,12 @@ const PositionList = ({timesheet}) => {
     useEffect(()=>{
         (async ()=>{
             try{
+                setLoader(true);
                 const res = await axios.get(`/position/${tid}`);
                 if(res.status == 200){
                     if(res.data.positions)
                     {
+                        setLoader(false);
                         if(res.data.positions.length > 0)
                             setData(res.data.positions);
                         else
@@ -101,6 +104,7 @@ const PositionList = ({timesheet}) => {
         {
             title: 'Fee Type',
             dataIndex: 'fee_type',
+            // eslint-disable-next-line react/display-name
             render: (text) => (
                 <span>{(text=="fxd")?"Fixed":(text=="hr")?"Hours":(text=="day")?"Day":(text=="week")?"Week":""}</span>
             )
@@ -150,13 +154,19 @@ const PositionList = ({timesheet}) => {
     }
     return (
         <>
+            {/*loader*/}
+            { loader &&
+                <div className={"mx-5 my-5"}>
+                    <Skeleton active paragraph={{width:"5",rows:6}} title={{width:"5"}} />
+                </div>
+            }
             {
-                isEmpty && <div className='mt-5 mx-5'>
+                isEmpty && loader===false && <div className='mt-5 mx-5'>
                     <EmptyContainer header="Add New Position" description="Create Position for timesheet and create them to invoice" link={"/project/"+pid+"/timesheet/"+tid+"/position/new"} />
                 </div>
             }
             {
-                !isEmpty && <>
+                !isEmpty && loader===false && <>
                     <div className='mt-5 mx-5'>
                         <div style={{ marginBottom: 16 }}>
                             <Button type="link" onClick={()=>{createInvoice()}} style={{color:"orange"}} icon={<AppstoreAddOutlined />} disabled={!hasSelected}>
