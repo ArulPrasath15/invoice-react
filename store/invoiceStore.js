@@ -44,6 +44,7 @@ const invoiceSlice = createSlice({
                 state.itax="";
                 state.stax="";
                 state.ctax="";
+
                 state.tableData=[];
                 state.total="";
             console.log(action.payload.reset)

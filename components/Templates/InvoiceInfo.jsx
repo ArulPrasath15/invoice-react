@@ -5,7 +5,7 @@ import { Typography, Space } from 'antd';
 const { Text, Link } = Typography;
 const {TabPane} = Tabs;
 
-export function InvoiceInfo() {
+export function InvoiceInfo({dataSource,currency,business,subTotal,total,vat,invoice,bank}) {
 
     const [openDrawer, setOpenDrawer] = useState(false);
     const showDrawer = () => {
@@ -14,70 +14,62 @@ export function InvoiceInfo() {
     const onClose = () => {
         setOpenDrawer(false);
     };
-    const dataSource = [
-        {
-            key: '1',
-            particulars: 'Mike',
-            price: 32,
-        },
-        {
-            key: '2',
-            particulars: 'Mike',
-            price: 32,
-        },
-    ];
 
     const columns = [
         {
-            title: 'No',
-            dataIndex: 'key',
+            title: 'Sr No.',
+            dataIndex: 'sr',
             key: 'key',
-            align: 'center'
+            width:"15%"
+
         },
         {
             title: 'Particulars',
-            dataIndex: 'particulars',
+            dataIndex: 'desc',
             key: 'particulars',
             align: 'center'
         },
         {
             title: 'Price',
-            dataIndex: 'price',
+            dataIndex: 'amt',
             key: 'price',
-            align: 'center'
+            align: 'center',
+            render: (text) => {return (<h4>  {currency}&nbsp;{text}</h4>)}
         }
     ];
+
+
 
 
     return (
 
         <div>
             <div style={{position: "fixed", top: "50vh", right: "0px", }}>
-                <Button style={{ width:"2vw",height:"10vh",paddingRigth:10,borderBottomLeftRadius:'1.5vh',borderTopLeftRadius:'1.5vh'}} icon={<LeftOutlined />}   onClick={showDrawer}/>
+                <Button style={{ width:"2vw",height:"10vh",paddingRight:10,borderBottomLeftRadius:'1.5vh',borderTopLeftRadius:'1.5vh'}} icon={<LeftOutlined />}   onClick={showDrawer}/>
             </div>
 
-            <Drawer  title="Invoice Informations" width={500} placement="right" onClose={onClose} visible={openDrawer}>
+            <Drawer  title="Invoice Information" width={500} placement="right" onClose={onClose} visible={openDrawer}>
                 <Tabs defaultActiveKey="1">
                     {/*Information Tab*/}
                     <TabPane size="small" tab={<span><InfoCircleOutlined />Information</span>} key="1">
                         <Row gutter={24}>
                             <Col span={24} className={"mt-2"}>
                                 <Text className={'text-secondary'}>Invoice type : </Text>
-                                <Text className='px-2' strong>Not based on approved tasks </Text>
+                                <Text className='px-2' strong>{business.business_type} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}> <Text className={'text-secondary'}>Invoice ID : </Text>
-                                <Text className='px-2' strong> 2021-09-07-0001 </Text>
+                                <Text className='px-2' strong> {invoice.no} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}><Text className={'text-secondary'}>Creator : </Text>
-                                <Text className='px-2' strong> PentaFox Invoice </Text>
+                                <Text className='px-2' strong> {business.business_name} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>Invoice date : </Text>
-                                <Text className='px-2' strong> 07/09/2021 </Text>
+                                <Text className='px-2' strong> {invoice.date} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>Payment deadline : </Text>
-                                <Text className='px-2' strong> 30 days </Text>
+                                <Text className='px-2' strong> {invoice.due} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24} style={{marginTop: "2vh", marginBottom: "2vh"}}>
                                 <hr style={{
@@ -88,22 +80,24 @@ export function InvoiceInfo() {
                                 }}/>
                             </Col>
                         </Row>
-                        <Table size="small"  className={"mt-2"} dataSource={dataSource} columns={columns} align={"center"} pagination={false}  />
+                        <Table size="small" rowKey="sr" className={"mt-2"} dataSource={dataSource} columns={columns} align={"center"} pagination={false}  />
                         <Row  className={"mt-2"} justify="end" >
                             <Col>
-                                <table className={"mt-2"}>
+                                <table >
+                                    <tbody>
                                     <tr className={"mt-2"}>
                                         <td align={"right"} style={{paddingRight:"1vw"}}><Text className={'text-secondary' }>Subtotal &nbsp;&nbsp; : </Text></td>
-                                        <td align={"right"} ><Text className='px-2' >20,00 UGX  </Text> </td>
+                                        <td align={"right"} ><Text className='px-2' >{currency}&nbsp;{subTotal}  </Text> </td>
                                     </tr>
                                     <tr className={"mt-2"}>
-                                        <td align={"right"} style={{paddingRight:"1vw"}}> <Text className={'text-secondary' }>VAT (5,0%) &nbsp;&nbsp; : </Text> </td>
-                                        <td align={"right"} ><Text className='px-2' > 1,00 UGX   </Text> </td>
+                                        <td align={"right"} style={{paddingRight:"1vw"}}> <Text className={'text-secondary' }>VAT ({vat.gst}%) &nbsp;&nbsp; : </Text> </td>
+                                        <td align={"right"} ><Text className='px-2' > {currency}&nbsp; {vat.amt}   </Text> </td>
                                     </tr>
                                     <tr className={"mt-2"}>
                                         <td align={"right"} style={{paddingRight:"1vw"}}> <Text  strong>Total &nbsp;&nbsp; : </Text></td>
-                                        <td align={"right"} ><Text style={{textAlign:"right"}} className='px-2' strong >21,00 UGX   </Text> </td>
+                                        <td align={"right"} ><Text style={{textAlign:"right"}} className='px-2' strong >{currency}&nbsp;{total}   </Text> </td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </Col>
                          </Row>
@@ -114,21 +108,21 @@ export function InvoiceInfo() {
                         <Row gutter={24}>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>Account Holder : </Text>
-                                <Text className='px-2' strong>Barry Allen </Text>
+                                <Text className='px-2' strong>{bank.acc_holdername} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}> <Text className={'text-secondary'}>Bank Name : </Text>
-                                <Text className='px-2' strong> State bank of India </Text>
+                                <Text className='px-2' strong> {bank.bank_name} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}><Text className={'text-secondary'}>Account number : </Text>
-                                <Text className='px-2' strong> 398939897463 </Text>
+                                <Text className='px-2' strong> {bank.acc_number} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>IFSC : </Text>
-                                <Text className='px-2' strong> MINB0005943 </Text>
+                                <Text className='px-2' strong> {bank.ifsc} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
-                                <Text className={'text-secondary'}>Country of bank : </Text>
-                                <Text className='px-2' strong> India </Text>
+                                <Text className={'text-secondary'}> Bank Branch : </Text>
+                                <Text className='px-2' strong>{bank.branch}</Text>
                             </Col>
                         </Row>
                     </TabPane>
@@ -139,21 +133,21 @@ export function InvoiceInfo() {
                         <Row gutter={24}>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>Street/Number : </Text>
-                                <Text className='px-2' strong>5/450,salem road,Namakkal </Text>
+                                <Text className='px-2' strong>{business.address} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}> <Text className={'text-secondary'}>City : </Text>
-                                <Text className='px-2' strong> Namakkal </Text>
+                                <Text className='px-2' strong> {business.city} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}><Text className={'text-secondary'}>Zip : </Text>
-                                <Text className='px-2' strong> 637001 </Text>
+                                <Text className='px-2' strong> {business.pincode} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>State : </Text>
-                                <Text className='px-2' strong> TamilNadu </Text>
+                                <Text className='px-2' strong> {business.state} </Text>
                             </Col>
                             <Col className={"mt-2"} span={24}>
                                 <Text className={'text-secondary'}>Country : </Text>
-                                <Text className='px-2' strong> India </Text>
+                                <Text className='px-2' strong> {business.country} </Text>
                             </Col>
                         </Row>
                     </TabPane>

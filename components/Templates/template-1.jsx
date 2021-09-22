@@ -6,7 +6,7 @@
 
 import  styles from  '../../assets/css/template.module.css'
 import React, {useEffect, useState} from 'react';
-import {Button, DatePicker, Input, Table, Tooltip, Select, Menu, Dropdown, InputNumber, Spin} from 'antd';
+import {Button, DatePicker, Input, Table, Tooltip, Select, Menu, Dropdown, InputNumber, Spin, Form} from 'antd';
 import {
     BankOutlined,
     BankTwoTone,
@@ -23,6 +23,7 @@ import {useRouter} from "next/router";
 import Image from 'next/image'
 import {resetInvoice, setIGST, setSGST, setCGST,setITax,setSTax,setCTax} from "../../store/invoiceStore";
 import useClients from "../../hooks/useClients";
+import useBanks from "../../hooks/useBanks";
 import { Steps } from 'antd';
 import moment from 'moment';
 import notify from "../Utils/notify";
@@ -44,6 +45,8 @@ function zeroPad(num, places) {
 function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setITax,setSTax,setCTax,iTax,sTax,cTax,resetInvoice,currencyList}) {
     const router = useRouter();
     const {data: allClients} = useClients();
+    const {data: allBanks} = useBanks();
+    const [form] = Form.useForm();
     const [client,setClient] = useState({});
 
     const [tableData, setTableData] = useState([{
@@ -58,10 +61,9 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
 
     const [invoiceNo,setInvoiceNo] = useState('');
-    const [invoiceDate,setInvoiceDate] = useState('');
+    const [invoiceDate,setInvoiceDate] = useState("");
     const [invoiceDueDate,setInvoiceDueDate] = useState('');
 
-    const [allBanks,setAllBanks] = useState([]);
     const [bank,setBank] = useState({});
     const [status,setStatus] = useState({
         drafted:"",
@@ -78,9 +80,10 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
     useEffect(()=>{
         (async ()=>{
+            setLoading(true);
                 await resetInvoice({reset:true});
-                try{
 
+                try{
                     if(router.pathname==="/invoice/new"){
                         const res1 = await axios.get(`/invoice/business_id/${default_business._id}`);
                         if(res1.status === 200){
@@ -88,39 +91,71 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         }
                         const newData = [...tableData];
                         for (let index = 0; index < tableData.length; index++) {
-                            setTotal(newData, index);
+                            await setTotal(newData, index);
                         }
                         setTableData(newData);
                     }
                     else if(router.pathname==="/invoice/[id]"){
                         const res2 = await axios.get(`/invoice/invoice/${default_business._id}/${router.query.id}`);
                         if(res2.status === 200){
+                            //Todo: Set State from added invoice
                             let inv=res2.data.invoice;
-                            console.log(inv)
+                            //
                             setInvoiceNo(inv.invoice_no);
-                            setClient(allClients.reduce(client=>client._id===inv.client_id));
-                            setBank(allBanks.reduce(bank=>bank._id===inv.bank_id));
-                            // setTableData(inv.row_items)
+                            form.setFieldsValue({timeframe:inv.invoice_date});
+                            setInvoiceDate(inv.invoice_date);
+                            setInvoiceDueDate(moment(inv.due_date).format("DD/MM/YYYY"));
+                            console.log(inv)
+                            console.log(allBanks)
+                            console.log(allClients)
+                            // // setClient(allClients.reduce(client=>client._id===inv.client_id))
+                            for (const client1 of allClients) {
+                                if(client1._id===inv.client_id){
+                                    console.log("Match Client",inv.client_id);
+                                    await setClient(client1);
+                                }
+
+                            }
+                            for (const bank1 of allBanks) {
+                                if(bank1._id===inv.bank_id){
+                                    console.log("Match Bank",inv.bank_id);
+                                    await setBank(bank1);
+                                }
+
+                            }
+                            // setClient(allClients.filter(client=>client._id===inv.client_id)[0]);
+                            // setBank(allBanks.filter(bank=>bank._id===inv.bank_id)[0]);
+
+                            setTableData(inv.row_items)
+                            let sum=0.00;
+                            for (let index = 0; index < inv.row_items.length; index++)
+                                sum+=Number((inv.row_items[index]["amt"]==="")?0:inv.row_items[index]["amt"]);
+                            setSubTotal(sum.toFixed(2));
+                            setIGST({igst:inv.gst.IGST})
+                            setCGST({cgst:inv.gst.CGST})
+                            setSGST({sgst:inv.gst.SGST})
+                            setITax({t:inv.gstAmount.IGST})
+                            setCTax({t:inv.gstAmount.CGST})
+                            setSTax({t:inv.gstAmount.SGST})
+                            setCurrency(inv.currency);
+                            setTotalAmount(inv.amount);
+                            setIsCreated(inv.status.stage>0);
+                            if(inv.status.stage!==3){
+                                inv.status.stage+=1;
+                            }
+                            setStatus(inv.status);
+
+
                         }
                     }
-                    const res = await axios.get('/bank');
-                    if(res.status === 200){
-                        if(res.data.bank)
-                        {
-                            await setAllBanks(res.data.bank);
-                        }
-                    }
+
                 }
                 catch (e) {
                     console.error(e);
                 }
-
-
-
-
-
+            setLoading(false);
         })();
-    },[]);
+    },[allClients,allBanks]);
     function base64toBlob(base64Data, contentType = '') {
         const sliceSize = 1024;
         const byteCharacters = atob(base64Data);
@@ -144,7 +179,12 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     }
     function handleClientSelect(e) {
         if(e.key!=="Add_Client"){
-            setClient(allClients.reduce(client=>client._id===e.key))
+            allClients.forEach((client)=>{
+                if(client._id===e.key){
+                    setClient(client);
+                }
+            })
+            // setClient(allClients.reduce(client=>client._id===e.key))
         }
         else {
             router.push("../client/new");
@@ -186,34 +226,26 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
         </Menu>
     );
     const handleSave=(option)=>{
-
+        setLoading(true);
 
         var dt=new Date();
         let today=String(dt.getDate()).padStart(2, '0') +"-"+String(dt.getMonth()).padStart(2, '0')+"-"+dt.getFullYear()+" "+String(dt.getHours()).padStart(2, '0')+":"+String(dt.getMinutes()).padStart(2, '0');
+
         let stat={
-            drafted:today,
+            drafted:"",
             created:"",
             sent:"",
             completed:"",
             stage:-1
         }
         let currentStatus="Drafted";
-        stat.stage=option;
-
-        if(option===3){
-            stat.stage=1;
-        }
-        switch(option){
-            case 1: stat.created=today;currentStatus="Created";break;
-            case 2: stat.created=today;stat.sent=today;currentStatus="Sent";break;
-            case 3: stat.created=today;currentStatus="Created";break;
-
-        }
 
         const payload = {
-            invoice_no: invoiceNo,
             business_id: default_business._id,
             client_id: client._id,
+            bank_id: bank._id,
+            invoice_date: new Date(invoiceDate.split("/").reverse().join("-")),
+            due_date: new Date(invoiceDueDate.split("/").reverse().join("-")),
             row_items: tableData,
             gst:{
                 CGST:CGST,
@@ -226,47 +258,94 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                 IGST:iTax
             },
             amount: total,
-            bank_id: bank._id,
-            invoice_date: new Date(invoiceDate.split("/").reverse().join("-")),
-            due_date: new Date(invoiceDate.split("/").reverse().join("-")),
             currency:currency,
-            status: stat,
-            currentStatus: currentStatus,
             notes: "",
             addl_fields: {},
         };
-        // console.log(payload);
+
 
         (async ()=>{
             try{
-                const res = await axios.post(`/invoice/`,payload);
-                if(res.status === 200){
-                    if(res)
-                    {
-                        console.log(res);
+                const isIns=await axios.post(`/invoice/invoice/${default_business._id}`,{invoiceNo:invoiceNo});
+                if(isIns.data.invoice!=null){
+                    // Update Invoice Detail
+                    stat=isIns.data.invoice.status;
+                    switch(option){
+                        case 0:
+                            stat.drafted=today;currentStatus="Drafted";break;
+                        case 2:
+                            stat.created=today;stat.sent=today;currentStatus="Drafted";break;
+                        default:
+                            stat.created=today;currentStatus="Created";break;
+                    }
+                    stat.stage=option;
+                    if(option===3){
+                        stat.stage=1;
+                    }
+                    payload.status=stat;
+                    payload["currentStatus"]=currentStatus;
+                    payload["option"]=option;
+
+                    const res = await axios.put(`/invoice`,{id:isIns.data.invoice._id,updates:payload});
+                    if(res.status === 200){
+
                         stat.stage+=1;
                         setStatus(stat)
                         notify({type:'success',msg:res.data.msg,des:''})
                         if(option===2||option===3){
-                            setLoading(true);
-                            generateInvoice(option);
-                            setLoading(false);
+                            await generateInvoice(option);
                         }
                         if(option>0){
                             setIsCreated(true);
                         }
                     }
+                }
+                else{
+                    // Insert New Invoice
+                    stat.stage=option;
+                    if(option===3){
+                        stat.stage=1;
+                    }
 
+                    stat.drafted=today;
+                    switch(option){
+                        case 0: currentStatus="Drafted";break;
+                        case 2: stat.created=today;stat.sent=today;currentStatus="Sent";break;
+                        default: stat.created=today;currentStatus="Created";break;
+                    }
+
+                    payload["invoice_no"]=invoiceNo;
+                    payload["status"]=stat;
+                    payload["currentStatus"]=currentStatus;
+
+                    const res = await axios.post(`/invoice/`,payload);
+                    if(res.status === 200){
+                        stat.stage+=1;
+                        setStatus(stat)
+                        notify({type:'success',msg:res.data.msg,des:''})
+                        if(option===2||option===3){
+                            await generateInvoice(option);
+                        }
+                        if(option>0){
+                            setIsCreated(true);
+                        }
+
+                    }
+                    else{
+                        Error(res.data.msg);
+                    }
                 }
             }catch (err){
+                notify({type:'error',msg:err,des:''})
                 console.log(err);
             }
         })();
-
+        setLoading(false);
 
 
     }
     const generateInvoice=async (opt)=>{
+        setLoading(true);
         try{
             var op=(opt===2)?"Send":"Download";
             const res=await axios.get(`invoice/generateInvoice/${default_business._id}/${invoiceNo}/${op}`);
@@ -285,6 +364,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
         }catch (err){
             console.log(err);
         }
+        setLoading(false);
     }
     const saveMenu = (
         <Menu style={{fontWeight: 'bold'}}>
@@ -351,6 +431,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             render: (text, record, index) => (
                 <Input
                     value={text}
+                    type="number"
                     style={{ border: "none" }}
                     onChange={onInputChange("qty", index)}
                 />
@@ -392,9 +473,9 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     const { Option } = Select;
 
     return (
-        <Spin spinning={loading} tip="Cooking up your Invoice...">
+        <Spin spinning={loading} tip="Cooking up your Invoice..."  size="large" >
         <div id="example" style={{margin: "3%"}} className={styles.template} >
-            <Card style={{marginBottom:"3%"}}  title={<><FileTextTwoTone  style={{ fontSize: '22px'}}/>&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> }
+            <Card size="medium" style={{width:"80%",margin:"auto"}}  className={styles.StatusBar} title={<><FileTextTwoTone  style={{ fontSize: '22px',}} />&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> }
                   extra={
                       <>
                           {!isCreated && (<Button  type="dashed" onClick={()=>{handleSave(0)}} danger icon={<FileSyncOutlined />} >Save as Draft</Button>)}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -403,18 +484,19 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                           {isCreated && <Button type="primary" onClick={()=>{generateInvoice(3)}} icon={<DownloadOutlined/>}>Download Invoice</Button>}
                       </>} >
 
-            <Steps current={status.stage} percent={60}>
-                <Step title="Draft" description={status.drafted} />
-                <Step title="Created"  description={status.created} />
-                <Step title="Sent" description={status.sent}/>
-                <Step title="Completed" description={status.completed} />
-            </Steps>
+                <Steps current={status.stage} percent={60}>
+                    <Step title="Draft" description={status.drafted} />
+                    <Step title="Created"  description={status.created} />
+                    <Step title="Sent" description={status.sent}/>
+                    <Step title="Completed" description={status.completed} />
+                </Steps>
             </Card>
 
-                <InvoiceInfo/>
+                <InvoiceInfo dataSource={tableData} currency={currency} business={default_business} subTotal={subTotal} total={total} vat={{gst:(Number(SGST)+Number(CGST)+Number(IGST)).toFixed(0),amt:(Number(sTax)+Number(cTax)+Number(iTax)).toFixed(2)}} invoice={{date:invoiceDate,no:invoiceNo,due:invoiceDueDate}} bank={bank} />
 
             <div  className="page-container hidden-on-narrow" style={isCreated ? {pointerEvents: "none"} : {}}>
-                <div className={styles.pdfPage+' '+styles.sizeA4}>
+                <Form form={form} >
+                <div className={styles.pdfPage+' '+styles.sizeA4} style={{marginTop:"5%"}}>
                     <div className={styles.pdfHeader}>
                             <span className={styles.companyLogo}>
                                  {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
@@ -460,18 +542,20 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         </p>
                         <div style={{paddingTop: "20px"}}>
                             <span >Invoice ID: {invoiceNo}</span><br/>
-                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))} format={"DD/MM/YYYY"}/><br/>
-                            Due Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('/')).reverse()).join("-"))} format={"DD/MM/YYYY"} bordered={false}/>
+
+                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))}  format={"DD/MM/YYYY"}  /><br/>
+                            Due Date: <DatePicker  onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('/')).reverse()).join("-"))} format={"DD/MM/YYYY"} bordered={false}/>
                         </div>
                     </div>
 
                     <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
-                        <div className="action-btn">
+                        {!isCreated &&
+                        (<div className="action-btn">
                             <Tooltip title="Add Invoice Data">
                                 <Button shape="circle" type="primary" icon={<PlusOutlined />} onClick={()=>{handleAdd()}} size={"small"} style={{float: 'right'}} />
                             </Tooltip>
-                        </div>
-                        <br />
+                        </div>)}
+                        <br/>
 
                         <Table
                             rowKey="sr"
@@ -491,6 +575,61 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                                             {currency}     {subTotal}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row >
+
+
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+
+                                        <Table.Summary.Cell  style={{color:"grey"}}>SGST</Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <Select defaultValue={SGST}  onChange={async (vat)=>{
+                                              await  setSGST({sgst:vat});
+                                                if(subTotal!==''){
+                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
+                                                    await setSTax({t});
+
+                                                    await setTotalAmount((Number(subTotal)+Number(iTax)+Number(cTax)+Number(t)).toFixed(2))
+                                                }
+
+                                            }} style={{ width: 100}} bordered={false}>
+                                                <Option value="0">0%</Option>
+                                                <Option value="2.5">2.5%</Option>
+                                                <Option value="6">6%</Option>
+                                                <Option value="9">9%</Option>
+                                                <Option value="14">14%</Option>
+                                            </Select>
+
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {currency}     {sTax}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={2} />
+                                        <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <Select  value={CGST} onChange={async (vat)=>{
+                                                await setCGST({cgst:vat});
+                                                if(subTotal!==''){
+                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
+                                                    setCTax({t});
+                                                    setTotalAmount((Number(subTotal)+Number(iTax)+Number(t)+Number(sTax)).toFixed(2))
+                                                }
+
+                                            }} style={{ width: 100}} bordered={false}>
+                                                <Option value="0">0%</Option>
+                                                <Option value="2.5">2.5%</Option>
+                                                <Option value="6">6%</Option>
+                                                <Option value="9">9%</Option>
+                                                <Option value="14">14%</Option>
+                                            </Select>
+
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            {currency}    {cTax}
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
                                     <Table.Summary.Row>
                                         <Table.Summary.Cell colSpan={2} />
 
@@ -519,69 +658,14 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                                             {currency}     {iTax}
                                         </Table.Summary.Cell>
                                     </Table.Summary.Row>
-
-                                    <Table.Summary.Row>
-                                        <Table.Summary.Cell colSpan={2} />
-
-                                        <Table.Summary.Cell  style={{color:"grey"}}>SGST</Table.Summary.Cell>
-                                        <Table.Summary.Cell>
-                                            <Select defaultValue={SGST}  onChange={async (vat)=>{
-                                              await  setSGST({sgst:vat});
-                                                if(subTotal!==''){
-                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
-                                                    await setSTax({t});
-
-                                                    await setTotalAmount((Number(subTotal)+Number(iTax)+Number(cTax)+Number(t)).toFixed(2))
-                                                }
-
-                                            }} style={{ width: 100}} bordered={false}>
-                                                <Option value="0">0%</Option>
-                                                <Option value="5">5%</Option>
-                                                <Option value="12">12%</Option>
-                                                <Option value="18">18%</Option>
-                                                <Option value="28">28%</Option>
-                                            </Select>
-
-                                        </Table.Summary.Cell>
-                                        <Table.Summary.Cell>
-                                            {currency}     {sTax}
-                                        </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-
-                                    <Table.Summary.Row>
-                                        <Table.Summary.Cell colSpan={2} />
-                                        <Table.Summary.Cell  style={{color:"grey"}}>CGST  </Table.Summary.Cell>
-                                        <Table.Summary.Cell>
-                                            <Select defaultValue={CGST}  onChange={async (vat)=>{
-                                                await setCGST({cgst:vat});
-                                                if(subTotal!==''){
-                                                    var t=(subTotal*(Number(vat)/100)).toFixed(2);
-                                                    setCTax({t});
-                                                    setTotalAmount((Number(subTotal)+Number(iTax)+Number(t)+Number(sTax)).toFixed(2))
-                                                }
-
-                                            }} style={{ width: 100}} bordered={false}>
-                                                <Option value="0">0%</Option>
-                                                <Option value="5">5%</Option>
-                                                <Option value="12">12%</Option>
-                                                <Option value="18">18%</Option>
-                                                <Option value="28">28%</Option>
-                                            </Select>
-
-                                        </Table.Summary.Cell>
-                                        <Table.Summary.Cell>
-                                            {currency}    {cTax}
-                                        </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-
                                     <Table.Summary.Row>
                                         <Table.Summary.Cell colSpan={2} />
                                         <Table.Summary.Cell ><b>Total </b></Table.Summary.Cell>
                                         <Table.Summary.Cell >
-                                            <Select showSearch optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} onChange={(value)=>{setCurrency(value)}} defaultValue={currency}>
-                                                {currencyList.map(country => (
-                                                       <Option value={country._id} key={country._id}>{country.code +' - '+country.symbol}</Option>
-                                                ))}
+                                            <Select placeholder="Select Currency" showSearch optionFilterProp="children" filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} onChange={(value)=>{setCurrency(value)}} defaultValue={currency} bordered={false}>
+                                                    {currencyList.map(country => (
+                                                        <Option value={country.symbol} key={country._id}>{country.code}</Option>
+                                                    ))}
                                             </Select>
                                         </Table.Summary.Cell>
                                         <Table.Summary.Cell>
@@ -623,7 +707,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
 
                 </div>
-
+                </Form>
             </div>
 
         </div>
