@@ -34,6 +34,7 @@ export function InvoiceInfo({dataSource,currency,business,subTotal,total,vat,inv
             dataIndex: 'amt',
             key: 'price',
             align: 'center',
+            // eslint-disable-next-line react/display-name
             render: (text) => {return (<h4>  {currency}&nbsp;{text}</h4>)}
         }
     ];
