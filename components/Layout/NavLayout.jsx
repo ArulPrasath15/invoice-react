@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {Layout, Menu, Button, Typography, Col, Row, Select, Dropdown, Divider, Input, Space, BackTop} from 'antd';
 import {UserOutlined, LogoutOutlined, FundProjectionScreenOutlined, BellOutlined, SettingOutlined, CopyOutlined, ProjectOutlined, UsergroupAddOutlined,ClockCircleOutlined, DownOutlined} from '@ant-design/icons';
-import logo from '../../assets/images/logo.png';
+// import logo from '../../assets/images/logo.png';
 const { Search } = Input;
 const { Option } = Select;
 const { Header, Sider } = Layout;
@@ -128,7 +128,7 @@ import {setDefaultBusiness,setBusiness} from '../../store/businessStore'
                         <Col span={12}>
                             <Row>
                                 <Col   style={{paddingTop:'10px',paddingLeft:'5px'}} >
-                                    <Image width={35} height={35} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>
+//                                     <Image width={35} height={35} alt="img" src={logo} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}}/>
                                 </Col>
                                 <Col  style={{paddingTop:'14px',paddingLeft:'10px'}}>
                                     <Title style={{color:'#ff0202'}} level={4} className='cursor-pointer' onClick={()=>{Router.push('/dashboard')}} >Pentafox Invoice</Title>
