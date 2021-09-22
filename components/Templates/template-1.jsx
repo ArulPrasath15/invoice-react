@@ -102,9 +102,10 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                             let inv=res2.data.invoice;
                             //
                             setInvoiceNo(inv.invoice_no);
-                            form.setFieldsValue({timeframe:inv.invoice_date});
-                            setInvoiceDate(inv.invoice_date);
-                            setInvoiceDueDate(moment(inv.due_date).format("DD/MM/YYYY"));
+                            console.log("I_Date:",inv.invoice_date,"d_date",inv.due_date);
+                            form.setFieldsValue({i_date:moment(inv.invoice_date),due_date:moment(inv.due_date)});
+                            setInvoiceDate(moment(inv.invoice_date).format('YYYY-MM-DD'));
+                            setInvoiceDueDate(moment(inv.due_date).format('YYYY-MM-DD'));
                             console.log(inv)
                             console.log(allBanks)
                             console.log(allClients)
@@ -542,8 +543,8 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         <div style={{paddingTop: "20px"}}>
                             <span >Invoice ID: {invoiceNo}</span><br/>
 
-                            Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))}  format={"DD/MM/YYYY"}  /><br/>
-                            Due Date: <DatePicker  onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('/')).reverse()).join("-"))} format={"DD/MM/YYYY"} bordered={false}/>
+                            Invoice Date: <Form.Item name="i_date" noStyle><DatePicker onChange={(val,dateString)=>{setInvoiceDate(moment(dateString).format('YYYY-MM-DD'))}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))}  /></Form.Item>
+                            Due Date: <Form.Item name="due_date" noStyle><DatePicker  onChange={(val,dateString)=>{setInvoiceDueDate(moment(dateString).format('YYYY-MM-DD'))}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('-'))).join("-"))} bordered={false}/></Form.Item>
                         </div>
                     </div>
 
