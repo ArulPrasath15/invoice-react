@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Badge, Col, Input, Layout, Row, Table, Typography} from 'antd';
+import {Badge, Col, Input, Layout, Row, Skeleton, Table, Typography} from 'antd';
 import Link from "next/link";
 import {connect} from "react-redux";
 import axios from "axios";
@@ -16,6 +16,7 @@ function zeroPad(num, places) {
 }
 
 function Invoice({default_business}) {
+    const [loader, setLoader] = useState(true);
     const [invoices,setInvoices] = useState([]);
     const [isEmpty,setIsEmpty] = useState(true);
 
@@ -25,6 +26,7 @@ function Invoice({default_business}) {
                 const res = await axios.get(`/invoice/${default_business._id}`);
                 if(res.status === 200){
                     if(res.data.invoices){
+                        setLoader(false);
                         setIsEmpty(false);
                         setInvoices(res.data.invoices);
                     }
@@ -88,11 +90,22 @@ function Invoice({default_business}) {
             </Head>
             <TitleStrip head={{title: "My Invoices", desc: "Add new invoices and store all invoice related information", action:"Add Invoice", action_link:`/invoice/new`}}/>
         <div className="mx-5 mt-5">
+
+            { loader &&
             <div className="bg-w mt-5">
-                {
-                    isEmpty? <EmptyContainer header="Add New Invoice" description="Create an invoice to send to the clients" link={"/invoice/new"} />:<Table columns={columns} className='br-5' dataSource={invoices} rowKey={invoice=>invoice.invoice_no} onChange={onChange}/>
-                }
+                <Skeleton active paragraph={{width:"5",rows:6}} title={{width:"5"}} />
             </div>
+            }
+            {   loader==false &&
+                <div className="bg-w mt-5">
+                {
+                    isEmpty ?
+                        <EmptyContainer header="Add New Invoice" description="Create an invoice to send to the clients"
+                                        link={"/invoice/new"}/> :
+                        <Table columns={columns} className='br-5' dataSource={invoices}
+                               rowKey={invoice => invoice.invoice_no} onChange={onChange}/>
+                }
+            </div>}
         </div>
         </>
     );
