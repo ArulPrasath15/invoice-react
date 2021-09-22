@@ -4,13 +4,13 @@
 * @description: Index Design for creating new invoice
 */
 
-import  styles from  '../../assets/css/template.module.css'
+import  styles from '../../assets/css/template1.module.css'
 import React, {useEffect, useState} from 'react';
 import {Button, DatePicker, Input, Table, Tooltip, Select, Menu, Dropdown, InputNumber, Spin, Form} from 'antd';
 import {
     BankOutlined,
     BankTwoTone,
-    DownloadOutlined, FileSyncOutlined,
+    DownloadOutlined, EditOutlined, FileSyncOutlined,
     FileTextTwoTone,
     PlusOutlined,
     SendOutlined,
@@ -407,7 +407,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
         {
             title: "Sr No.",
             dataIndex: "sr",
-            width: "10%"
+            width: "10%",
         },
         {
             title: "Particulars",
@@ -497,16 +497,16 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             <div  className="page-container hidden-on-narrow" style={isCreated ? {pointerEvents: "none"} : {}}>
                 <Form form={form} >
                 <div className={styles.pdfPage+' '+styles.sizeA4} style={{marginTop:"5%"}}>
-                    <div className={styles.pdfHeader}>
+                    <span className={styles.pdfHeader}>
                             <span className={styles.companyLogo}>
                                  {/*<Image src={default_business.images} alt="avatar" style={{width: '100%'}}/>*/}
                                 {/*<Image src={"https://us.123rf.com/450wm/zhanna26/zhanna261709/zhanna26170900035/85712562-black-silhouette-of-cat-vector-illustration-.jpg?ver=6"} width={144} height={144} alt="avatar" style={{width: '100%'}}/>*/}
                                 {default_business.business_name}
                             </span>
-                        <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
-                    </div>
+                    </span>
+                    <span className={styles.invoiceNumber}>Invoice #{invoiceNo}</span>
 
-                    <div className={styles.for}>
+                    <span className={styles.for}>
                         {Object.keys(client).length===0 &&
                         <Dropdown overlay={clientMenu}  placement="bottomLeft" arrow>
                             <Button>
@@ -516,7 +516,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         }
                         {Object.keys(client).length!==0 &&
                         <>
-                            <h2>Invoice For </h2>
+                            <h2>Invoice For <span><Button type={'link'} icon={<EditOutlined />}/></span> </h2>
 
                             <p>{client.business_name}<br/>
                                 {client.city} {client.pincode} .<br/>
@@ -526,12 +526,12 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                                 </span>
                             </p>
                         </>}
-                    </div>
+                    </span>
 
 
-                    <div className={styles.from}>
+                    <span className={styles.from}>
                         <h2>From</h2>
-                        <p style={{paddingBottom: "20px", borderBottom: "1px solid #e5e5e5"}}>
+                        <p style={{paddingBottom: "20px"}}>
                             {default_business.business_name} <br/>
                             {default_business.address},<br/>
                             {default_business.city},  {default_business.state},  {default_business.pincode}.<br/>
@@ -541,12 +541,10 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                         </p>
                         <div style={{paddingTop: "20px"}}>
-                            <span >Invoice ID: {invoiceNo}</span><br/>
-
                             Invoice Date: <DatePicker onChange={(val,dateString)=>{setInvoiceDate(dateString)}} bordered={false}  disabledDate={d =>  d.isBefore(new Date().setDate(new Date().getDate() -1))}  format={"DD/MM/YYYY"}  /><br/>
                             Due Date: <DatePicker  onChange={(val,dateString)=>{setInvoiceDueDate(dateString)}} disabledDate={d => !d || d.isBefore(((invoiceDate.split('/')).reverse()).join("-"))} format={"DD/MM/YYYY"} bordered={false}/>
                         </div>
-                    </div>
+                    </span>
 
                     <div className={styles.pdfBody} style={{marginTop: "10%", marginBottom: "5%"}}>
                         {!isCreated &&
@@ -564,6 +562,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                             pagination={false}
                             size="small"
                             tableLayout="unset"
+                            style={styles.table}
                             summary={()=> (
                                 <Table.Summary fixed >
                                     <Table.Summary.Row >
@@ -680,7 +679,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                     <div className={styles.pdfBank}>
                         {Object.keys(bank).length===0 &&
                         <Dropdown overlay={bankMenu}  placement="bottomLeft" arrow>
-                            <Button>
+                            <Button type={"link"} primary>
                                 <PlusOutlined />Select Bank Details
                             </Button>
                         </Dropdown>

@@ -1,0 +1,92 @@
+.template{ font-size: 14px; font-family: Arial, Helvetica, sans-serif; }
+
+.pdfPage {
+    margin: 0 auto;
+    box-sizing: border-box;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.3);
+    color: #333;
+    position: relative;
+    background-color: white;
+    border-top:8px solid #3aabf0;;
+    border-bottom:8px solid #3aabf0;;
+}
+.sizeA4 { width: 8.3in; height: 11.7in; }
+
+.pdfHeader {
+    position: absolute;
+    top: .5in;
+    height: .6in;
+    right: .5in;
+    float:right;
+}
+.invoiceNumber {
+    padding-top: .97in;
+    float:right;
+    padding-right: .5in;
+    color:#787878;
+}
+.pdfFooter {
+    position: absolute;
+    bottom: .5in;
+    height: .6in;
+    left: .5in;
+    right: .5in;
+    padding-top: 10px;
+    border-top: 1px solid #e5e5e5;
+    text-align: left;
+    color: #787878;
+    font-size: 12px;
+}
+.pdfBank {
+    position: absolute;
+    bottom: 0.7in;
+    height: 2.5in;
+    left: .5in;
+    right: .5in;
+    padding-top: 10px;
+
+    text-align: left;
+    font-size: 14px;
+}
+.pdfBody {
+    position: absolute;
+    top: 3.7in;
+    bottom: 1.2in;
+    left: .5in;
+    right: .5in;
+}
+
+
+.size-letter { width: 8.5in; height: 11in; }
+.size-executive { width: 7.25in; height: 10.5in; }
+
+.companyLogo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #3aabf0;
+}
+.from {
+    position: absolute;
+    top: 1.5in;
+    left: .5in;
+    width: 2.9in;
+}
+.for {
+    position: absolute;
+    top: 1.5in;
+    right: 0.5in;
+    width: 2.6in;
+}
+.from p, .for p,.from div {
+    color: #787878;
+}
+.signature {
+    padding-top: .5in;
+}
+.boxCol {
+    float: left;
+}
+.StatusBar{
+    /*!* offset-x | offset-y | blur-radius | spread-radius | color *!*/
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
