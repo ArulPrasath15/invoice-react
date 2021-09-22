@@ -16,6 +16,6 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    sudo npm install
-    sudo npm run dev
+    sudo yarn install
+    sudo yarn build
   displayName: 'npm install and build'
