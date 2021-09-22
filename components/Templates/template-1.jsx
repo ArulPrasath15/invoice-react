@@ -288,7 +288,6 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
 
                     const res = await axios.put(`/invoice`,{id:isIns.data.invoice._id,updates:payload});
                     if(res.status === 200){
-
                         stat.stage+=1;
                         setStatus(stat)
                         notify({type:'success',msg:res.data.msg,des:''})
