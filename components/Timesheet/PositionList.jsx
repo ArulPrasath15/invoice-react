@@ -101,6 +101,9 @@ const PositionList = ({timesheet}) => {
         {
             title: 'Fee Type',
             dataIndex: 'fee_type',
+            render: (text) => (
+                <span>{(text=="fxd")?"Fixed":(text=="hr")?"Hours":(text=="day")?"Day":(text=="week")?"Week":""}</span>
+            )
         },
         {
             title: 'Fee',

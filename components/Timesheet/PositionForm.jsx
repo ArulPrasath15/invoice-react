@@ -3,7 +3,7 @@
 * @author: Abi
 * @description: ----------------
 */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, DatePicker, Form, Input, message, Row, Select} from "antd";
 import {PlusOutlined} from "@ant-design/icons";
 import {useRouter} from "next/router";
@@ -18,10 +18,14 @@ const PositionForm = ({position,closeDrawer,timesheet}) => {
     const router=useRouter();
     const [form] = Form.useForm();
     const {tid}=router.query;
-    
+    const [feeTypeValue, setFeeTypeValue] = useState(position.fee_type);
     useEffect(() => {
         if(position)
+        {
+            setFeeTypeValue(position.fee_type);
+            console.log(position.amount);
             form.setFieldsValue({title:position.title,timeframe:[moment(position.timeframe.from),moment(position.timeframe.to)],fee_type:position.fee_type,fee:position.fee,amount:position.amount});
+        }
     },[form, position])
 
     const onSubmit = async (values)=>{
@@ -61,6 +65,7 @@ const PositionForm = ({position,closeDrawer,timesheet}) => {
         console.log(errorInfo);
         message.error("Validations Failed");
     };
+
     return (
         <>
             <div className='mt-5 mx-5'>
@@ -76,11 +81,11 @@ const PositionForm = ({position,closeDrawer,timesheet}) => {
                             <Row gutter={8}>
                                 <Col span={12}>
                                     <Form.Item label="Fee Type" name="fee_type" rules={[{required: true, message: 'Fee Type is Required'}]}>
-                                        <Select placeholder="Select a Type" allowClear>
+                                        <Select placeholder="Select a Type" allowClear onChange={(value)=>setFeeTypeValue(value)}>
                                             <Option value="fxd">Fixed</Option>
                                             <Option value="hr">Per Hour</Option>
                                             <Option value="day">Per Day</Option>
-                                            <Option value="day">Per Week</Option>
+                                            <Option value="week">Per Week</Option>
                                         </Select>
                                     </Form.Item>
                                 </Col>
@@ -91,11 +96,20 @@ const PositionForm = ({position,closeDrawer,timesheet}) => {
                                 </Col>
                             </Row>
                             <Row gutter={8}>
-                                <Col span={12}>
-                                    <Form.Item label="Amount" name="amount" rules={[{required: true, message: 'Invalid Amount', pattern: new RegExp(/[+-]?([0-9]*[.])?[0-9]+/)}]}>
-                                      <Input  type="number"/>
+
+                                {(feeTypeValue != '') && <Col span={12}>
+                                    <Form.Item label={(feeTypeValue != 'fxd') && "Estimated Duration" || "Amount"}
+                                                rules={[{
+                                        required: true,
+                                        message: 'Invalid Amount',
+                                        pattern: new RegExp(/[+-]?([0-9]*[.])?[0-9]+/)
+                                    }]}>
+                                        {feeTypeValue == "fxd" && <Form.Item name="amount" noStyle><Input type="number"/></Form.Item>}
+                                        {feeTypeValue == "hr" && <Form.Item name="amount" noStyle><Input type="number" addonAfter={"Hours"}/></Form.Item>}
+                                        {feeTypeValue == "day" && <Form.Item name="amount" noStyle><Input type="number" addonAfter={"Days"}/></Form.Item>}
+                                        {feeTypeValue == "week" && <Form.Item name="amount" noStyle><Input type="number" addonAfter={"Weeks"}/></Form.Item>}
                                     </Form.Item>
-                                </Col>
+                                </Col>}
                             </Row>
                             <Form.Item>
                                 <Button type="primary" icon={<PlusOutlined />} htmlType="submit">Save Position</Button>
