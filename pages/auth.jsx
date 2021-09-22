@@ -1,10 +1,7 @@
 import {useEffect, useState} from 'react'
-import Link from 'next/link'
 import styles from '../assets/css/Auth.module.css';
 import {Row, Col, Card, Space, Button} from 'antd';
 import logoImg from '../assets/images/logo.png'
-import VectorImg from '../assets/images/authVector.png'
-import bg from '../assets/images/authBG.jpg'
 import Image from 'next/image'
 import Login from '../components/Auth/Login';
 import Register from '../components/Auth/Register';

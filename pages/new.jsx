@@ -1,13 +1,8 @@
 import React from 'react';
 import BusinessForm from '../components/Settings/BusinessForm'
 import Head from 'next/head'
-import Link from 'next/link'
 import styles from '../assets/css/Auth.module.css';
 import {Row, Col, Card, Space, Button} from 'antd';
-import logoImg from '../assets/images/logo.png'
-import VectorImg from '../assets/images/authVector.png'
-import bg from '../assets/images/authBG.jpg'
-import Image from 'next/image'
 import AuthRoute from '../hoc/auth.hoc'
 
 export async function getServerSideProps(context) {
