@@ -19,7 +19,8 @@
     border-bottom: 1px solid #e5e5e5;
 }
 .invoiceNumber {
-    padding-top: .17in;
+    padding-top: .64in;
+    padding-right: .5in;
     float: right;
 }
 .pdfFooter {
