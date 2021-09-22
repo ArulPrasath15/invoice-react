@@ -456,6 +456,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             dataIndex: "amt",
             title: "Amount",
             width: "16%",
+            // eslint-disable-next-line react/display-name
             render: (text) => {return (<h4>  {currency}&nbsp;{text}</h4>)}
         }
     ];
