@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import styles from '../assets/css/Auth.module.css';
 import {Row, Col, Card, Space, Button} from 'antd';
-import logoImg from '../assets/images/logo.png'
+// import logoImg from '../assets/images/logo.png'
 import Image from 'next/image'
 import Login from '../components/Auth/Login';
 import Register from '../components/Auth/Register';
@@ -33,7 +33,7 @@ function Auth() {
 
                     <div className={'mt-3'}>
                         <Space>
-                            <Image src={logoImg} alt="img" width={35} height={35} className={styles.authLogo} />
+//                             <Image src={logoImg} alt="img" width={35} height={35} className={styles.authLogo} />
                             <h1>Pentafox Invoice</h1>
                         </Space>
                     </div>
