@@ -17,5 +17,5 @@ steps:
 
 - script: |
     sudo npm install
-    sudo npm run build
+    sudo npm run dev
   displayName: 'npm install and build'
