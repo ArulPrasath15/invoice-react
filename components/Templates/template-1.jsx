@@ -558,6 +558,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
                         <br/>
 
                         <Table
+                            id={"template1"}
                             rowKey="sr"
                             columns={columns}
                             dataSource={tableData}
