@@ -455,6 +455,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
             dataIndex: "amt",
             title: "Amount",
             width: "16%",
+            // eslint-disable-next-line react/display-name
             render: (text) => {return (<h4>  {currency}&nbsp;{text}</h4>)}
         }
     ];
@@ -474,7 +475,7 @@ function Template1({default_business,IGST,setIGST,SGST,setSGST,CGST,setCGST,setI
     return (
         <Spin spinning={loading} tip="Cooking up your Invoice..."  size="large" >
         <div id="example" style={{margin: "3%"}} className={styles.template} >
-            <Card size="medium" style={{width:"80%",margin:"auto"}}  className={styles.StatusBar} title={<><FileTextTwoTone  style={{ fontSize: '22px',}} />&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> }
+            <Card size="medium" style={{width:"90%",margin:"auto"}}  className={styles.StatusBar} title={<><FileTextTwoTone  style={{ fontSize: '22px',}} />&nbsp;<span style={{opacity: 0.6}}>{invoiceNo}</span></> }
                   extra={
                       <>
                           {!isCreated && (<Button  type="dashed" onClick={()=>{handleSave(0)}} danger icon={<FileSyncOutlined />} >Save as Draft</Button>)}&nbsp;&nbsp;&nbsp;&nbsp;
